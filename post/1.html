@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <!-- https://bootswatch.com/flatly/ -->
+     <!-- see also: https://bootswatch.com/darkly/ -->
+  <head>
+    <meta charset="utf-8">
+    <title>Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+  </head>
+  <style>
+    #content {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  </style>
+  <body class="d-flex flex-column min-vh-100">
+    
+    <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
+    <div class="container">
+      <a href="../" class="navbar-brand">Home</a>
+      <button class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarResponsive" 
+        aria-controls="navbarResponsive" 
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="categories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="categories">
+                
+                    
+                    <li class="dropdown-submenu">
+    <a class="dropdown-item dropdown-toggle" 
+    href="/category/fairy-tales.html">
+      Fairy Tales
+    </a>
+    
+      <ul class="dropdown-menu">
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/grimms.html">
+      Grimms
+    </a>
+    
+  </li>
+        
+      </ul>
+    
+  </li>
+                
+              </ul>
+          
+            </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/help">Help</a>
+            </li>
+          </ul>
+
+        <ul class="navbar-nav ms-md-auto">
+          <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+            <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+            <hr class="d-lg-none my-2 text-white-50">
+          </li>
+          <!-- <li class="nav-item dropdown" data-bs-theme="light">
+              <form class="d-flex">
+                  <input class="form-control me-sm-2" type="search" placeholder="Search">
+                  <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+          </li> -->
+          <li class="nav-item" data-bs-theme="light">
+            <form class="d-flex">
+              <div class="position-relative">
+                <svg class="position-absolute top-50 start-0 translate-middle-y ms-2" width="16" height="16" fill="currentColor" style="pointer-events: none; color: #6c757d;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                </svg>
+                <input 
+                  class="form-control" 
+                  type="search" 
+                  placeholder="Cuardaigh" 
+                  style="padding-left: 2.5rem;">
+              </div>
+            </form>
+            <!-- position-relative - Creates positioning context
+            position-absolute - Positions the icon absolutely
+            top-50 start-0 - Positions icon vertically centered at the left
+            translate-middle-y - Centers the icon perfectly
+            ms-2 - Adds left margin to the icon
+            ps-4 or padding-left: 2.5rem - Adds left padding to input so text doesn't overlap icon
+            d-none d-lg-block - Hides on mobile, shows on desktop -->
+          </li>
+          <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+            <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+            <hr class="d-lg-none my-2 text-white-50">
+          </li>
+          <li class="nav-item dropdown" data-bs-theme="light">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
+              <i class="bi bi-circle-half"></i>
+              <span class="d-lg-none ms-2">Toggle theme</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                  <i class="bi bi-sun-fill"></i><span class="ms-2">Light</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="true">
+                  <i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span>
+                </button>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown" data-bs-theme="light">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
+                  <i class="bi bi-person-circle"></i>
+                  <span class="d-lg-none ms-2">User Menu</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                
+                <li>
+                    <button id="sign-in-btn" type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="light" aria-pressed="false"
+                            onclick="window.location.href='/login.html'">
+                    <i class="bi bi-box-arrow-in-right"></i><span class="ms-2">Sign In</span>
+                    </button>
+                </li>
+                
+              
+              </ul>
+              </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+    <main style="padding-top: 80px;" class="container flex-grow-1">
+
+      <!-- Buttons
+      ================================================== -->
+      <div class="bs-docs-section">
+        <!-- <div class="page-header">
+          <div class="row">
+            <div class="col-lg-12">
+              <h1 id="title">
+                <span data-bs-toggle="tooltip" 
+                data-bs-placement="top" 
+                title="The Dog and the Sparrow">
+                An Madra agus an Gealbhan</span></h1>
+            </div>
+          </div>
+        </div> -->
+
+        <div class="row pb-3">
+            <div class="bs-component mb-3 d-flex align-items-center">
+
+                <i class="fa-regular fa-bookmark me-2" style="font-size: 2rem;"></i>
+                <div class="btn-group" role="group" aria-label="Version toggle">
+                  
+                    <input type="radio" class="btn-check" name="versionToggle" id="version1" autocomplete="off"
+                          checked
+                          onclick="switchVersion('0.0')">
+                    <label class="btn btn-outline-primary" for="version1">
+                      Original
+                    </label>
+                  
+                    <input type="radio" class="btn-check" name="versionToggle" id="version2" autocomplete="off"
+                          
+                          onclick="switchVersion('1.0')">
+                    <label class="btn btn-outline-primary" for="version2">
+                      Simplified x1
+                    </label>
+                  
+                </div>
+            
+
+              </div>
+
+          <div class="col-lg-8">
+            <h1 id="title" class="text-center">
+                <span data-bs-toggle="tooltip" 
+                data-bs-placement="top" 
+                title="The Dog and the Sparrow">
+                An Madra agus an Gealbhan</span></h1>
+
+                <div id="post_image">
+                  <img 
+                  class="img-fluid mx-auto d-block mb-3" 
+                  src=../assets/img/posts/dog-and-sparrow.jpg
+                  alt="An Madra agus an Gealbhan - main image">
+                </div>
+
+                <div id="content" class="bs-component">
+                  <p>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="A shepherd&#x27;s dog had a master who took no care of him, but often let him suffer the greatest hunger.">
+    Bhí madra aoire ann a raibh máistir aige nár thug aire dó, ach a d'fhág é ag fulaingt ocras mór go minic.
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="At last he could bear it no longer.">
+    Ar deireadh níor fhéad sé é a sheasamh níos mó.
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="So he took to his heels and off he ran in a very sad and sorrowful mood.">
+    Mar sin thug sé leis na cosa agus rith sé leis, brónach agus buartha go mór.
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="On the road he met a sparrow that said to him,">
+    Ar an mbóthar bhuail sé le gealbhan a dúirt leis,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;Why are you so sad, my friend?&quot;">
+    "Cén fáth a bhfuil tú chomh brónach, a chara?"
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;Because,&quot; said the dog, &quot;I am very very hungry, and have nothing to eat.&quot;">
+    "Mar," arsa an madra, "tá ocras orm go dona, agus níl aon rud agam le hithe."
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;If that be all,&quot; answered the sparrow,">
+    "Más é sin an t-aon rud atá ort," arsa an gealbhan,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;come with me into the next town, and I will soon find you plenty of food.&quot;">
+    "tar liom isteach sa chéad bhaile eile, agus gheobhaidh mé bia go leor duit go luath."
+</span>
+</p>
+<p>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="So on they went together into the town and as they passed by a butcher&#x27;s shop, the sparrow said to the dog,">
+    Mar sin shiúil siad le chéile isteach sa bhaile: agus nuair a chuaigh siad thart ar shiopa búistéara, dúirt an gealbhan leis an madra,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;Stand there a little while till I peck you down a piece of meat.&quot;">
+    "Fan ansin beagán go dtí go bpócfaidh mé píosa feola anuas duit."
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="So the sparrow perched upon the shelf and having first looked carefully about her to see if anyone was watching her,">
+    Mar sin shuigh an gealbhan ar an tseilf agus tar éis di breathnú timpeall go cúramach lena chinntiú nach raibh éinne ag féachaint uirthi,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="she pecked and scratched at a steak that lay upon the edge of the shelf, till at last down it fell.">
+    thosaigh sí ag pioctha agus ag scríobadh ag stéig a bhí suite ar imeall na seilfe, go dtí gur thit sí anuas ar deireadh.
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="Then the dog snapped it up, and scrambled away with it into a corner, where he soon ate it all up.">
+    Ansin shnáp an madra í suas, agus rith sé leis isteach i gcúinne, áit ar ith sé an fheoil ar fad gan mhoill.
+</span>
+</p>
+<p>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;Well,&quot; said the sparrow, &quot;you shall have some more if you will.">
+    "Bhuel," arsa an gealbhan, "beidh tuilleadh agat más mian leat.
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="So come with me to the next shop, and I will peck you down another steak.&quot;">
+    Mar sin tar liom go dtí an chéad siopa eile, agus piócfaidh mé stéig eile anuas duit."
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="When the dog had eaten this too, the sparrow said to him,">
+    Nuair a bhí an madra tar éis é sin a ithe freisin, dúirt an gealbhan leis,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;Well, my good friend, have you had enough now?&quot;">
+    "Bhuel, a chara uasail, an bhfuil go leor agat anois?"
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;I have had plenty of meat,&quot; answered he,">
+    "Tá mé lán de fheoil," ar seisean,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;but I should like to have a piece of bread to eat after it.&quot;">
+    "ach ba mhaith liom píosa aráin a bheith agam le hithe ina dhiaidh."
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="&quot;Come with me then,&quot; said the sparrow, &quot;and you shall soon have that too.&quot;">
+    "Tar liom mar sin," arsa an gealbhan, "agus beidh sin agat go luath freisin."
+</span>
+</p>
+                </div>
+            
+
+          </div>
+
+          <!-- card? -->
+          <!-- <div class="col-lg-4">
+            <div class="bs-component">
+              <div class="card mb-3">
+                <h3 class="card-header">
+                    <span
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="top" 
+                        title="Vocabulary">
+                        Foclóir
+                    </span></h3>
+                <div class="card-body">
+                <table class="table table-striped">
+                  <tbody id="vocab_table">
+                    <tr>
+  <td>madra</td>
+  <td>dog</td>
+</tr><tr>
+  <td>gealbhan</td>
+  <td>sparrow</td>
+</tr><tr>
+  <td>aoire</td>
+  <td>sheperd</td>
+</tr>
+                    </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="col-lg-4">
+            <div class="bs-component">
+              <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      <span
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="top" 
+                        title="Vocabulary">
+                        <b>Foclóir</b>
+                    </span>
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <table class="table table-striped">
+                        <tbody id="vocab_table">
+                          <tr>
+  <td>madra</td>
+  <td>dog</td>
+</tr><tr>
+  <td>gealbhan</td>
+  <td>sparrow</td>
+</tr><tr>
+  <td>aoire</td>
+  <td>sheperd</td>
+</tr>
+                          </tbody>
+                          </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="pagination-controls"></div>
+
+          <!-- The href values assumes routes like /category/<slug> and /tag/<slug> -->
+          <div class="row">
+            <div id="meta" class="text-secondary col-lg-12">
+              
+                Category:
+                
+                  <a href="/category/fairy-tales">Fairy Tales</a> > 
+                
+                  <a href="/category/grimms">Grimms</a>
+                
+              
+          
+              
+                <br>Tags:
+                
+                  <a href="/tag/dog">dog</a>
+                
+              
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </main>
+      
+    <footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
+    <div class="container">
+      <ul class="list-unstyled">
+        <li class="float-end"><a href="#top">Back to top</a></li>
+        <!-- <li><a href="https://blog.bootswatch.com/">Blog</a></li> -->
+      </ul>
+      <p>Made by <a href="">Sinéad Kearney</a>.</p>
+    </div>
+</footer>
+
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/common.js"></script>
+    <script>
+
+      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "id": 1, "image": "../assets/img/posts/dog-and-sparrow.jpg", "tags": [{"name": "dog", "slug": "dog"}], "title": "An Madra agus an Gealbhan", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A shepherd\u0026#x27;s dog had a master who took no care of him, but often let him suffer the greatest hunger.\"\u003e\n    Bh\u00ed madra aoire ann a raibh m\u00e1istir aige n\u00e1r thug aire d\u00f3, ach a d\u0027fh\u00e1g \u00e9 ag fulaingt ocras m\u00f3r go minic.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"At last he could bear it no longer.\"\u003e\n    Ar deireadh n\u00edor fh\u00e9ad s\u00e9 \u00e9 a sheasamh n\u00edos m\u00f3.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So he took to his heels and off he ran in a very sad and sorrowful mood.\"\u003e\n    Mar sin thug s\u00e9 leis na cosa agus rith s\u00e9 leis, br\u00f3nach agus buartha go m\u00f3r.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"On the road he met a sparrow that said to him,\"\u003e\n    Ar an mb\u00f3thar bhuail s\u00e9 le gealbhan a d\u00fairt leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Why are you so sad, my friend?\u0026quot;\"\u003e\n    \"C\u00e9n f\u00e1th a bhfuil t\u00fa chomh br\u00f3nach, a chara?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Because,\u0026quot; said the dog, \u0026quot;I am very very hungry, and have nothing to eat.\u0026quot;\"\u003e\n    \"Mar,\" arsa an madra, \"t\u00e1 ocras orm go dona, agus n\u00edl aon rud agam le hithe.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;If that be all,\u0026quot; answered the sparrow,\"\u003e\n    \"M\u00e1s \u00e9 sin an t-aon rud at\u00e1 ort,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;come with me into the next town, and I will soon find you plenty of food.\u0026quot;\"\u003e\n    \"tar liom isteach sa ch\u00e9ad bhaile eile, agus gheobhaidh m\u00e9 bia go leor duit go luath.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So on they went together into the town and as they passed by a butcher\u0026#x27;s shop, the sparrow said to the dog,\"\u003e\n    Mar sin shi\u00fail siad le ch\u00e9ile isteach sa bhaile: agus nuair a chuaigh siad thart ar shiopa b\u00faist\u00e9ara, d\u00fairt an gealbhan leis an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Stand there a little while till I peck you down a piece of meat.\u0026quot;\"\u003e\n    \"Fan ansin beag\u00e1n go dt\u00ed go bp\u00f3cfaidh m\u00e9 p\u00edosa feola anuas duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So the sparrow perched upon the shelf and having first looked carefully about her to see if anyone was watching her,\"\u003e\n    Mar sin shuigh an gealbhan ar an tseilf agus tar \u00e9is di breathn\u00fa timpeall go c\u00faramach lena chinnti\u00fa nach raibh \u00e9inne ag f\u00e9achaint uirthi,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she pecked and scratched at a steak that lay upon the edge of the shelf, till at last down it fell.\"\u003e\n    thosaigh s\u00ed ag pioctha agus ag scr\u00edobadh ag st\u00e9ig a bh\u00ed suite ar imeall na seilfe, go dt\u00ed gur thit s\u00ed anuas ar deireadh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then the dog snapped it up, and scrambled away with it into a corner, where he soon ate it all up.\"\u003e\n    Ansin shn\u00e1p an madra \u00ed suas, agus rith s\u00e9 leis isteach i gc\u00fainne, \u00e1it ar ith s\u00e9 an fheoil ar fad gan mhoill.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Well,\u0026quot; said the sparrow, \u0026quot;you shall have some more if you will.\"\u003e\n    \"Bhuel,\" arsa an gealbhan, \"beidh tuilleadh agat m\u00e1s mian leat.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So come with me to the next shop, and I will peck you down another steak.\u0026quot;\"\u003e\n    Mar sin tar liom go dt\u00ed an ch\u00e9ad siopa eile, agus pi\u00f3cfaidh m\u00e9 st\u00e9ig eile anuas duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When the dog had eaten this too, the sparrow said to him,\"\u003e\n    Nuair a bh\u00ed an madra tar \u00e9is \u00e9 sin a ithe freisin, d\u00fairt an gealbhan leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Well, my good friend, have you had enough now?\u0026quot;\"\u003e\n    \"Bhuel, a chara uasail, an bhfuil go leor agat anois?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;I have had plenty of meat,\u0026quot; answered he,\"\u003e\n    \"T\u00e1 m\u00e9 l\u00e1n de fheoil,\" ar seisean,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;but I should like to have a piece of bread to eat after it.\u0026quot;\"\u003e\n    \"ach ba mhaith liom p\u00edosa ar\u00e1in a bheith agam le hithe ina dhiaidh.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Come with me then,\u0026quot; said the sparrow, \u0026quot;and you shall soon have that too.\u0026quot;\"\u003e\n    \"Tar liom mar sin,\" arsa an gealbhan, \"agus beidh sin agat go luath freisin.\"\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So she took him to a baker\u0026#x27;s shop, and pecked at two rolls that lay in the window, till they fell down:\"\u003e\n    Mar sin thug s\u00ed \u00e9 go dt\u00ed siopa b\u00e1ic\u00e9ara, agus phi\u00f3c s\u00ed dh\u00e1 roll\u00f3g a bh\u00ed sa fhuinneog, go dt\u00ed gur thit siad anuas:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and as the dog still wished for more,\"\u003e\n    agus toisc go raibh an madra f\u00f3s ag iarraidh tuilleadh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she took him to another shop and pecked down some more for him.\"\u003e\n    thug s\u00ed \u00e9 go dt\u00ed siopa eile agus phi\u00f3c s\u00ed tuilleadh anuas d\u00f3.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When that was eaten, the sparrow asked him whether he had had enough now.\"\u003e\n    Nuair a bh\u00ed s\u00e9 sin ite, d\u0027fhiafraigh an gealbhan de an raibh go leor aige anois.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Yes,\u0026quot; said he; \u0026quot;and now let us take a walk a little way out of the town.\u0026quot;\"\u003e\n    \"T\u00e1,\" ar seisean; \"agus anois d\u00e9anaimis si\u00fal beag amach as an mbaile.\"\n\u003c/span\u003e\n\u003c/p\u003e"], "vocab": "\u003ctr\u003e\n  \u003ctd\u003emadra\u003c/td\u003e\n  \u003ctd\u003edog\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egealbhan\u003c/td\u003e\n  \u003ctd\u003esparrow\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003eaoire\u003c/td\u003e\n  \u003ctd\u003esheperd\u003c/td\u003e\n\u003c/tr\u003e"}, "1.0": {"content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A shepherd had a dog, but he never took care of him.\"\u003e\n    Bh\u00ed madra ag aoire, ach n\u00edor thug s\u00e9 aire d\u00f3 riamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The poor dog was always hungry.\"\u003e\n    Bh\u00ed an madra bocht ocrach an t-am ar fad.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Finally, the dog ran away, feeling very sad.\"\u003e\n    Ar deireadh thosaigh an madra ag rith ar shi\u00fal, agus bh\u00ed s\u00e9 an-bhr\u00f3nach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"On the road, he met a sparrow who asked him,\"\u003e\n    Ar an mb\u00f3thar, bhuail s\u00e9 le gealbhan a d\u00fairt,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Why are you so sad, my friend?\u0026#x27;\"\u003e\n    \"C\u00e9n f\u00e1th a bhfuil t\u00fa chomh br\u00f3nach, a chara?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Because I\u0026#x27;m really, really hungry, and I have nothing to eat,\u0026#x27; said the dog.\"\u003e\n    \"T\u00e1 ocras an-mh\u00f3r orm, agus n\u00edl aon rud agam le n-ithe,\" arsa an madra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;If that\u0026#x27;s the problem,\u0026#x27; said the sparrow,\"\u003e\n    \"M\u00e1s \u00e9 sin an fhadhb,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;come with me to the next town, and I\u0026#x27;ll help you find some food.\u0026#x27;\"\u003e\n    \"tar liom go dt\u00ed an baile eile, agus gheobhaidh m\u00e9 bia duit.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So they walked together into the town.\"\u003e\n    Mar sin shi\u00fail siad le ch\u00e9ile isteach sa bhaile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When they passed by a butcher\u0026#x27;s shop, the sparrow said to the dog,\"\u003e\n    Nuair a chuaigh siad thar shiopa b\u00faist\u00e9ara, d\u00fairt an gealbhan leis an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Wait here for a minute while I get you some meat.\u0026#x27;\"\u003e\n    \"Fan anseo ar feadh n\u00f3im\u00e9id agus gheobhaidh m\u00e9 feoil duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The sparrow flew up and landed on a shelf.\"\u003e\n    D\u0027eitil an gealbhan suas agus sheas s\u00ed ar sheilf.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"She looked around carefully.\"\u003e\n    Bhreathnaigh s\u00ed timpeall go c\u00faramach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then she pecked and scratched at a steak sitting on the edge of the shelf until it fell down.\"\u003e\n    Ansin ghob s\u00ed st\u00e9ig a bh\u00ed ar imeall na seilfe go dt\u00ed gur thit s\u00ed anuas.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The dog quickly grabbed it and ran into a corner, where he ate it all up.\"\u003e\n    Rug an madra ar an bhfeoil go tapa agus rith s\u00e9 go c\u00fainne, agus d\u0027ith s\u00e9 suas go l\u00e9ir \u00ed.\n\u003c/span\u003e\n\u003c/p\u003e"], "vocab": "\u003ctr\u003e\n  \u003ctd\u003emadra\u003c/td\u003e\n  \u003ctd\u003edog\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egealbhan\u003c/td\u003e\n  \u003ctd\u003esparrow\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003eaoire\u003c/td\u003e\n  \u003ctd\u003esheperd\u003c/td\u003e\n\u003c/tr\u003e"}}};
+      document.title = postData.title;
+
+      // Get the content paragraph
+      const contentDiv = document.getElementById("content");
+      const vocabTable = document.getElementById("vocab_table");
+      const paginationControls = document.getElementById("pagination-controls");
+      
+      let currentVersion = Object.keys(postData.versions)[0];
+      let currentPage = 0;
+      
+      function renderPage(version, pageIndex, instant = true) {
+        const pages = postData.versions[version].content;
+        if (!pages || !pages[pageIndex]) return;
+
+        if (instant) {
+          contentDiv.innerHTML = pages[pageIndex];
+          contentDiv.style.opacity = 1;
+          reinitializeTooltips();
+        } else {
+          contentDiv.style.opacity = 0;
+          setTimeout(() => {
+            contentDiv.innerHTML = pages[pageIndex];
+            contentDiv.style.opacity = 1;
+            reinitializeTooltips();
+          }, 150);
+        }
+
+        paginationControls.innerHTML = `
+          <button class="btn btn-outline-primary me-2" ${pageIndex === 0 ? "disabled" : ""} onclick="renderPage('${version}', ${pageIndex - 1})">Previous</button>
+          <span class="align-self-center">Page ${pageIndex + 1} of ${pages.length}</span>
+          <button class="btn btn-outline-primary ms-2" ${pageIndex === pages.length - 1 ? "disabled" : ""} onclick="renderPage('${version}', ${pageIndex + 1})">Next</button>
+        `;
+
+        const postImageDiv = document.getElementById("post_image");
+        if (postImageDiv) {
+          postImageDiv.style.display = pageIndex === 0 ? "block" : "none";
+        }
+
+        currentPage = pageIndex;
+        window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
+      }
+      
+      function switchVersion(versionKey, instant = true) {
+        currentVersion = versionKey;
+        currentPage = 0;
+        renderPage(currentVersion, currentPage, instant);
+        vocabTable.innerHTML = postData.versions[versionKey].vocab;
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          if (currentPage > 0) {
+            renderPage(currentVersion, currentPage - 1);
+          }
+        } else if (e.key === "ArrowRight") {
+          const pages = postData.versions[currentVersion].content;
+          if (currentPage < pages.length - 1) {
+            renderPage(currentVersion, currentPage + 1);
+          }
+        }
+      });
+      
+      const enable_swipe = false;
+
+      if (enable_swipe) {
+        // Swipe gesture support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        contentDiv.addEventListener("touchstart", (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        contentDiv.addEventListener("touchend", (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          const delta = touchEndX - touchStartX;
+          if (Math.abs(delta) < 50) return;
+          if (delta > 0) renderPage(currentVersion, currentPage - 1);
+          else renderPage(currentVersion, currentPage + 1);
+        });
+      }
+
+      switchVersion(currentVersion, true); // render instantly on page load
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const collapseEl = document.getElementById("collapseOne");
+        const collapse = new bootstrap.Collapse(collapseEl, {
+          toggle: false // prevent auto toggle
+        });
+
+        if (window.innerWidth >= 992) { // Bootstrap's lg breakpoint
+          collapse.show(); // expand on desktop
+        } else {
+          collapse.hide(); // collapse on mobile
+        }
+      });
+    </script>
+
+  </body>
+</html>

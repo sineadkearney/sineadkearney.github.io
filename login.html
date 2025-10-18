@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="icon" type="image/x-icon" href="assets/images/logo.ico">
+  <link rel="stylesheet" href="/assets/css/common.css">
+  <link rel="stylesheet" href="/assets/css/auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  
+  <div class="h-screen flex flex-col justify-center items-center">
+
+    <div class="container">
+      
+        
+      
+      <form method="POST" action="/login.html">
+        <label for="email">Email:</label>
+        <input id="email_input" type="email" name="email" required>
+        
+        <label for="password">Password:</label>
+        <div style="position: relative;">
+          <input type="password" name="password" id="loginPassword" style="width: 85%; padding-right: 50px;" required>
+          <i class="fa-solid fa-eye-slash"
+              id="toggleLoginPassword"
+              style="position: absolute; right: 10px; top: 35%; transform: translateY(-50%); cursor: pointer; color: grey;"></i>
+        </div>
+        
+        <button id="loginButton" class="rounded-button grey" type="submit">Sign In</button>
+      </form>
+      
+      <p>Don't have an account? <a href="/register.html">Register here</a>.</p>
+      <p style="margin-top: 10px;">
+        <a href="/forgot-password.html">Forgot password?</a>
+      </p>
+    </div>
+
+  </div>
+</body>
+<script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("loginButton").addEventListener("click", function(event) {
+
+      const email = document.getElementById('email_input').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      event.preventDefault(); // Prevent immediate submission
+      if (!email || !password) {
+        return;
+      }
+      
+      // empty errors
+      if (document.getElementById("login_error") != null) 
+        document.getElementById("login_error").innerHTML = "";
+
+      document.getElementById("loginButton").innerText = "Logging in...";
+      document.querySelector("form").submit(); 
+
+    });
+  });
+
+  function setupToggle(toggleId, inputId) {
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
+
+    toggle.addEventListener('click', function() {
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      toggle.classList.toggle("fa-eye");
+      toggle.classList.toggle("fa-eye-slash");
+      toggle.style.color = isHidden ? "blue" : "grey";
+    });
+  }
+  if (document.getElementById('toggleLoginPassword')) {
+    setupToggle('toggleLoginPassword', 'loginPassword');
+  }
+  </script>
+</html>
