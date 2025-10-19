@@ -62,9 +62,9 @@
           
             </li>
           
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="/help">Help</a>
-            </li> -->
+            <li class="nav-item">
+              <a class="nav-link" href="/help.html">Help</a>
+            </li>
           </ul>
 
         <ul class="navbar-nav ms-md-auto">
@@ -151,34 +151,24 @@
         <div class="page-header">
           <div class="row">
             <div class="col-lg-12">
-              <h1 id="title" class="text-center">
-                <span data-bs-toggle="tooltip" 
-                data-bs-placement="top" 
-                title="Welcome">
-                Fáilte</span></h1>
-            </div>
-            <h3>How to use this website:</h3>
-            <p>
-                If you are using a laptop/PC, hover your mouse cursor over an
-                Irish sentence to view the English translation.
-            </p>
-            <p>
-                If you are using a mobile device, tap an Irish sentence to 
-                view the English translation. Tap another spot on the page to
-                dismiss the translation.
-            </p>
-            <p>Here is an example: <span data-bs-toggle="tooltip" 
-                data-bs-placement="top" 
-                title="example">
-                sampla</span>
-            </p>
+              <a href="post/1.html">example</a>
           </div>
         </div>
 
       </div>
     </main>
       
-    <footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
+    <!-- notification for when making bookmarks -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Bookmark updated!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
     <div class="container">
       <ul class="list-unstyled">
         <li class="float-end"><a href="#top">Back to top</a></li>
