@@ -61,9 +61,9 @@
           
             </li>
           
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="/help">Help</a>
-            </li>
+            </li> -->
           </ul>
 
         <ul class="navbar-nav ms-md-auto">
@@ -130,7 +130,7 @@
                 <li>
                     <button id="sign-in-btn" type="button" class="dropdown-item d-flex align-items-center"
                             data-bs-theme-value="light" aria-pressed="false"
-                            onclick="window.location.href='/login.html'">
+                            onclick="window.location.href='/login.html?next=' + encodeURIComponent(window.location.pathname)">
                     <i class="bi bi-box-arrow-in-right"></i><span class="ms-2">Sign In</span>
                     </button>
                 </li>
