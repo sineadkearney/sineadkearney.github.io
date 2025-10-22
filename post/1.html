@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-    <!-- https://bootswatch.com/flatly/ -->
-     <!-- see also: https://bootswatch.com/darkly/ -->
-  <head>
-    <meta charset="utf-8">
-    <title>Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">
+  <title>Gaeilge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Load theme immediately (inline script runs before page renders) -->
+  <script src="/assets/js/load_theme.js"></script>
 
-    <!-- <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css">
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/assets/css/common.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -68,7 +65,7 @@
             </li>
           
             <li class="nav-item">
-              <a class="nav-link" href="/help">Help</a>
+              <a class="nav-link" href="/help.html">Help</a>
             </li>
           </ul>
 
@@ -77,12 +74,7 @@
             <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
             <hr class="d-lg-none my-2 text-white-50">
           </li>
-          <!-- <li class="nav-item dropdown" data-bs-theme="light">
-              <form class="d-flex">
-                  <input class="form-control me-sm-2" type="search" placeholder="Search">
-                  <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form>
-          </li> -->
+
           <li class="nav-item" data-bs-theme="light">
             <form class="d-flex">
               <div class="position-relative">
@@ -126,6 +118,33 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+            <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+            <hr class="d-lg-none my-2 text-white-50">
+          </li>
+          <li class="nav-item dropdown" data-bs-theme="light">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="font-size-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Font Size">
+              <i class="bi bi-type"></i>
+              <span class="d-lg-none ms-2">Font Size</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-decrease">
+                  <i class="bi bi-dash-circle"></i><span class="ms-2">Decrease</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
+                  <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase">
+                  <i class="bi bi-plus-circle"></i><span class="ms-2">Increase</span>
+                </button>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
                   <i class="bi bi-person-circle"></i>
@@ -136,7 +155,7 @@
                 <li>
                     <button id="sign-in-btn" type="button" class="dropdown-item d-flex align-items-center"
                             data-bs-theme-value="light" aria-pressed="false"
-                            onclick="window.location.href='/login.html'">
+                            onclick="window.location.href='/login.html?next=' + encodeURIComponent(window.location.pathname)">
                     <i class="bi bi-box-arrow-in-right"></i><span class="ms-2">Sign In</span>
                     </button>
                 </li>
@@ -148,7 +167,7 @@
       </div>
     </div>
   </div>
-    <main style="padding-top: 80px;" class="container flex-grow-1">
+    <main style="padding-top: 5em;" class="container flex-grow-1">
 
       <!-- Buttons
       ================================================== -->
@@ -168,7 +187,34 @@
         <div class="row pb-3">
             <div class="bs-component mb-3 d-flex align-items-center">
 
-                <i class="fa-regular fa-bookmark me-2" style="font-size: 2rem;"></i>
+              <span 
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Please sign-in to bookmark pages"
+                class="d-inline-block">
+                <button id="bookmark-btn"
+                  class="btn"
+                  disabled
+                  >
+                  <i id="bookmark-icon" class="fa-regular fa-bookmark me-2"
+                  style="font-size: 2rem;"></i>
+                </button>
+              </span>
+
+              <p>
+              </p>
+              <button 
+                id="bookmark-jump" 
+                class="btn btn-outline-info mb-3 d-none" 
+                onclick="render_page_for_current_version(0)"
+                
+              >
+                <i class="fa-solid fa-arrow-turn-down"></i>
+                
+                Go to Bookmark (Page 1)
+                
+              </button>
+                
                 <div class="btn-group" role="group" aria-label="Version toggle">
                   
                     <input type="radio" class="btn-check" name="versionToggle" id="version1" autocomplete="off"
@@ -191,11 +237,11 @@
               </div>
 
           <div class="col-lg-8">
-            <h1 id="title" class="text-center">
+            <h2 id="title" class="text-center">
                 <span data-bs-toggle="tooltip" 
                 data-bs-placement="top" 
                 title="The Dog and the Sparrow">
-                An Madra agus an Gealbhan</span></h1>
+                An Madra agus an Gealbhan</span></h2>
 
                 <div id="post_image">
                   <img 
@@ -205,12 +251,18 @@
                 </div>
 
                 <div id="content" class="bs-component">
-                  <p>
+                  <!-- <p>
 <span
     data-bs-toggle="tooltip" 
     data-bs-placement="top" 
-    title="A shepherd&#x27;s dog had a master who took no care of him, but often let him suffer the greatest hunger.">
-    Bhí madra aoire ann a raibh máistir aige nár thug aire dó, ach a d'fhág é ag fulaingt ocras mór go minic.
+    title="A shepherd&#x27;s dog had a master who took no care of him,">
+    Bhí madra aoire ann a raibh máistir aige nár thug aire dó,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="but often let him suffer the greatest hunger.">
+    ach a d'fhág é ag fulaingt ocras mór go minic.
 </span>
 <span
     data-bs-toggle="tooltip" 
@@ -259,8 +311,14 @@
 <span
     data-bs-toggle="tooltip" 
     data-bs-placement="top" 
-    title="So on they went together into the town and as they passed by a butcher&#x27;s shop, the sparrow said to the dog,">
-    Mar sin shiúil siad le chéile isteach sa bhaile: agus nuair a chuaigh siad thart ar shiopa búistéara, dúirt an gealbhan leis an madra,
+    title="So on they went together into the town">
+    Mar sin shiúil siad le chéile isteach sa bhaile:
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="and as they passed by a butcher&#x27;s shop, the sparrow said to the dog,">
+    agus nuair a chuaigh siad thart ar shiopa búistéara, dúirt an gealbhan leis an madra,
 </span>
 <span
     data-bs-toggle="tooltip" 
@@ -271,20 +329,38 @@
 <span
     data-bs-toggle="tooltip" 
     data-bs-placement="top" 
-    title="So the sparrow perched upon the shelf and having first looked carefully about her to see if anyone was watching her,">
-    Mar sin shuigh an gealbhan ar an tseilf agus tar éis di breathnú timpeall go cúramach lena chinntiú nach raibh éinne ag féachaint uirthi,
+    title="So the sparrow perched upon the shelf">
+    Mar sin shuigh an gealbhan ar an tseilf
 </span>
 <span
     data-bs-toggle="tooltip" 
     data-bs-placement="top" 
-    title="she pecked and scratched at a steak that lay upon the edge of the shelf, till at last down it fell.">
-    thosaigh sí ag pioctha agus ag scríobadh ag stéig a bhí suite ar imeall na seilfe, go dtí gur thit sí anuas ar deireadh.
+    title="and having first looked carefully about her to see if anyone was watching her,">
+    agus tar éis di breathnú timpeall go cúramach lena chinntiú nach raibh éinne ag féachaint uirthi,
 </span>
 <span
     data-bs-toggle="tooltip" 
     data-bs-placement="top" 
-    title="Then the dog snapped it up, and scrambled away with it into a corner, where he soon ate it all up.">
-    Ansin shnáp an madra í suas, agus rith sé leis isteach i gcúinne, áit ar ith sé an fheoil ar fad gan mhoill.
+    title="she pecked and scratched at a steak that lay upon the edge of the shelf,">
+    thosaigh sí ag pioctha agus ag scríobadh ag stéig a bhí suite ar imeall na seilfe,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="till at last down it fell.">
+    go dtí gur thit sí anuas ar deireadh.
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="Then the dog snapped it up, and scrambled away with it into a corner,">
+    Ansin shnáp an madra í suas, agus rith sé leis isteach i gcúinne,
+</span>
+<span
+    data-bs-toggle="tooltip" 
+    data-bs-placement="top" 
+    title="where he soon ate it all up.">
+    áit ar ith sé an fheoil ar fad gan mhoill.
 </span>
 </p>
 <p>
@@ -330,10 +406,10 @@
     title="&quot;Come with me then,&quot; said the sparrow, &quot;and you shall soon have that too.&quot;">
     "Tar liom mar sin," arsa an gealbhan, "agus beidh sin agat go luath freisin."
 </span>
-</p>
+</p> -->
                 </div>
             
-
+                <div id="pagination-controls"></div>
           </div>
 
           <!-- card? -->
@@ -351,14 +427,35 @@
                 <table class="table table-striped">
                   <tbody id="vocab_table">
                     <tr>
-  <td>madra</td>
-  <td>dog</td>
+  <td>aoire</td>
+  <td>sheperd</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="5" >
+  </td>
 </tr><tr>
   <td>gealbhan</td>
   <td>sparrow</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="3" >
+  </td>
 </tr><tr>
-  <td>aoire</td>
-  <td>sheperd</td>
+  <td>madra</td>
+  <td>dog</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="1" >
+  </td>
+</tr><tr>
+  <td>shiopa búistéara</td>
+  <td>butcher shop</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="17" >
+  </td>
+</tr><tr>
+  <td>siopa báicéara</td>
+  <td>bakery</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="19" >
+  </td>
 </tr>
                     </tbody>
                     </table>
@@ -386,14 +483,35 @@
                       <table class="table table-striped">
                         <tbody id="vocab_table">
                           <tr>
-  <td>madra</td>
-  <td>dog</td>
+  <td>aoire</td>
+  <td>sheperd</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="5" >
+  </td>
 </tr><tr>
   <td>gealbhan</td>
   <td>sparrow</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="3" >
+  </td>
 </tr><tr>
-  <td>aoire</td>
-  <td>sheperd</td>
+  <td>madra</td>
+  <td>dog</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="1" >
+  </td>
+</tr><tr>
+  <td>shiopa búistéara</td>
+  <td>butcher shop</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="17" >
+  </td>
+</tr><tr>
+  <td>siopa báicéara</td>
+  <td>bakery</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="19" >
+  </td>
 </tr>
                           </tbody>
                           </table>
@@ -405,7 +523,7 @@
             </div>
           </div>
 
-          <div id="pagination-controls"></div>
+          
 
           <!-- The href values assumes routes like /category/<slug> and /tag/<slug> -->
           <div class="row">
@@ -431,8 +549,18 @@
         </div>
       </div>
     </main>
-      
-    <footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
+    
+    <!-- notification for when making bookmarks -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Bookmark updated!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
     <div class="container">
       <ul class="list-unstyled">
         <li class="float-end"><a href="#top">Back to top</a></li>
@@ -446,19 +574,30 @@
     <script src="/assets/js/common.js"></script>
     <script>
 
-      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "id": 1, "image": "../assets/img/posts/dog-and-sparrow.jpg", "tags": [{"name": "dog", "slug": "dog"}], "title": "An Madra agus an Gealbhan", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A shepherd\u0026#x27;s dog had a master who took no care of him, but often let him suffer the greatest hunger.\"\u003e\n    Bh\u00ed madra aoire ann a raibh m\u00e1istir aige n\u00e1r thug aire d\u00f3, ach a d\u0027fh\u00e1g \u00e9 ag fulaingt ocras m\u00f3r go minic.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"At last he could bear it no longer.\"\u003e\n    Ar deireadh n\u00edor fh\u00e9ad s\u00e9 \u00e9 a sheasamh n\u00edos m\u00f3.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So he took to his heels and off he ran in a very sad and sorrowful mood.\"\u003e\n    Mar sin thug s\u00e9 leis na cosa agus rith s\u00e9 leis, br\u00f3nach agus buartha go m\u00f3r.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"On the road he met a sparrow that said to him,\"\u003e\n    Ar an mb\u00f3thar bhuail s\u00e9 le gealbhan a d\u00fairt leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Why are you so sad, my friend?\u0026quot;\"\u003e\n    \"C\u00e9n f\u00e1th a bhfuil t\u00fa chomh br\u00f3nach, a chara?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Because,\u0026quot; said the dog, \u0026quot;I am very very hungry, and have nothing to eat.\u0026quot;\"\u003e\n    \"Mar,\" arsa an madra, \"t\u00e1 ocras orm go dona, agus n\u00edl aon rud agam le hithe.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;If that be all,\u0026quot; answered the sparrow,\"\u003e\n    \"M\u00e1s \u00e9 sin an t-aon rud at\u00e1 ort,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;come with me into the next town, and I will soon find you plenty of food.\u0026quot;\"\u003e\n    \"tar liom isteach sa ch\u00e9ad bhaile eile, agus gheobhaidh m\u00e9 bia go leor duit go luath.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So on they went together into the town and as they passed by a butcher\u0026#x27;s shop, the sparrow said to the dog,\"\u003e\n    Mar sin shi\u00fail siad le ch\u00e9ile isteach sa bhaile: agus nuair a chuaigh siad thart ar shiopa b\u00faist\u00e9ara, d\u00fairt an gealbhan leis an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Stand there a little while till I peck you down a piece of meat.\u0026quot;\"\u003e\n    \"Fan ansin beag\u00e1n go dt\u00ed go bp\u00f3cfaidh m\u00e9 p\u00edosa feola anuas duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So the sparrow perched upon the shelf and having first looked carefully about her to see if anyone was watching her,\"\u003e\n    Mar sin shuigh an gealbhan ar an tseilf agus tar \u00e9is di breathn\u00fa timpeall go c\u00faramach lena chinnti\u00fa nach raibh \u00e9inne ag f\u00e9achaint uirthi,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she pecked and scratched at a steak that lay upon the edge of the shelf, till at last down it fell.\"\u003e\n    thosaigh s\u00ed ag pioctha agus ag scr\u00edobadh ag st\u00e9ig a bh\u00ed suite ar imeall na seilfe, go dt\u00ed gur thit s\u00ed anuas ar deireadh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then the dog snapped it up, and scrambled away with it into a corner, where he soon ate it all up.\"\u003e\n    Ansin shn\u00e1p an madra \u00ed suas, agus rith s\u00e9 leis isteach i gc\u00fainne, \u00e1it ar ith s\u00e9 an fheoil ar fad gan mhoill.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Well,\u0026quot; said the sparrow, \u0026quot;you shall have some more if you will.\"\u003e\n    \"Bhuel,\" arsa an gealbhan, \"beidh tuilleadh agat m\u00e1s mian leat.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So come with me to the next shop, and I will peck you down another steak.\u0026quot;\"\u003e\n    Mar sin tar liom go dt\u00ed an ch\u00e9ad siopa eile, agus pi\u00f3cfaidh m\u00e9 st\u00e9ig eile anuas duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When the dog had eaten this too, the sparrow said to him,\"\u003e\n    Nuair a bh\u00ed an madra tar \u00e9is \u00e9 sin a ithe freisin, d\u00fairt an gealbhan leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Well, my good friend, have you had enough now?\u0026quot;\"\u003e\n    \"Bhuel, a chara uasail, an bhfuil go leor agat anois?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;I have had plenty of meat,\u0026quot; answered he,\"\u003e\n    \"T\u00e1 m\u00e9 l\u00e1n de fheoil,\" ar seisean,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;but I should like to have a piece of bread to eat after it.\u0026quot;\"\u003e\n    \"ach ba mhaith liom p\u00edosa ar\u00e1in a bheith agam le hithe ina dhiaidh.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Come with me then,\u0026quot; said the sparrow, \u0026quot;and you shall soon have that too.\u0026quot;\"\u003e\n    \"Tar liom mar sin,\" arsa an gealbhan, \"agus beidh sin agat go luath freisin.\"\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So she took him to a baker\u0026#x27;s shop, and pecked at two rolls that lay in the window, till they fell down:\"\u003e\n    Mar sin thug s\u00ed \u00e9 go dt\u00ed siopa b\u00e1ic\u00e9ara, agus phi\u00f3c s\u00ed dh\u00e1 roll\u00f3g a bh\u00ed sa fhuinneog, go dt\u00ed gur thit siad anuas:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and as the dog still wished for more,\"\u003e\n    agus toisc go raibh an madra f\u00f3s ag iarraidh tuilleadh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she took him to another shop and pecked down some more for him.\"\u003e\n    thug s\u00ed \u00e9 go dt\u00ed siopa eile agus phi\u00f3c s\u00ed tuilleadh anuas d\u00f3.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When that was eaten, the sparrow asked him whether he had had enough now.\"\u003e\n    Nuair a bh\u00ed s\u00e9 sin ite, d\u0027fhiafraigh an gealbhan de an raibh go leor aige anois.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Yes,\u0026quot; said he; \u0026quot;and now let us take a walk a little way out of the town.\u0026quot;\"\u003e\n    \"T\u00e1,\" ar seisean; \"agus anois d\u00e9anaimis si\u00fal beag amach as an mbaile.\"\n\u003c/span\u003e\n\u003c/p\u003e"], "vocab": "\u003ctr\u003e\n  \u003ctd\u003emadra\u003c/td\u003e\n  \u003ctd\u003edog\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egealbhan\u003c/td\u003e\n  \u003ctd\u003esparrow\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003eaoire\u003c/td\u003e\n  \u003ctd\u003esheperd\u003c/td\u003e\n\u003c/tr\u003e"}, "1.0": {"content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A shepherd had a dog, but he never took care of him.\"\u003e\n    Bh\u00ed madra ag aoire, ach n\u00edor thug s\u00e9 aire d\u00f3 riamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The poor dog was always hungry.\"\u003e\n    Bh\u00ed an madra bocht ocrach an t-am ar fad.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Finally, the dog ran away, feeling very sad.\"\u003e\n    Ar deireadh thosaigh an madra ag rith ar shi\u00fal, agus bh\u00ed s\u00e9 an-bhr\u00f3nach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"On the road, he met a sparrow who asked him,\"\u003e\n    Ar an mb\u00f3thar, bhuail s\u00e9 le gealbhan a d\u00fairt,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Why are you so sad, my friend?\u0026#x27;\"\u003e\n    \"C\u00e9n f\u00e1th a bhfuil t\u00fa chomh br\u00f3nach, a chara?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Because I\u0026#x27;m really, really hungry, and I have nothing to eat,\u0026#x27; said the dog.\"\u003e\n    \"T\u00e1 ocras an-mh\u00f3r orm, agus n\u00edl aon rud agam le n-ithe,\" arsa an madra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;If that\u0026#x27;s the problem,\u0026#x27; said the sparrow,\"\u003e\n    \"M\u00e1s \u00e9 sin an fhadhb,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;come with me to the next town, and I\u0026#x27;ll help you find some food.\u0026#x27;\"\u003e\n    \"tar liom go dt\u00ed an baile eile, agus gheobhaidh m\u00e9 bia duit.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So they walked together into the town.\"\u003e\n    Mar sin shi\u00fail siad le ch\u00e9ile isteach sa bhaile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When they passed by a butcher\u0026#x27;s shop, the sparrow said to the dog,\"\u003e\n    Nuair a chuaigh siad thar shiopa b\u00faist\u00e9ara, d\u00fairt an gealbhan leis an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Wait here for a minute while I get you some meat.\u0026#x27;\"\u003e\n    \"Fan anseo ar feadh n\u00f3im\u00e9id agus gheobhaidh m\u00e9 feoil duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The sparrow flew up and landed on a shelf.\"\u003e\n    D\u0027eitil an gealbhan suas agus sheas s\u00ed ar sheilf.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"She looked around carefully.\"\u003e\n    Bhreathnaigh s\u00ed timpeall go c\u00faramach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then she pecked and scratched at a steak sitting on the edge of the shelf until it fell down.\"\u003e\n    Ansin ghob s\u00ed st\u00e9ig a bh\u00ed ar imeall na seilfe go dt\u00ed gur thit s\u00ed anuas.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The dog quickly grabbed it and ran into a corner, where he ate it all up.\"\u003e\n    Rug an madra ar an bhfeoil go tapa agus rith s\u00e9 go c\u00fainne, agus d\u0027ith s\u00e9 suas go l\u00e9ir \u00ed.\n\u003c/span\u003e\n\u003c/p\u003e"], "vocab": "\u003ctr\u003e\n  \u003ctd\u003emadra\u003c/td\u003e\n  \u003ctd\u003edog\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egealbhan\u003c/td\u003e\n  \u003ctd\u003esparrow\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003eaoire\u003c/td\u003e\n  \u003ctd\u003esheperd\u003c/td\u003e\n\u003c/tr\u003e"}}};
+      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_bookmark_page_index": null, "current_level_key": 0.0, "id": 1, "image": "../assets/img/posts/dog-and-sparrow.jpg", "tags": [{"name": "dog", "slug": "dog"}], "title": "An Madra agus an Gealbhan", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A shepherd\u0026#x27;s dog had a master who took no care of him,\"\u003e\n    Bh\u00ed madra aoire ann a raibh m\u00e1istir aige n\u00e1r thug aire d\u00f3,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but often let him suffer the greatest hunger.\"\u003e\n    ach a d\u0027fh\u00e1g \u00e9 ag fulaingt ocras m\u00f3r go minic.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"At last he could bear it no longer.\"\u003e\n    Ar deireadh n\u00edor fh\u00e9ad s\u00e9 \u00e9 a sheasamh n\u00edos m\u00f3.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So he took to his heels and off he ran in a very sad and sorrowful mood.\"\u003e\n    Mar sin thug s\u00e9 leis na cosa agus rith s\u00e9 leis, br\u00f3nach agus buartha go m\u00f3r.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"On the road he met a sparrow that said to him,\"\u003e\n    Ar an mb\u00f3thar bhuail s\u00e9 le gealbhan a d\u00fairt leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Why are you so sad, my friend?\u0026quot;\"\u003e\n    \"C\u00e9n f\u00e1th a bhfuil t\u00fa chomh br\u00f3nach, a chara?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Because,\u0026quot; said the dog, \u0026quot;I am very very hungry, and have nothing to eat.\u0026quot;\"\u003e\n    \"Mar,\" arsa an madra, \"t\u00e1 ocras orm go dona, agus n\u00edl aon rud agam le hithe.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;If that be all,\u0026quot; answered the sparrow,\"\u003e\n    \"M\u00e1s \u00e9 sin an t-aon rud at\u00e1 ort,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;come with me into the next town, and I will soon find you plenty of food.\u0026quot;\"\u003e\n    \"tar liom isteach sa ch\u00e9ad bhaile eile, agus gheobhaidh m\u00e9 bia go leor duit go luath.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So on they went together into the town\"\u003e\n    Mar sin shi\u00fail siad le ch\u00e9ile isteach sa bhaile:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and as they passed by a butcher\u0026#x27;s shop, the sparrow said to the dog,\"\u003e\n    agus nuair a chuaigh siad thart ar shiopa b\u00faist\u00e9ara, d\u00fairt an gealbhan leis an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Stand there a little while till I peck you down a piece of meat.\u0026quot;\"\u003e\n    \"Fan ansin beag\u00e1n go dt\u00ed go bp\u00f3cfaidh m\u00e9 p\u00edosa feola anuas duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So the sparrow perched upon the shelf\"\u003e\n    Mar sin shuigh an gealbhan ar an tseilf\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and having first looked carefully about her to see if anyone was watching her,\"\u003e\n    agus tar \u00e9is di breathn\u00fa timpeall go c\u00faramach lena chinnti\u00fa nach raibh \u00e9inne ag f\u00e9achaint uirthi,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she pecked and scratched at a steak that lay upon the edge of the shelf,\"\u003e\n    thosaigh s\u00ed ag pioctha agus ag scr\u00edobadh ag st\u00e9ig a bh\u00ed suite ar imeall na seilfe,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"till at last down it fell.\"\u003e\n    go dt\u00ed gur thit s\u00ed anuas ar deireadh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then the dog snapped it up, and scrambled away with it into a corner,\"\u003e\n    Ansin shn\u00e1p an madra \u00ed suas, agus rith s\u00e9 leis isteach i gc\u00fainne,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"where he soon ate it all up.\"\u003e\n    \u00e1it ar ith s\u00e9 an fheoil ar fad gan mhoill.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Well,\u0026quot; said the sparrow, \u0026quot;you shall have some more if you will.\"\u003e\n    \"Bhuel,\" arsa an gealbhan, \"beidh tuilleadh agat m\u00e1s mian leat.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So come with me to the next shop, and I will peck you down another steak.\u0026quot;\"\u003e\n    Mar sin tar liom go dt\u00ed an ch\u00e9ad siopa eile, agus pi\u00f3cfaidh m\u00e9 st\u00e9ig eile anuas duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When the dog had eaten this too, the sparrow said to him,\"\u003e\n    Nuair a bh\u00ed an madra tar \u00e9is \u00e9 sin a ithe freisin, d\u00fairt an gealbhan leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Well, my good friend, have you had enough now?\u0026quot;\"\u003e\n    \"Bhuel, a chara uasail, an bhfuil go leor agat anois?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;I have had plenty of meat,\u0026quot; answered he,\"\u003e\n    \"T\u00e1 m\u00e9 l\u00e1n de fheoil,\" ar seisean,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;but I should like to have a piece of bread to eat after it.\u0026quot;\"\u003e\n    \"ach ba mhaith liom p\u00edosa ar\u00e1in a bheith agam le hithe ina dhiaidh.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Come with me then,\u0026quot; said the sparrow, \u0026quot;and you shall soon have that too.\u0026quot;\"\u003e\n    \"Tar liom mar sin,\" arsa an gealbhan, \"agus beidh sin agat go luath freisin.\"\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So she took him to a baker\u0026#x27;s shop, and pecked at two rolls that lay in the window, till they fell down:\"\u003e\n    Mar sin thug s\u00ed \u00e9 go dt\u00ed siopa b\u00e1ic\u00e9ara, agus phi\u00f3c s\u00ed dh\u00e1 roll\u00f3g a bh\u00ed sa fhuinneog, go dt\u00ed gur thit siad anuas:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and as the dog still wished for more,\"\u003e\n    agus toisc go raibh an madra f\u00f3s ag iarraidh tuilleadh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she took him to another shop and pecked down some more for him.\"\u003e\n    thug s\u00ed \u00e9 go dt\u00ed siopa eile agus phi\u00f3c s\u00ed tuilleadh anuas d\u00f3.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When that was eaten, the sparrow asked him whether he had had enough now.\"\u003e\n    Nuair a bh\u00ed s\u00e9 sin ite, d\u0027fhiafraigh an gealbhan de an raibh go leor aige anois.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Yes,\u0026quot; said he; \u0026quot;and now let us take a walk a little way out of the town.\u0026quot;\"\u003e\n    \"T\u00e1,\" ar seisean; \"agus anois d\u00e9anaimis si\u00fal beag amach as an mbaile.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So they both went out upon the high road;\"\u003e\n    Mar sin chuaigh an bheirt acu amach ar an mb\u00f3thar m\u00f3r;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but as the weather was warm,\"\u003e\n    ach \u00f3s rud \u00e9 go raibh an aimsir te,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"they had not gone far before the dog said,\"\u003e\n    n\u00edor imigh siad i bhfad sular d\u00fairt an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;I am very much tired\u2013I should like to take a nap.\u0026quot;\"\u003e\n    \"T\u00e1 m\u00e9 an-tuirseach\u2014ba mhaith liom codladh beag a dh\u00e9anamh.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Very well,\u0026quot; answered the sparrow,\"\u003e\n    \"Go han-mhaith,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;do so, and in the meantime I will perch upon that bush.\u0026quot;\"\u003e\n    \"d\u00e9an \u00e9 sin, agus idir an d\u00e1 linn su\u00edfidh m\u00e9 ar an toir sin ansi\u00fad.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So the dog stretched himself out on the road, and fell fast asleep.\"\u003e\n    Mar sin sh\u00edn an madra \u00e9 f\u00e9in amach ar an mb\u00f3thar, agus thit s\u00e9 i gcodladh domhain.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Whilst he slept, there came by a carter with a cart drawn by three horses,\"\u003e\n    Le linn d\u00f3 ag codladh, th\u00e1inig fear lasta ag tiom\u00e1int chairt a bh\u00ed tarraingthe ag tr\u00ed chapall,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and loaded with two casks of wine.\"\u003e\n    agus luchtaithe le dh\u00e1 chise\u00e1n f\u00edona.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The sparrow, seeing that the carter did not turn out of the way,\"\u003e\n    Chonaic an gealbhan nach raibh an fear lasta ag imeacht \u00f3na bh\u00f3thar,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but would go on in the track in which the dog lay,\"\u003e\n    ach go gcinnteodh s\u00e9 cur ar an rian ina raibh an madra ina lu\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"so as to drive over him, called out,\"\u003e\n    ionas go dtiom\u00e1inf\u00ed thar \u00e9, agus ghlaoigh s\u00ed amach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Stop! stop! Mr Carter, or it shall be the worse for you.\u0026quot;\"\u003e\n    \"Stad! stad! a charthala\u00ed, n\u00f3 beidh s\u00e9 n\u00edos measa ort.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"But the carter, grumbling to himself,\"\u003e\n    Ach an charthala\u00ed, ag g\u00e9ar\u00e1in ina dhiaidh f\u00e9in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;You make it the worse for me, indeed!\"\u003e\n    \"Is tusa a chuireann an sc\u00e9al n\u00edos measa dom, i nd\u00e1ir\u00edre!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"what can you do?\u0026quot;\"\u003e\n    cad is f\u00e9idir leat a dh\u00e9anamh?\",\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"cracked his whip,\"\u003e\n    phl\u00e9asc s\u00e9 a shiolp\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and drove his cart over the poor dog,\"\u003e\n    agus thiom\u00e1in s\u00e9 a chairt thar an madra bocht,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"so that the wheels crushed him to death.\"\u003e\n    go raibh na rotha\u00ed \u00e1 bhr\u00fa go b\u00e1s \u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;There,\u0026quot; cried the sparrow,\"\u003e\n    \"Bhuel ansin,\" arsa an gealbhan go g\u00e9ar,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;you cruel villain, you have killed my friend the dog.\"\u003e\n    \"a chreach\u00f3ir crua, mhar\u00fa t\u00fa mo chara an madra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Now mind what I say.\"\u003e\n    Anois \u00e9ist liom;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"This deed of yours shall cost you all you art worth.\u0026quot;\"\u003e\n    \u00edocfaidh an gn\u00edomh seo th\u00fa ar fad asat f\u00e9in.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Do your worst, and welcome,\u0026quot; said the brute,\"\u003e\n    \"D\u00e9ana do dh\u00edcheall agus f\u00e1ilte,\" arsa an fear gruama,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;what harm can you do me?\u0026quot; and passed on.\"\u003e\n    \"c\u00e9ard is f\u00e9idir leat a dh\u00e9anamh dom?\" agus chuaigh s\u00e9 ar aghaidh.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"But the sparrow crept under the tilt of the cart,\"\u003e\n    Ach shleamhnaigh an gealbhan isteach faoin gcl\u00fadach den charr,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and pecked at the bung of one of the casks till she loosened it;\"\u003e\n    agus thosaigh s\u00ed ag pioctha ag an mbung ar cheann de na bairill\u00ed go dt\u00ed gur scaoil s\u00ed \u00e9;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and than all the wine ran out,\"\u003e\n    agus ansin rith an f\u00edon ar fad amach\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"without the carter seeing it.\"\u003e\n    gan an carthala\u00ed a thabhairt faoi deara.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"At last he looked round, and saw that the cart was dripping,\"\u003e\n    Ar deireadh d\u0027amharc s\u00e9 timpeall, agus chonaic s\u00e9 go raibh an chairt ag sileadh\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and the cask quite empty.\"\u003e\n    agus an bairille go hioml\u00e1n folamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;What an unlucky wretch I am!\u0026quot; cried he.\"\u003e\n    \"Is amad\u00e1n m\u00ed-\u00e1dh\u00fail m\u00e9!\" a scread s\u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Not wretch enough yet!\u0026quot; said the sparrow,\"\u003e\n    \"N\u00ed leor sin f\u00f3s, a amad\u00e1in!\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"as she alighted upon the head of one of the horses,\"\u003e\n    agus \u00ed ag tuirlingt ar cheann ceann de na capaill,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and pecked at him till he reared up and kicked.\"\u003e\n    agus phi\u00f3c s\u00ed air go dt\u00ed gur \u00e9irigh s\u00e9 ar a chois deiridh agus gur bhain s\u00e9 cic.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When the carter saw this,\"\u003e\n    Nuair a chonaic an carthala\u00ed \u00e9 sin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"he drew out his hatchet and aimed a blow at the sparrow,\"\u003e\n    tharraing s\u00e9 a tua amach agus bhuail s\u00e9 iarracht ar an ngealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"meaning to kill her; but she flew away,\"\u003e\n    ag iarraidh \u00ed a mhar\u00fa; ach d\u0027eitil s\u00ed l\u00e9i,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and the blow fell upon the poor horse\u0026#x27;s head with such force,\"\u003e\n    agus thit an buille ar cheann an chapaill bhoicht le f\u00f3rsa chomh m\u00f3r sin\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"that he fell down dead.\"\u003e\n    gur thit s\u00e9 marbh ar an toirt.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Unlucky wretch that I am!\u0026quot; cried he.\"\u003e\n    \"Is amad\u00e1n m\u00ed-\u00e1dh\u00fail m\u00e9!\" a scread s\u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Not wretch enough yet!\u0026quot; said the sparrow.\"\u003e\n    \"N\u00ed leor sin f\u00f3s, a amad\u00e1in!\" arsa an gealbhan.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"And as the carter went on with the other two horses,\"\u003e\n    Agus nuair a lean an carthala\u00ed ar aghaidh leis an d\u00e1 chapall eile,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she again crept under the tilt of the cart,\"\u003e\n    shleamhnaigh s\u00ed ar\u00eds faoin gcl\u00fadach den charr,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and pecked out the bung of the second cask,\"\u003e\n    agus phi\u00f3c s\u00ed amach an bung den dara bairille,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"so that all the wine ran out.\"\u003e\n    ionas gur rith an f\u00edon ar fad amach.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When the carter saw this, he again cried out,\"\u003e\n    Nuair a chonaic an carthala\u00ed \u00e9 sin, d\u0027\u00e9igh s\u00e9 ar\u00eds,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Miserable wretch that I am!\u0026quot;\"\u003e\n    \"Is cr\u00e9at\u00far bocht m\u00ed-\u00e1dh\u00fail m\u00e9!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"But the sparrow answered, \u0026#x27;Not wretch enough yet!\u0026quot;\"\u003e\n    Ach d\u0027fhreagair an gealbhan, \"N\u00ed leor sin f\u00f3s, a amad\u00e1in!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and perched on the head of the second horse, and pecked at him too.\"\u003e\n    agus shuigh s\u00ed ar cheann an dara capaill, agus thosaigh s\u00ed ag pioctha air freisin.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The carter ran up and struck at her again with his hatchet;\"\u003e\n    Rith an carthala\u00ed suas agus bhuail s\u00e9 iarracht eile uirthi lena tua;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but away she flew,\"\u003e\n    ach d\u0027eitil s\u00ed l\u00e9i,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and the blow fell upon the second horse and killed him on the spot.\"\u003e\n    agus thit an buille ar an dara capall agus mharaigh s\u00e9 \u00e9 ar an l\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Unlucky wretch that I am!\u0026quot; said he.\"\u003e\n    \"Is amad\u00e1n m\u00ed-\u00e1dh\u00fail m\u00e9!\" ar seisean.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Not wretch enough yet!\u0026quot; said the sparrow;\"\u003e\n    \"N\u00ed leor sin f\u00f3s, a amad\u00e1in!\" arsa an gealbhan;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and perching upon the third horse, she began to peck him too.\"\u003e\n    agus ag su\u00ed ar an tr\u00ed\u00fa capall, thosaigh s\u00ed \u00e1 phioctha si\u00fad freisin.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The carter was mad with fury;\"\u003e\n    Bh\u00ed an carthala\u00ed ar buile le fearg;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and without looking about him,\"\u003e\n    agus gan f\u00e9achaint timpeall air\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"or caring what he was about,\"\u003e\n    n\u00e1 c\u00faram a thabhairt faoi cad a bh\u00ed \u00e1 dh\u00e9anamh aige,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"struck again at the sparrow;\"\u003e\n    bhuail s\u00e9 ar\u00eds an gealbhan;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but killed his third horse as he done the other two.\"\u003e\n    ach mharaigh s\u00e9 a tr\u00ed\u00fa capall mar a mharaigh s\u00e9 na beirte eile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Alas! miserable wretch that I am!\u0026quot; cried he.\"\u003e\n    \"A Dhia! cr\u00e9at\u00far bocht m\u00ed-\u00e1dh\u00fail m\u00e9!\" a scread s\u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Not wretch enough yet!\u0026quot; answered the sparrow as she flew away;\"\u003e\n    \"N\u00ed leor sin f\u00f3s, a amad\u00e1in!\" arsa an gealbhan agus \u00ed ag eitilt uirthi;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;now will I plague and punish thee at thy own house.\u0026quot;\"\u003e\n    \"anois cuirfidh m\u00e9 pion\u00f3s ort i do theach f\u00e9in.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The carter was forced at last to leave his cart behind him,\"\u003e\n    Faoi dheireadh cuireadh an carthala\u00ed faoi bhr\u00fa a chairt a fh\u00e1g\u00e1il ina dhiaidh\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and to go home overflowing with rage and vexation.\"\u003e\n    agus dul abhaile l\u00edonta le fearg agus frustrachas.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Alas!\u0026quot; said he to his wife,\"\u003e\n    \"A Dhia!\" ar seisean lena bhean,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;what ill luck has befallen me!\"\u003e\n    \"c\u00e9n t-\u00e1dh dona at\u00e1 tagtha orm!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"My wine is all spilt, and my horses all three dead.\u0026quot;\"\u003e\n    T\u00e1 m\u0027f\u00edon ar fad scaipthe agus t\u00e1 mo chapaill uile tr\u00ed mharaite.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Alas! husband,\u0026quot; replied she,\"\u003e\n    \"A Dhia, a fhear c\u00e9ile,\" arsa s\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;and a wicked bird has come into the house,\"\u003e\n    \"agus t\u00e1 \u00e9an dochreidte olc tar \u00e9is teacht isteach sa teach\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and has brought with her all the birds in the world,\"\u003e\n    agus t\u00e1 s\u00e9, faoi m\u0027fhios, tar \u00e9is na h\u00e9in uile ar domhan a thabhairt leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"I am sure, and they have fallen upon our corn in the loft,\"\u003e\n    agus t\u00e1 siad tar \u00e9is titim ar \u00e1r gcuid eorna sa staighre\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and are eating it up at such a rate!\u0026quot;\"\u003e\n    agus t\u00e1 siad \u00e1 ithe go tapa!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Away ran the husband upstairs,\"\u003e\n    Rith an fear suas staighre\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and saw thousands of birds sitting upon the floor eating up his corn,\"\u003e\n    agus chonaic s\u00e9 na m\u00edlte \u00e9an ina su\u00ed ar an url\u00e1r ag ithe a chuid eorna,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"with the sparrow in the midst of them.\"\u003e\n    leis an ngealbhan ina measc.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Unlucky wretch that I am!\u0026quot; cried the carter;\"\u003e\n    \"Is amad\u00e1n m\u00ed-\u00e1dh\u00fail m\u00e9!\" a ghlaoigh an carthala\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"for he saw that the corn was almost all gone.\"\u003e\n    mar chonaic s\u00e9 go raibh an t-eorna beagnach ar fad imithe.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Not wretch enough yet!\u0026quot; said the sparrow;\"\u003e\n    \"N\u00ed leor sin f\u00f3s, a amad\u00e1in!\" arsa an gealbhan;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;thy cruelty shall cost thee they life yet!\u0026quot; and away she flew.\"\u003e\n    \"\u00edocfaidh do chrualacht th\u00fa le do shaol f\u00f3s!\" agus d\u0027eitil s\u00ed ar shi\u00fal.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The carter seeing that he had thus lost all that he had,\"\u003e\n    Chonaic an carthala\u00ed go raibh s\u00e9 chaillte d\u00e1 chuid ruda\u00ed go l\u00e9ir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"went down into his kitchen;\"\u003e\n    agus chuaigh s\u00e9 s\u00edos isteach ina chistin;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and was still not sorry for what he had done,\"\u003e\n    agus n\u00ed raibh br\u00f3n air f\u00f3s as an m\u00e9id a rinne s\u00e9,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but sat himself angrily and sulkily in the chimney corner.\"\u003e\n    ach shuigh s\u00e9 go feargach agus go gr\u00e1nna i gc\u00fainne an siml\u00e9ir.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"But the sparrow sat on the outside of the window, and cried\"\u003e\n    Ach shuigh an gealbhan taobh amuigh den fhuinneog, agus ghlaoigh s\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Carter! thy cruelty shall cost thee thy life!\u0026quot;\"\u003e\n    \"A charthala\u00ed! \u00edocfaidh do chrualacht as do shaol!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"With that he jumped up in a rage,\"\u003e\n    Leis sin l\u00e9im s\u00e9 suas le fearg,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"seized his hatchet,\"\u003e\n    rug s\u00e9 ar a th\u00e1,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and threw it at the sparrow;\"\u003e\n    agus chaith s\u00e9 \u00ed ar an ngealbhan;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but it missed her, and only broke the window.\"\u003e\n    ach chaill s\u00ed \u00ed, agus bhris s\u00ed an fhuinneog amh\u00e1in.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The sparrow now hopped in,\"\u003e\n    Th\u00e1inig an gealbhan isteach ansin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"perched upon the window-seat, and cried,\"\u003e\n    shuigh s\u00ed ar shu\u00edoch\u00e1n na fuinneoige,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Carter! it shall cost thee thy life!\u0026quot;\"\u003e\n    agus ghlaoigh s\u00ed, \"A charthala\u00ed! \u00edocfaidh s\u00e9 as do shaol!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then he became mad and blind with rage,\"\u003e\n    Ansin d\u0027\u00e9irigh s\u00e9 ar buile agus dall le fearg,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and struck the window-seat with such force that he cleft it in two:\"\u003e\n    agus bhuail s\u00e9 an su\u00edoch\u00e1n fuinneoige le f\u00f3rsa chomh m\u00f3r sin gur bhris s\u00e9 ina dh\u00e1 chuid;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and as the sparrow flew from place to place,\"\u003e\n    agus agus an gealbhan ag eitilt \u00f3 \u00e1it go h\u00e1it,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"the carter and his wife were so furious,\"\u003e\n    bh\u00ed an carthala\u00ed agus a bhean chomh feargach sin\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"that they broke all their furniture,\"\u003e\n    gur bhris siad a gcuid trosc\u00e1in go l\u00e9ir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"glasses, chairs, benches, the table, and at last the walls,\"\u003e\n    na gloin\u00ed, na cathaoireacha, na bancanna, an t\u00e1bla, agus faoi dheireadh na malla\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"without touching the bird at all.\"\u003e\n    gan an t-\u00e9an a bhaint amach ar bith.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"In the end, however, they caught her:\"\u003e\n    Faoi dheireadh, \u00e1fach, rug siad uirthi;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and the wife said, \u0026quot;Shall I kill her at once?\u0026quot;\"\u003e\n    agus d\u00fairt an bhean, \"An mhar\u00f3idh m\u00e9 \u00ed l\u00e1ithreach?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;No,\u0026quot; cried he, \u0026quot;that is letting her off too easily:\"\u003e\n    \"N\u00ed hea,\" a ghlaoigh s\u00e9, \"is r\u00f3-\u00e9asca \u00ed a scaoileadh:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"she shall die a much more cruel death; I will eat her.\u0026quot;\"\u003e\n    b\u00e1s i bhfad n\u00edos cru\u00e1lach a chuirfidh m\u00e9 uirthi; \u00edosfaidh m\u00e9 \u00ed.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"But the sparrow began to flutter about,\"\u003e\n    Ach thosaigh an gealbhan ag floscadh timpeall\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and stretch out her neck and cried,\"\u003e\n    agus ag s\u00edneadh a muine\u00e1l, agus ghlaoigh s\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Carter! it shall cost thee thy life yet!\u0026quot;\"\u003e\n    \"A charthala\u00ed! \u00edocfaidh s\u00e9 as do shaol f\u00f3s!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"With that he could wait no longer:\"\u003e\n    Leis sin n\u00ed raibh s\u00e9 in ann fanacht n\u00edos faide:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"so he gave his wife the hatchet, and cried,\"\u003e\n    thug s\u00e9 an t\u00e1ch d\u00e1 bhean, agus ghlaoigh s\u00e9,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;Wife, strike at the bird and kill her in my hand.\u0026quot;\"\u003e\n    \"A bhean, buaile an t-\u00e9an agus mhar\u00f3idh t\u00fa \u00ed i mo l\u00e1mh.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"And the wife struck; but she missed her aim,\"\u003e\n    Bhuaile an bhean; ach chaill s\u00ed a sprioc,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and hit her husband on the head so that he fell down dead,\"\u003e\n    agus bhuail s\u00ed a fear c\u00e9ile ar an gcloigeann ionas gur thit s\u00e9 marbh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and the sparrow flew quietly home to her nest.\"\u003e\n    agus d\u0027eitil an gealbhan go ci\u00fain abhaile chuig a nead.\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 2, "vocab": "\u003ctr\u003e\n  \u003ctd\u003eaoire\u003c/td\u003e\n  \u003ctd\u003esheperd\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"5\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egealbhan\u003c/td\u003e\n  \u003ctd\u003esparrow\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"3\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003emadra\u003c/td\u003e\n  \u003ctd\u003edog\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"1\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003eshiopa b\u00faist\u00e9ara\u003c/td\u003e\n  \u003ctd\u003ebutcher shop\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"17\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003esiopa b\u00e1ic\u00e9ara\u003c/td\u003e\n  \u003ctd\u003ebakery\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"19\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e"}, "1.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A shepherd had a dog, but he never took care of him.\"\u003e\n    Bh\u00ed madra ag aoire, ach n\u00edor thug s\u00e9 aire d\u00f3 riamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The poor dog was always hungry.\"\u003e\n    Bh\u00ed an madra bocht ocrach an t-am ar fad.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Finally, the dog ran away, feeling very sad.\"\u003e\n    Ar deireadh thosaigh an madra ag rith ar shi\u00fal, agus bh\u00ed s\u00e9 an-bhr\u00f3nach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"On the road, he met a sparrow who asked him,\"\u003e\n    Ar an mb\u00f3thar, bhuail s\u00e9 le gealbhan a d\u00fairt,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Why are you so sad, my friend?\u0026#x27;\"\u003e\n    \"C\u00e9n f\u00e1th a bhfuil t\u00fa chomh br\u00f3nach, a chara?\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Because I\u0026#x27;m really, really hungry, and I have nothing to eat,\u0026#x27; said the dog.\"\u003e\n    \"T\u00e1 ocras an-mh\u00f3r orm, agus n\u00edl aon rud agam le n-ithe,\" arsa an madra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;If that\u0026#x27;s the problem,\u0026#x27; said the sparrow,\"\u003e\n    \"M\u00e1s \u00e9 sin an fhadhb,\" arsa an gealbhan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;come with me to the next town, and I\u0026#x27;ll help you find some food.\u0026#x27;\"\u003e\n    \"tar liom go dt\u00ed an baile eile, agus gheobhaidh m\u00e9 bia duit.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So they walked together into the town.\"\u003e\n    Mar sin shi\u00fail siad le ch\u00e9ile isteach sa bhaile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"When they passed by a butcher\u0026#x27;s shop, the sparrow said to the dog,\"\u003e\n    Nuair a chuaigh siad thar shiopa b\u00faist\u00e9ara, d\u00fairt an gealbhan leis an madra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026#x27;Wait here for a minute while I get you some meat.\u0026#x27;\"\u003e\n    \"Fan anseo ar feadh n\u00f3im\u00e9id agus gheobhaidh m\u00e9 feoil duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The sparrow flew up and landed on a shelf.\"\u003e\n    D\u0027eitil an gealbhan suas agus sheas s\u00ed ar sheilf.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"She looked around carefully.\"\u003e\n    Bhreathnaigh s\u00ed timpeall go c\u00faramach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Then she pecked and scratched at a steak sitting on the edge of the shelf until it fell down.\"\u003e\n    Ansin ghob s\u00ed st\u00e9ig a bh\u00ed ar imeall na seilfe go dt\u00ed gur thit s\u00ed anuas.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The dog quickly grabbed it and ran into a corner, where he ate it all up.\"\u003e\n    Rug an madra ar an bhfeoil go tapa agus rith s\u00e9 go c\u00fainne, agus d\u0027ith s\u00e9 suas go l\u00e9ir \u00ed.\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 4, "vocab": "\u003ctr\u003e\n  \u003ctd\u003eaoire\u003c/td\u003e\n  \u003ctd\u003esheperd\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"5\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egealbhan\u003c/td\u003e\n  \u003ctd\u003esparrow\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"3\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003emadra\u003c/td\u003e\n  \u003ctd\u003edog\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"1\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003eshiopa b\u00faist\u00e9ara\u003c/td\u003e\n  \u003ctd\u003ebutcher shop\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"17\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e"}}};
       document.title = postData.title;
 
       // Get the content paragraph
       const contentDiv = document.getElementById("content");
       const vocabTable = document.getElementById("vocab_table");
       const paginationControls = document.getElementById("pagination-controls");
+      const maxVisiblePages = 5;
+
+      const current_post_id = postData.id;
+      let current_version_key = Object.keys(postData.versions)[0];
+      let current_page_index = 0;
+      let isBookmarked = postData.current_bookmark_page_index != null;
+
+      const bookmark_btn = document.getElementById("bookmark-btn");
+      const bookmark_jump_btn = document.getElementById("bookmark-jump");
+      const bookmark_icon = document.getElementById("bookmark-icon");
+      // const label = document.getElementById("bookmark-label");
+      const toastEl = document.getElementById("bookmark-toast");
+      const toast = new bootstrap.Toast(toastEl);
+
       
-      let currentVersion = Object.keys(postData.versions)[0];
-      let currentPage = 0;
-      
-      function renderPage(version, pageIndex, instant = true) {
-        const pages = postData.versions[version].content;
+      function render_page_for_current_version(pageIndex, instant = true) {
+        const pages = postData.versions[current_version_key].content;
         if (!pages || !pages[pageIndex]) return;
 
         if (instant) {
@@ -474,37 +613,102 @@
           }, 150);
         }
 
-        paginationControls.innerHTML = `
-          <button class="btn btn-outline-primary me-2" ${pageIndex === 0 ? "disabled" : ""} onclick="renderPage('${version}', ${pageIndex - 1})">Previous</button>
-          <span class="align-self-center">Page ${pageIndex + 1} of ${pages.length}</span>
-          <button class="btn btn-outline-primary ms-2" ${pageIndex === pages.length - 1 ? "disabled" : ""} onclick="renderPage('${version}', ${pageIndex + 1})">Next</button>
-        `;
+        // paginationControls.innerHTML = `
+        //   <button class="btn btn-outline-primary me-2" ${pageIndex === 0 ? "disabled" : ""} onclick="render_page_for_current_version(${pageIndex - 1})">Previous</button>
+        //   <span class="align-self-center">Page ${pageIndex + 1} of ${pages.length}</span>
+        //   <button class="btn btn-outline-primary ms-2" ${pageIndex === pages.length - 1 ? "disabled" : ""} onclick="render_page_for_current_version(${pageIndex + 1})">Next</button>
+        // `;
+        create_pagination_html(pageIndex, pages);
 
+        isBookmarked = postData.versions[current_version_key].bookmark_page_index != null;
         const postImageDiv = document.getElementById("post_image");
         if (postImageDiv) {
           postImageDiv.style.display = pageIndex === 0 ? "block" : "none";
         }
 
-        currentPage = pageIndex;
+        current_page_index = pageIndex;
+        updateBookmarkTooltip(isBookmarked);
         window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
       }
       
+      function create_pagination_html(
+        pageIndex,
+        pages
+      ){
+        let paginationHTML = `
+          <div class="bs-component">
+            <div>
+              <ul class="pagination justify-content-center">
+                <li class="page-item ${pageIndex === 0 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${pageIndex - 1})">&laquo;</a>
+                </li>`;
+
+        // Calculate page range to show
+        let startPage = Math.max(0, pageIndex - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(pages.length, startPage + maxVisiblePages);
+
+        // Adjust if we're near the end
+        if (endPage - startPage < maxVisiblePages) {
+          startPage = Math.max(0, endPage - maxVisiblePages);
+        }
+
+        // Add first page and ellipsis if needed
+        if (startPage > 0) {
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(0)">1</a>
+                </li>`;
+          if (startPage > 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+        }
+
+        // Add page numbers
+        for (let i = startPage; i < endPage; i++) {
+          paginationHTML += `
+                <li class="page-item ${i === pageIndex ? 'active' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${i})">${i + 1}</a>
+                </li>`;
+        }
+
+        // Add last page and ellipsis if needed
+        if (endPage < pages.length) {
+          if (endPage < pages.length - 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${pages.length - 1})">${pages.length}</a>
+                </li>`;
+        }
+
+        paginationHTML += `
+                <li class="page-item ${pageIndex === pages.length - 1 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${pageIndex + 1})">&raquo;</a>
+                </li>
+              </ul>
+            </div>
+          </div>`;
+
+        paginationControls.innerHTML = paginationHTML;
+      }
+
       function switchVersion(versionKey, instant = true) {
-        currentVersion = versionKey;
-        currentPage = 0;
-        renderPage(currentVersion, currentPage, instant);
+        current_version_key = versionKey;
+        current_page_index = 0;
+        render_page_for_current_version(current_page_index, instant);
         vocabTable.innerHTML = postData.versions[versionKey].vocab;
       }
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") {
-          if (currentPage > 0) {
-            renderPage(currentVersion, currentPage - 1);
+          if (current_page_index > 0) {
+            render_page_for_current_version(current_page_index - 1);
           }
         } else if (e.key === "ArrowRight") {
-          const pages = postData.versions[currentVersion].content;
-          if (currentPage < pages.length - 1) {
-            renderPage(currentVersion, currentPage + 1);
+          const pages = postData.versions[current_version_key].content;
+          if (current_page_index < pages.length - 1) {
+            render_page_for_current_version(current_page_index + 1);
           }
         }
       });
@@ -524,14 +728,18 @@
           touchEndX = e.changedTouches[0].screenX;
           const delta = touchEndX - touchStartX;
           if (Math.abs(delta) < 50) return;
-          if (delta > 0) renderPage(currentVersion, currentPage - 1);
-          else renderPage(currentVersion, currentPage + 1);
+          if (delta > 0) render_page_for_current_version(current_page_index - 1);
+          else render_page_for_current_version(current_page_index + 1);
         });
       }
 
-      switchVersion(currentVersion, true); // render instantly on page load
-
       document.addEventListener("DOMContentLoaded", function () {
+        // render instantly on page load
+        // note that it seems waiting until the page has loaded prevents any
+        // tooltips from accidentally appearing (if the User's mouse is in
+        // position)
+        switchVersion(current_version_key, true); 
+
         const collapseEl = document.getElementById("collapseOne");
         const collapse = new bootstrap.Collapse(collapseEl, {
           toggle: false // prevent auto toggle
@@ -543,7 +751,146 @@
           collapse.hide(); // collapse on mobile
         }
       });
-    </script>
+
+    bookmark_btn.addEventListener("click", () => {
+      bookmark_btn.disabled = true;
+
+      fetch("/bookmark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          post_version_id: postData.versions[current_version_key].id,
+          page_index: current_page_index,
+          remove: isBookmarked // toggle behavior
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          isBookmarked = !isBookmarked;
+          let toast_text = "Page bookmarked!";
+          if (isBookmarked){
+            postData.versions[current_version_key]['bookmark_page_index'] = current_page_index;
+          } else {
+            postData.versions[current_version_key]['bookmark_page_index'] = null;
+            toast_text = "Bookmark removed!";
+          }
+
+          if (bookmark_icon){
+            updateBookmarkTooltip(isBookmarked);
+            // label.textContent = isBookmarked ? "Bookmarked!" : "Bookmark This Page";
+          }
+          toastEl.querySelector(".toast-body").textContent = toast_text;
+          toast.show();
+        } else {
+          alert("Bookmark failed.");
+        }
+      })
+      .catch(() => alert("Server error."))
+      .finally(() => {
+        // button is disabled for a second to prevent spams
+        setTimeout(() => bookmark_btn.disabled = false, 1000);
+      });
+    });
+
+    function updateBookmarkTooltip(isBookmarked) {
+      if (bookmark_icon){
+        bookmark_icon.classList.toggle("fa-regular", !isBookmarked);
+        bookmark_icon.classList.toggle("fa-solid", isBookmarked);
+      }
+      const bookmarkSpan = document.querySelector('span[data-bs-toggle="tooltip"]');
+      const tooltip = bootstrap.Tooltip.getInstance(bookmarkSpan);
+      
+      // Determine new title based on state
+      const newTitle = isBookmarked ? 'Remove bookmark' : 'Bookmark page';
+      
+      // Update the title
+      bookmarkSpan.setAttribute('title', newTitle);
+      bookmarkSpan.setAttribute('data-bs-original-title', newTitle);
+      
+      // Reinitialize tooltip
+      if (tooltip) {
+        tooltip.dispose();
+      }
+      new bootstrap.Tooltip(bookmarkSpan);
+
+      if (isBookmarked) {
+        
+        bookmark_jump_btn.classList.remove('d-none'); // Show the button
+      } else {
+        bookmark_jump_btn.classList.add('d-none'); // Show the button
+      }
+
+      if (bookmark_jump_btn) {
+        if (postData.versions[current_version_key].bookmark_page_index == current_page_index) {
+          bookmark_jump_btn.textContent = "On bookmarked page";
+          bookmark_jump_btn.disabled = true;
+        } else {
+          let num = postData.versions[current_version_key].bookmark_page_index + 1;
+          bookmark_jump_btn.textContent = "Go to Bookmark (Page " + num.toString() + ")"
+          bookmark_jump_btn.disabled = false;
+          bookmark_jump_btn.onclick = () => render_page_for_current_version(
+            postData.versions[current_version_key].bookmark_page_index
+          );
+        }
+      }
+    }
+
+    $('#vocab_table').on('change', '.form-check-input', function() {
+      // the function that is triggered when checkboxes are un/checked
+      // console.log($(this));
+      const is_checked = $(this).is(':checked');
+      const word_id = $(this).val();
+      console.log(is_checked, word_id);
+      $(this).prop('disabled', true);
+
+      fetch("/wordbank", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          word_id: word_id,
+          remove: !is_checked
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        let toast_text = "";
+        if (data.status === "success") {
+          toastEl.classList.add('text-bg-success');
+          toastEl.classList.remove('text-bg-danger');
+          toast_text = "Word saved to your Word Bank!";
+          if (data.action == "removed"){
+            toast_text = "Word removed to your Word Bank!";
+          }
+          
+        } else {
+          toastEl.classList.remove('text-bg-success');
+          toastEl.classList.add('text-bg-danger');
+          toast_text = "Failed to save the Word to your Word Bank!";
+          if (data.action == "removed"){
+            toast_text = "Failed to remove the Word from your Word Bank!";
+          }
+        }
+        toastEl.querySelector(".toast-body").textContent = toast_text;
+        toast.show();
+      })
+      .catch(() => {
+        toastEl.classList.remove('text-bg-success');
+        toastEl.classList.add('text-bg-danger');
+        toastEl.querySelector(".toast-body").textContent = "Server Error";
+        toast.show();
+      })
+      .finally(() => {
+        // button is disabled for a second to prevent spams
+        setTimeout(() => $(this).prop('disabled', false), 1000);
+      });
+
+    });
+  </script>
 
   </body>
 </html>

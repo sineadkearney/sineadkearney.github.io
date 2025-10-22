@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-    <!-- https://bootswatch.com/flatly/ -->
-     <!-- see also: https://bootswatch.com/darkly/ -->
-  <head>
-    <meta charset="utf-8">
-    <title>Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">
+  <title>Gaeilge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Load theme immediately (inline script runs before page renders) -->
+  <script src="/assets/js/load_theme.js"></script>
 
-    <!-- <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css">
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/assets/css/common.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -68,7 +65,7 @@
             </li>
           
             <li class="nav-item">
-              <a class="nav-link" href="/help">Help</a>
+              <a class="nav-link" href="/help.html">Help</a>
             </li>
           </ul>
 
@@ -77,12 +74,7 @@
             <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
             <hr class="d-lg-none my-2 text-white-50">
           </li>
-          <!-- <li class="nav-item dropdown" data-bs-theme="light">
-              <form class="d-flex">
-                  <input class="form-control me-sm-2" type="search" placeholder="Search">
-                  <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form>
-          </li> -->
+
           <li class="nav-item" data-bs-theme="light">
             <form class="d-flex">
               <div class="position-relative">
@@ -126,6 +118,33 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+            <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+            <hr class="d-lg-none my-2 text-white-50">
+          </li>
+          <li class="nav-item dropdown" data-bs-theme="light">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="font-size-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Font Size">
+              <i class="bi bi-type"></i>
+              <span class="d-lg-none ms-2">Font Size</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-decrease">
+                  <i class="bi bi-dash-circle"></i><span class="ms-2">Decrease</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
+                  <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase">
+                  <i class="bi bi-plus-circle"></i><span class="ms-2">Increase</span>
+                </button>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item dropdown" data-bs-theme="light">
               <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
                   <i class="bi bi-person-circle"></i>
@@ -136,7 +155,7 @@
                 <li>
                     <button id="sign-in-btn" type="button" class="dropdown-item d-flex align-items-center"
                             data-bs-theme-value="light" aria-pressed="false"
-                            onclick="window.location.href='/login.html'">
+                            onclick="window.location.href='/login.html?next=' + encodeURIComponent(window.location.pathname)">
                     <i class="bi bi-box-arrow-in-right"></i><span class="ms-2">Sign In</span>
                     </button>
                 </li>
@@ -148,7 +167,7 @@
       </div>
     </div>
   </div>
-    <main style="padding-top: 80px;" class="container flex-grow-1">
+    <main style="padding-top: 5em;" class="container flex-grow-1">
 
       <!-- Buttons
       ================================================== -->
@@ -168,7 +187,34 @@
         <div class="row pb-3">
             <div class="bs-component mb-3 d-flex align-items-center">
 
-                <i class="fa-regular fa-bookmark me-2" style="font-size: 2rem;"></i>
+              <span 
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Please sign-in to bookmark pages"
+                class="d-inline-block">
+                <button id="bookmark-btn"
+                  class="btn"
+                  disabled
+                  >
+                  <i id="bookmark-icon" class="fa-regular fa-bookmark me-2"
+                  style="font-size: 2rem;"></i>
+                </button>
+              </span>
+
+              <p>
+              </p>
+              <button 
+                id="bookmark-jump" 
+                class="btn btn-outline-info mb-3 d-none" 
+                onclick="render_page_for_current_version(0)"
+                
+              >
+                <i class="fa-solid fa-arrow-turn-down"></i>
+                
+                Go to Bookmark (Page 1)
+                
+              </button>
+                
                 <div class="btn-group" role="group" aria-label="Version toggle">
                   
                     <input type="radio" class="btn-check" name="versionToggle" id="version1" autocomplete="off"
@@ -184,11 +230,11 @@
               </div>
 
           <div class="col-lg-8">
-            <h1 id="title" class="text-center">
+            <h2 id="title" class="text-center">
                 <span data-bs-toggle="tooltip" 
                 data-bs-placement="top" 
                 title="The Dog and the Sparrow">
-                An tÉan Órga</span></h1>
+                An tÉan Órga</span></h2>
 
                 <div id="post_image">
                   <img 
@@ -198,7 +244,7 @@
                 </div>
 
                 <div id="content" class="bs-component">
-                  <p>
+                  <!-- <p>
 <span
     data-bs-toggle="tooltip" 
     data-bs-placement="top" 
@@ -236,9 +282,11 @@
     agus d'ordaigh sé don ghairneoir faire a choinneáil faoi chrann an oíche ar fad.
 </span>
 </p>
+<p>
+</p> -->
                 </div>
             
-
+                <div id="pagination-controls"></div>
           </div>
 
           <!-- card? -->
@@ -256,17 +304,29 @@
                 <table class="table table-striped">
                   <tbody id="vocab_table">
                     <tr>
-  <td>rí</td>
-  <td>king</td>
-</tr><tr>
-  <td>úl</td>
-  <td>apple</td>
-</tr><tr>
   <td>fearg</td>
   <td>angry</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="11" >
+  </td>
 </tr><tr>
   <td>gairneoir</td>
   <td>gardener</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="13" >
+  </td>
+</tr><tr>
+  <td>rí</td>
+  <td>king</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="7" >
+  </td>
+</tr><tr>
+  <td>úl</td>
+  <td>apple</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="9" >
+  </td>
 </tr>
                     </tbody>
                     </table>
@@ -294,17 +354,29 @@
                       <table class="table table-striped">
                         <tbody id="vocab_table">
                           <tr>
-  <td>rí</td>
-  <td>king</td>
-</tr><tr>
-  <td>úl</td>
-  <td>apple</td>
-</tr><tr>
   <td>fearg</td>
   <td>angry</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="11" >
+  </td>
 </tr><tr>
   <td>gairneoir</td>
   <td>gardener</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="13" >
+  </td>
+</tr><tr>
+  <td>rí</td>
+  <td>king</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="7" >
+  </td>
+</tr><tr>
+  <td>úl</td>
+  <td>apple</td>
+  <td>
+    <input class="form-check-input" type="checkbox" value="9" >
+  </td>
 </tr>
                           </tbody>
                           </table>
@@ -316,7 +388,7 @@
             </div>
           </div>
 
-          <div id="pagination-controls"></div>
+          
 
           <!-- The href values assumes routes like /category/<slug> and /tag/<slug> -->
           <div class="row">
@@ -342,8 +414,18 @@
         </div>
       </div>
     </main>
-      
-    <footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
+    
+    <!-- notification for when making bookmarks -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Bookmark updated!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
     <div class="container">
       <ul class="list-unstyled">
         <li class="float-end"><a href="#top">Back to top</a></li>
@@ -357,19 +439,30 @@
     <script src="/assets/js/common.js"></script>
     <script>
 
-      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "id": 2, "image": "../assets/img/posts/golden_bird.jpg", "tags": [{"name": "bird", "slug": "bird"}], "title": "An t\u00c9an \u00d3rga", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A certain king had a beautiful garden,\"\u003e\n    Bh\u00ed gaird\u00edn \u00e1lainn ag r\u00ed \u00e1irithe,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and in the garden stood a tree which bore golden apples.\"\u003e\n    agus sa ghaird\u00edn sin sheas crann a bh\u00ed ag tabhairt \u00falla \u00f3ir.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"These apples were always counted,\"\u003e\n    Bh\u00edodh na h\u00falla seo \u00e1 gcomhaireamh i gc\u00f3na\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and about the time when they began to grow ripe it was found that every night one of them was gone.\"\u003e\n    agus nuair a thosaigh siad ag aib\u00edocht fuarthas amach gur imigh ceann d\u00edobh gach o\u00edche.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The king became very angry at this,\"\u003e\n    Chuaigh fearg mh\u00f3r ar an r\u00ed mar gheall air seo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and ordered the gardener to keep watch all night under the tree.\"\u003e\n    agus d\u0027ordaigh s\u00e9 don ghairneoir faire a choinne\u00e1il faoi chrann an o\u00edche ar fad.\n\u003c/span\u003e\n\u003c/p\u003e"], "vocab": "\u003ctr\u003e\n  \u003ctd\u003er\u00ed\u003c/td\u003e\n  \u003ctd\u003eking\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003e\u00fal\u003c/td\u003e\n  \u003ctd\u003eapple\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003efearg\u003c/td\u003e\n  \u003ctd\u003eangry\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egairneoir\u003c/td\u003e\n  \u003ctd\u003egardener\u003c/td\u003e\n\u003c/tr\u003e"}}};
+      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_bookmark_page_index": null, "current_level_key": 0.0, "id": 2, "image": "../assets/img/posts/golden_bird.jpg", "tags": [{"name": "bird", "slug": "bird"}], "title": "An t\u00c9an \u00d3rga", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A certain king had a beautiful garden,\"\u003e\n    Bh\u00ed gaird\u00edn \u00e1lainn ag r\u00ed \u00e1irithe,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and in the garden stood a tree which bore golden apples.\"\u003e\n    agus sa ghaird\u00edn sin sheas crann a bh\u00ed ag tabhairt \u00falla \u00f3ir.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"These apples were always counted,\"\u003e\n    Bh\u00edodh na h\u00falla seo \u00e1 gcomhaireamh i gc\u00f3na\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and about the time when they began to grow ripe it was found that every night one of them was gone.\"\u003e\n    agus nuair a thosaigh siad ag aib\u00edocht fuarthas amach gur imigh ceann d\u00edobh gach o\u00edche.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The king became very angry at this,\"\u003e\n    Chuaigh fearg mh\u00f3r ar an r\u00ed mar gheall air seo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and ordered the gardener to keep watch all night under the tree.\"\u003e\n    agus d\u0027ordaigh s\u00e9 don ghairneoir faire a choinne\u00e1il faoi chrann an o\u00edche ar fad.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003c/p\u003e"], "id": 7, "vocab": "\u003ctr\u003e\n  \u003ctd\u003efearg\u003c/td\u003e\n  \u003ctd\u003eangry\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"11\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egairneoir\u003c/td\u003e\n  \u003ctd\u003egardener\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"13\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003er\u00ed\u003c/td\u003e\n  \u003ctd\u003eking\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"7\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003e\u00fal\u003c/td\u003e\n  \u003ctd\u003eapple\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"9\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e"}}};
       document.title = postData.title;
 
       // Get the content paragraph
       const contentDiv = document.getElementById("content");
       const vocabTable = document.getElementById("vocab_table");
       const paginationControls = document.getElementById("pagination-controls");
+      const maxVisiblePages = 5;
+
+      const current_post_id = postData.id;
+      let current_version_key = Object.keys(postData.versions)[0];
+      let current_page_index = 0;
+      let isBookmarked = postData.current_bookmark_page_index != null;
+
+      const bookmark_btn = document.getElementById("bookmark-btn");
+      const bookmark_jump_btn = document.getElementById("bookmark-jump");
+      const bookmark_icon = document.getElementById("bookmark-icon");
+      // const label = document.getElementById("bookmark-label");
+      const toastEl = document.getElementById("bookmark-toast");
+      const toast = new bootstrap.Toast(toastEl);
+
       
-      let currentVersion = Object.keys(postData.versions)[0];
-      let currentPage = 0;
-      
-      function renderPage(version, pageIndex, instant = true) {
-        const pages = postData.versions[version].content;
+      function render_page_for_current_version(pageIndex, instant = true) {
+        const pages = postData.versions[current_version_key].content;
         if (!pages || !pages[pageIndex]) return;
 
         if (instant) {
@@ -385,37 +478,102 @@
           }, 150);
         }
 
-        paginationControls.innerHTML = `
-          <button class="btn btn-outline-primary me-2" ${pageIndex === 0 ? "disabled" : ""} onclick="renderPage('${version}', ${pageIndex - 1})">Previous</button>
-          <span class="align-self-center">Page ${pageIndex + 1} of ${pages.length}</span>
-          <button class="btn btn-outline-primary ms-2" ${pageIndex === pages.length - 1 ? "disabled" : ""} onclick="renderPage('${version}', ${pageIndex + 1})">Next</button>
-        `;
+        // paginationControls.innerHTML = `
+        //   <button class="btn btn-outline-primary me-2" ${pageIndex === 0 ? "disabled" : ""} onclick="render_page_for_current_version(${pageIndex - 1})">Previous</button>
+        //   <span class="align-self-center">Page ${pageIndex + 1} of ${pages.length}</span>
+        //   <button class="btn btn-outline-primary ms-2" ${pageIndex === pages.length - 1 ? "disabled" : ""} onclick="render_page_for_current_version(${pageIndex + 1})">Next</button>
+        // `;
+        create_pagination_html(pageIndex, pages);
 
+        isBookmarked = postData.versions[current_version_key].bookmark_page_index != null;
         const postImageDiv = document.getElementById("post_image");
         if (postImageDiv) {
           postImageDiv.style.display = pageIndex === 0 ? "block" : "none";
         }
 
-        currentPage = pageIndex;
+        current_page_index = pageIndex;
+        updateBookmarkTooltip(isBookmarked);
         window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
       }
       
+      function create_pagination_html(
+        pageIndex,
+        pages
+      ){
+        let paginationHTML = `
+          <div class="bs-component">
+            <div>
+              <ul class="pagination justify-content-center">
+                <li class="page-item ${pageIndex === 0 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${pageIndex - 1})">&laquo;</a>
+                </li>`;
+
+        // Calculate page range to show
+        let startPage = Math.max(0, pageIndex - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(pages.length, startPage + maxVisiblePages);
+
+        // Adjust if we're near the end
+        if (endPage - startPage < maxVisiblePages) {
+          startPage = Math.max(0, endPage - maxVisiblePages);
+        }
+
+        // Add first page and ellipsis if needed
+        if (startPage > 0) {
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(0)">1</a>
+                </li>`;
+          if (startPage > 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+        }
+
+        // Add page numbers
+        for (let i = startPage; i < endPage; i++) {
+          paginationHTML += `
+                <li class="page-item ${i === pageIndex ? 'active' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${i})">${i + 1}</a>
+                </li>`;
+        }
+
+        // Add last page and ellipsis if needed
+        if (endPage < pages.length) {
+          if (endPage < pages.length - 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${pages.length - 1})">${pages.length}</a>
+                </li>`;
+        }
+
+        paginationHTML += `
+                <li class="page-item ${pageIndex === pages.length - 1 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); render_page_for_current_version(${pageIndex + 1})">&raquo;</a>
+                </li>
+              </ul>
+            </div>
+          </div>`;
+
+        paginationControls.innerHTML = paginationHTML;
+      }
+
       function switchVersion(versionKey, instant = true) {
-        currentVersion = versionKey;
-        currentPage = 0;
-        renderPage(currentVersion, currentPage, instant);
+        current_version_key = versionKey;
+        current_page_index = 0;
+        render_page_for_current_version(current_page_index, instant);
         vocabTable.innerHTML = postData.versions[versionKey].vocab;
       }
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") {
-          if (currentPage > 0) {
-            renderPage(currentVersion, currentPage - 1);
+          if (current_page_index > 0) {
+            render_page_for_current_version(current_page_index - 1);
           }
         } else if (e.key === "ArrowRight") {
-          const pages = postData.versions[currentVersion].content;
-          if (currentPage < pages.length - 1) {
-            renderPage(currentVersion, currentPage + 1);
+          const pages = postData.versions[current_version_key].content;
+          if (current_page_index < pages.length - 1) {
+            render_page_for_current_version(current_page_index + 1);
           }
         }
       });
@@ -435,14 +593,18 @@
           touchEndX = e.changedTouches[0].screenX;
           const delta = touchEndX - touchStartX;
           if (Math.abs(delta) < 50) return;
-          if (delta > 0) renderPage(currentVersion, currentPage - 1);
-          else renderPage(currentVersion, currentPage + 1);
+          if (delta > 0) render_page_for_current_version(current_page_index - 1);
+          else render_page_for_current_version(current_page_index + 1);
         });
       }
 
-      switchVersion(currentVersion, true); // render instantly on page load
-
       document.addEventListener("DOMContentLoaded", function () {
+        // render instantly on page load
+        // note that it seems waiting until the page has loaded prevents any
+        // tooltips from accidentally appearing (if the User's mouse is in
+        // position)
+        switchVersion(current_version_key, true); 
+
         const collapseEl = document.getElementById("collapseOne");
         const collapse = new bootstrap.Collapse(collapseEl, {
           toggle: false // prevent auto toggle
@@ -454,7 +616,146 @@
           collapse.hide(); // collapse on mobile
         }
       });
-    </script>
+
+    bookmark_btn.addEventListener("click", () => {
+      bookmark_btn.disabled = true;
+
+      fetch("/bookmark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          post_version_id: postData.versions[current_version_key].id,
+          page_index: current_page_index,
+          remove: isBookmarked // toggle behavior
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          isBookmarked = !isBookmarked;
+          let toast_text = "Page bookmarked!";
+          if (isBookmarked){
+            postData.versions[current_version_key]['bookmark_page_index'] = current_page_index;
+          } else {
+            postData.versions[current_version_key]['bookmark_page_index'] = null;
+            toast_text = "Bookmark removed!";
+          }
+
+          if (bookmark_icon){
+            updateBookmarkTooltip(isBookmarked);
+            // label.textContent = isBookmarked ? "Bookmarked!" : "Bookmark This Page";
+          }
+          toastEl.querySelector(".toast-body").textContent = toast_text;
+          toast.show();
+        } else {
+          alert("Bookmark failed.");
+        }
+      })
+      .catch(() => alert("Server error."))
+      .finally(() => {
+        // button is disabled for a second to prevent spams
+        setTimeout(() => bookmark_btn.disabled = false, 1000);
+      });
+    });
+
+    function updateBookmarkTooltip(isBookmarked) {
+      if (bookmark_icon){
+        bookmark_icon.classList.toggle("fa-regular", !isBookmarked);
+        bookmark_icon.classList.toggle("fa-solid", isBookmarked);
+      }
+      const bookmarkSpan = document.querySelector('span[data-bs-toggle="tooltip"]');
+      const tooltip = bootstrap.Tooltip.getInstance(bookmarkSpan);
+      
+      // Determine new title based on state
+      const newTitle = isBookmarked ? 'Remove bookmark' : 'Bookmark page';
+      
+      // Update the title
+      bookmarkSpan.setAttribute('title', newTitle);
+      bookmarkSpan.setAttribute('data-bs-original-title', newTitle);
+      
+      // Reinitialize tooltip
+      if (tooltip) {
+        tooltip.dispose();
+      }
+      new bootstrap.Tooltip(bookmarkSpan);
+
+      if (isBookmarked) {
+        
+        bookmark_jump_btn.classList.remove('d-none'); // Show the button
+      } else {
+        bookmark_jump_btn.classList.add('d-none'); // Show the button
+      }
+
+      if (bookmark_jump_btn) {
+        if (postData.versions[current_version_key].bookmark_page_index == current_page_index) {
+          bookmark_jump_btn.textContent = "On bookmarked page";
+          bookmark_jump_btn.disabled = true;
+        } else {
+          let num = postData.versions[current_version_key].bookmark_page_index + 1;
+          bookmark_jump_btn.textContent = "Go to Bookmark (Page " + num.toString() + ")"
+          bookmark_jump_btn.disabled = false;
+          bookmark_jump_btn.onclick = () => render_page_for_current_version(
+            postData.versions[current_version_key].bookmark_page_index
+          );
+        }
+      }
+    }
+
+    $('#vocab_table').on('change', '.form-check-input', function() {
+      // the function that is triggered when checkboxes are un/checked
+      // console.log($(this));
+      const is_checked = $(this).is(':checked');
+      const word_id = $(this).val();
+      console.log(is_checked, word_id);
+      $(this).prop('disabled', true);
+
+      fetch("/wordbank", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          word_id: word_id,
+          remove: !is_checked
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        let toast_text = "";
+        if (data.status === "success") {
+          toastEl.classList.add('text-bg-success');
+          toastEl.classList.remove('text-bg-danger');
+          toast_text = "Word saved to your Word Bank!";
+          if (data.action == "removed"){
+            toast_text = "Word removed to your Word Bank!";
+          }
+          
+        } else {
+          toastEl.classList.remove('text-bg-success');
+          toastEl.classList.add('text-bg-danger');
+          toast_text = "Failed to save the Word to your Word Bank!";
+          if (data.action == "removed"){
+            toast_text = "Failed to remove the Word from your Word Bank!";
+          }
+        }
+        toastEl.querySelector(".toast-body").textContent = toast_text;
+        toast.show();
+      })
+      .catch(() => {
+        toastEl.classList.remove('text-bg-success');
+        toastEl.classList.add('text-bg-danger');
+        toastEl.querySelector(".toast-body").textContent = "Server Error";
+        toast.show();
+      })
+      .finally(() => {
+        // button is disabled for a second to prevent spams
+        setTimeout(() => $(this).prop('disabled', false), 1000);
+      });
+
+    });
+  </script>
 
   </body>
 </html>

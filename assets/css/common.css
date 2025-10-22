@@ -1,6 +1,6 @@
 span[data-bs-toggle="tooltip"] {
     transition: all 0.2s ease;
-    padding: 2px 4px;
+    /* padding: 2px 4px; */
     border-radius: 3px;
     }
 
@@ -11,7 +11,7 @@ span[data-bs-toggle="tooltip"] {
 
     /* Make highlight more visible in dark mode */
     [data-bs-theme="dark"] span[data-bs-toggle="tooltip"]:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.4);
     }
   
     /* Fix navbar and content width on mobile */
