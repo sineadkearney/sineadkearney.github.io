@@ -128,11 +128,11 @@
               <span class="d-lg-none ms-2">Font Size</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li>
+              <!-- <li>
                 <button type="button" class="dropdown-item d-flex align-items-center" id="font-decrease">
                   <i class="bi bi-dash-circle"></i><span class="ms-2">Decrease</span>
                 </button>
-              </li>
+              </li> -->
               <li>
                 <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
                   <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
@@ -140,7 +140,12 @@
               </li>
               <li>
                 <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase">
-                  <i class="bi bi-plus-circle"></i><span class="ms-2">Increase</span>
+                  <i class="bi bi-plus-circle"></i><span class="ms-2">Big</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase-big">
+                  <i class="bi bi-plus-circle" style="font-size: 1.5em;"></i><span class="ms-2">Bigger</span>
                 </button>
               </li>
             </ul>
@@ -221,7 +226,8 @@
                           checked
                           onclick="switchVersion('0.0')">
                     <label class="btn btn-outline-primary" for="version1">
-                      Original
+                      original
+                      <!-- Original -->
                     </label>
                   
                 </div>
@@ -297,7 +303,7 @@
                     <span
                         data-bs-toggle="tooltip" 
                         data-bs-placement="top" 
-                        title="Vocabulary">
+                        title="Dictionary">
                         Foclóir
                     </span></h3>
                 <div class="card-body">
@@ -306,27 +312,19 @@
                     <tr>
   <td>fearg</td>
   <td>angry</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="11" >
-  </td>
+  
 </tr><tr>
   <td>gairneoir</td>
   <td>gardener</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="13" >
-  </td>
+  
 </tr><tr>
   <td>rí</td>
   <td>king</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="7" >
-  </td>
+  
 </tr><tr>
   <td>úl</td>
   <td>apple</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="9" >
-  </td>
+  
 </tr>
                     </tbody>
                     </table>
@@ -344,7 +342,7 @@
                       <span
                         data-bs-toggle="tooltip" 
                         data-bs-placement="top" 
-                        title="Vocabulary">
+                        title="Dictionary">
                         <b>Foclóir</b>
                     </span>
                     </button>
@@ -356,27 +354,19 @@
                           <tr>
   <td>fearg</td>
   <td>angry</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="11" >
-  </td>
+  
 </tr><tr>
   <td>gairneoir</td>
   <td>gardener</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="13" >
-  </td>
+  
 </tr><tr>
   <td>rí</td>
   <td>king</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="7" >
-  </td>
+  
 </tr><tr>
   <td>úl</td>
   <td>apple</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="9" >
-  </td>
+  
 </tr>
                           </tbody>
                           </table>
@@ -439,7 +429,7 @@
     <script src="/assets/js/common.js"></script>
     <script>
 
-      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_bookmark_page_index": null, "current_level_key": 0.0, "id": 2, "image": "../assets/img/posts/golden_bird.jpg", "tags": [{"name": "bird", "slug": "bird"}], "title": "An t\u00c9an \u00d3rga", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A certain king had a beautiful garden,\"\u003e\n    Bh\u00ed gaird\u00edn \u00e1lainn ag r\u00ed \u00e1irithe,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and in the garden stood a tree which bore golden apples.\"\u003e\n    agus sa ghaird\u00edn sin sheas crann a bh\u00ed ag tabhairt \u00falla \u00f3ir.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"These apples were always counted,\"\u003e\n    Bh\u00edodh na h\u00falla seo \u00e1 gcomhaireamh i gc\u00f3na\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and about the time when they began to grow ripe it was found that every night one of them was gone.\"\u003e\n    agus nuair a thosaigh siad ag aib\u00edocht fuarthas amach gur imigh ceann d\u00edobh gach o\u00edche.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The king became very angry at this,\"\u003e\n    Chuaigh fearg mh\u00f3r ar an r\u00ed mar gheall air seo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and ordered the gardener to keep watch all night under the tree.\"\u003e\n    agus d\u0027ordaigh s\u00e9 don ghairneoir faire a choinne\u00e1il faoi chrann an o\u00edche ar fad.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003c/p\u003e"], "id": 7, "vocab": "\u003ctr\u003e\n  \u003ctd\u003efearg\u003c/td\u003e\n  \u003ctd\u003eangry\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"11\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egairneoir\u003c/td\u003e\n  \u003ctd\u003egardener\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"13\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003er\u00ed\u003c/td\u003e\n  \u003ctd\u003eking\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"7\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003e\u00fal\u003c/td\u003e\n  \u003ctd\u003eapple\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"9\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e"}}};
+      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_bookmark_page_index": null, "current_level_key": 0.0, "id": 2, "image": "../assets/img/posts/golden_bird.jpg", "tags": [{"name": "bird", "slug": "bird"}], "title": "An t\u00c9an \u00d3rga", "title_tooltip": "The Dog and the Sparrow", "versions": {"0.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A certain king had a beautiful garden,\"\u003e\n    Bh\u00ed gaird\u00edn \u00e1lainn ag r\u00ed \u00e1irithe,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and in the garden stood a tree which bore golden apples.\"\u003e\n    agus sa ghaird\u00edn sin sheas crann a bh\u00ed ag tabhairt \u00falla \u00f3ir.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"These apples were always counted,\"\u003e\n    Bh\u00edodh na h\u00falla seo \u00e1 gcomhaireamh i gc\u00f3na\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and about the time when they began to grow ripe it was found that every night one of them was gone.\"\u003e\n    agus nuair a thosaigh siad ag aib\u00edocht fuarthas amach gur imigh ceann d\u00edobh gach o\u00edche.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"The king became very angry at this,\"\u003e\n    Chuaigh fearg mh\u00f3r ar an r\u00ed mar gheall air seo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"and ordered the gardener to keep watch all night under the tree.\"\u003e\n    agus d\u0027ordaigh s\u00e9 don ghairneoir faire a choinne\u00e1il faoi chrann an o\u00edche ar fad.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003c/p\u003e"], "id": 7, "level_name": "original", "vocab": "\u003ctr\u003e\n  \u003ctd\u003efearg\u003c/td\u003e\n  \u003ctd\u003eangry\u003c/td\u003e\n  \n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003egairneoir\u003c/td\u003e\n  \u003ctd\u003egardener\u003c/td\u003e\n  \n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003er\u00ed\u003c/td\u003e\n  \u003ctd\u003eking\u003c/td\u003e\n  \n\u003c/tr\u003e\u003ctr\u003e\n  \u003ctd\u003e\u00fal\u003c/td\u003e\n  \u003ctd\u003eapple\u003c/td\u003e\n  \n\u003c/tr\u003e"}}};
       document.title = postData.title;
 
       // Get the content paragraph

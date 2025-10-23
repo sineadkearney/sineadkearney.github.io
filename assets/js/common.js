@@ -117,9 +117,10 @@ document.querySelectorAll('.dropdown-submenu .dropdown-toggle').forEach(function
 (function() {
     const minSize = 100;
     const maxSize = 150;
-    const step = 10;
+    const step = 15;
     
     // Load saved font size on page load
+    const originalFontSize = 100;
     const savedFontSize = parseInt(localStorage.getItem('fontSize')) || 100;
     applyFontSize(savedFontSize);
     
@@ -135,22 +136,31 @@ document.querySelectorAll('.dropdown-submenu .dropdown-toggle').forEach(function
     }
     
     document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('font-decrease')?.addEventListener('click', () => {
-        const currentSize = getCurrentFontSize();
-        if (currentSize > minSize) {
-          applyFontSize(currentSize - step);
-        }
-      });
+
+    //   document.getElementById('font-decrease')?.addEventListener('click', () => {
+    //     const currentSize = getCurrentFontSize();
+    //     if (currentSize > minSize) {
+    //       applyFontSize(currentSize - step);
+    //     }
+    //   });
       
       document.getElementById('font-reset')?.addEventListener('click', () => {
-        applyFontSize(100);
+        applyFontSize(originalFontSize);
       });
       
+    //   document.getElementById('font-increase')?.addEventListener('click', () => {
+    //     const currentSize = getCurrentFontSize();
+    //     if (currentSize < maxSize) {
+    //       applyFontSize(currentSize + step);
+    //     }
+    //   });
+
       document.getElementById('font-increase')?.addEventListener('click', () => {
-        const currentSize = getCurrentFontSize();
-        if (currentSize < maxSize) {
-          applyFontSize(currentSize + step);
-        }
+        applyFontSize(originalFontSize + step);
+      });
+
+      document.getElementById('font-increase-big')?.addEventListener('click', () => {
+        applyFontSize(originalFontSize + step + step);
       });
     });
   })();

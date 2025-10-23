@@ -128,11 +128,11 @@
               <span class="d-lg-none ms-2">Font Size</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li>
+              <!-- <li>
                 <button type="button" class="dropdown-item d-flex align-items-center" id="font-decrease">
                   <i class="bi bi-dash-circle"></i><span class="ms-2">Decrease</span>
                 </button>
-              </li>
+              </li> -->
               <li>
                 <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
                   <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
@@ -140,7 +140,12 @@
               </li>
               <li>
                 <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase">
-                  <i class="bi bi-plus-circle"></i><span class="ms-2">Increase</span>
+                  <i class="bi bi-plus-circle"></i><span class="ms-2">Big</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase-big">
+                  <i class="bi bi-plus-circle" style="font-size: 1.5em;"></i><span class="ms-2">Bigger</span>
                 </button>
               </li>
             </ul>
@@ -221,7 +226,8 @@
                           checked
                           onclick="switchVersion('0.0')">
                     <label class="btn btn-outline-primary" for="version1">
-                      Original
+                      original
+                      <!-- Original -->
                     </label>
                   
                 </div>
@@ -357,7 +363,7 @@
                     <span
                         data-bs-toggle="tooltip" 
                         data-bs-placement="top" 
-                        title="Vocabulary">
+                        title="Dictionary">
                         Foclóir
                     </span></h3>
                 <div class="card-body">
@@ -366,9 +372,7 @@
                     <tr>
   <td>adhmadóir</td>
   <td>carpenter</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="15" >
-  </td>
+  
 </tr>
                     </tbody>
                     </table>
@@ -386,7 +390,7 @@
                       <span
                         data-bs-toggle="tooltip" 
                         data-bs-placement="top" 
-                        title="Vocabulary">
+                        title="Dictionary">
                         <b>Foclóir</b>
                     </span>
                     </button>
@@ -398,9 +402,7 @@
                           <tr>
   <td>adhmadóir</td>
   <td>carpenter</td>
-  <td>
-    <input class="form-check-input" type="checkbox" value="15" >
-  </td>
+  
 </tr>
                           </tbody>
                           </table>
@@ -458,7 +460,7 @@
     <script src="/assets/js/common.js"></script>
     <script>
 
-      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_bookmark_page_index": null, "current_level_key": 0.0, "id": 3, "image": "../assets/img/posts/tom_thumb.png", "tags": [], "title": "Tom\u00e1s Beag", "title_tooltip": "Little Tomas (Tom Thumb)", "versions": {"0.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A poor woodman sat in his cottage one night,\"\u003e\n    Bh\u00ed adhmad\u00f3ir bocht ina shu\u00ed ina ch\u00e1b\u00e1n o\u00edche amh\u00e1in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"smoking his pipe by the fireside,\"\u003e\n    ag caitheamh a ph\u00edopa cois na tine,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"while his wife sat by his side spinning.\"\u003e\n    agus a bhean ina su\u00ed lena thaobh ag sn\u00edomh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;How lonely it is, wife,\u0026quot; said he, as he puffed out a long curl of smoke,\"\u003e\n    \"Nach uaigneach at\u00e1 s\u00e9, a bhean,\" ar seisean, agus \u00e9 ag s\u00e9ideadh amach cor fada deataigh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;for you and me to sit here by ourselves, without any children to play about and amuse us\"\u003e\n    \"duitse agus domsa a bheith anseo in\u00e1r n-aonar, gan p\u00e1ist\u00ed timpeall orainn ag s\u00fagradh agus ag spraoi linn,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"while other people seem so happy and merry with their children!\u0026quot;\"\u003e\n    agus daoine eile chomh s\u00e1sta sin lena gcuid p\u00e1ist\u00ed!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;What you say is very true,\u0026quot; said the wife, sighing, and turning round her wheel;\"\u003e\n    \"Is f\u00edor an m\u00e9id at\u00e1 \u00e1 r\u00e1 agat,\" arsa an bhean, ag osna\u00edl agus ag casadh a rotha;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;how happy should I be if I had but one child!\"\u003e\n    \"nach sona a bheadh m\u00e9 d\u00e1 mbeadh fi\u00fa leanbh amh\u00e1in agam!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"If it were no bigger than my thumb, I should be very happy, and love it dearly.\u0026quot;\"\u003e\n    D\u00e1 mbeadh s\u00e9 gan a bheith n\u00edos m\u00f3 n\u00e1 mo ord\u00f3g f\u00e9in, bheadh m\u00e9 an-s\u00e1sta agus dh\u00e9anfainn m\u00f3r\u00e1n gr\u00e1 d\u00f3.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Now odd as you may think it, it came to pass that this good woman\u0026quot;s wish was fulfilled,\"\u003e\n    Anois, c\u00e9 gur ait an sc\u00e9al \u00e9, tharla s\u00e9 go f\u00edor gur comhl\u00edonadh mian na mn\u00e1 maithe seo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"just in the very way she had wished it;\"\u003e\n    d\u00edreach ar an d\u00f3igh ar theastaigh uaithi \u00ed;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"for, not long afterwards, she had a little boy, who was quite healthy and strong,\"\u003e\n    \u00f3ir n\u00ed fada ina dhiaidh sin rug s\u00ed buachaill beag a bh\u00ed l\u00e1n sl\u00e1inteach agus l\u00e1idir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but was not much bigger than my thumb.\"\u003e\n    ach n\u00e1rbh fhada n\u00edos m\u00f3 n\u00e1 mo ord\u00f3g f\u00e9in.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So they said, \u0026quot;Well, we cannot say we have not got what we wished for, and,\"\u003e\n    Mar sin d\u00fairt siad, \"Bhuel, n\u00ed f\u00e9idir a r\u00e1 nach bhfuair muid an rud ar mhian linn, agus,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"little as he is, we will love him dearly.\u0026quot;\"\u003e\n    beag mar at\u00e1 s\u00e9, beidh muid go m\u00f3r i ngr\u00e1 leis.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"And they called him Thomas Thumb.\"\u003e\n    Agus thug siad air Tom\u00e1s Beag.\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 11, "vocab": "\u003ctr\u003e\n  \u003ctd\u003eadhmad\u00f3ir\u003c/td\u003e\n  \u003ctd\u003ecarpenter\u003c/td\u003e\n  \u003ctd\u003e\n    \u003cinput class=\"form-check-input\" type=\"checkbox\" value=\"15\" \u003e\n  \u003c/td\u003e\n\u003c/tr\u003e"}}};
+      const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_bookmark_page_index": null, "current_level_key": 0.0, "id": 3, "image": "../assets/img/posts/tom_thumb.png", "tags": [], "title": "Tom\u00e1s Beag", "title_tooltip": "Little Tomas (Tom Thumb)", "versions": {"0.0": {"bookmark_page_index": null, "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"A poor woodman sat in his cottage one night,\"\u003e\n    Bh\u00ed adhmad\u00f3ir bocht ina shu\u00ed ina ch\u00e1b\u00e1n o\u00edche amh\u00e1in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"smoking his pipe by the fireside,\"\u003e\n    ag caitheamh a ph\u00edopa cois na tine,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"while his wife sat by his side spinning.\"\u003e\n    agus a bhean ina su\u00ed lena thaobh ag sn\u00edomh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;How lonely it is, wife,\u0026quot; said he, as he puffed out a long curl of smoke,\"\u003e\n    \"Nach uaigneach at\u00e1 s\u00e9, a bhean,\" ar seisean, agus \u00e9 ag s\u00e9ideadh amach cor fada deataigh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;for you and me to sit here by ourselves, without any children to play about and amuse us\"\u003e\n    \"duitse agus domsa a bheith anseo in\u00e1r n-aonar, gan p\u00e1ist\u00ed timpeall orainn ag s\u00fagradh agus ag spraoi linn,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"while other people seem so happy and merry with their children!\u0026quot;\"\u003e\n    agus daoine eile chomh s\u00e1sta sin lena gcuid p\u00e1ist\u00ed!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;What you say is very true,\u0026quot; said the wife, sighing, and turning round her wheel;\"\u003e\n    \"Is f\u00edor an m\u00e9id at\u00e1 \u00e1 r\u00e1 agat,\" arsa an bhean, ag osna\u00edl agus ag casadh a rotha;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"\u0026quot;how happy should I be if I had but one child!\"\u003e\n    \"nach sona a bheadh m\u00e9 d\u00e1 mbeadh fi\u00fa leanbh amh\u00e1in agam!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"If it were no bigger than my thumb, I should be very happy, and love it dearly.\u0026quot;\"\u003e\n    D\u00e1 mbeadh s\u00e9 gan a bheith n\u00edos m\u00f3 n\u00e1 mo ord\u00f3g f\u00e9in, bheadh m\u00e9 an-s\u00e1sta agus dh\u00e9anfainn m\u00f3r\u00e1n gr\u00e1 d\u00f3.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"Now odd as you may think it, it came to pass that this good woman\u0026quot;s wish was fulfilled,\"\u003e\n    Anois, c\u00e9 gur ait an sc\u00e9al \u00e9, tharla s\u00e9 go f\u00edor gur comhl\u00edonadh mian na mn\u00e1 maithe seo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"just in the very way she had wished it;\"\u003e\n    d\u00edreach ar an d\u00f3igh ar theastaigh uaithi \u00ed;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"for, not long afterwards, she had a little boy, who was quite healthy and strong,\"\u003e\n    \u00f3ir n\u00ed fada ina dhiaidh sin rug s\u00ed buachaill beag a bh\u00ed l\u00e1n sl\u00e1inteach agus l\u00e1idir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"but was not much bigger than my thumb.\"\u003e\n    ach n\u00e1rbh fhada n\u00edos m\u00f3 n\u00e1 mo ord\u00f3g f\u00e9in.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"So they said, \u0026quot;Well, we cannot say we have not got what we wished for, and,\"\u003e\n    Mar sin d\u00fairt siad, \"Bhuel, n\u00ed f\u00e9idir a r\u00e1 nach bhfuair muid an rud ar mhian linn, agus,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"little as he is, we will love him dearly.\u0026quot;\"\u003e\n    beag mar at\u00e1 s\u00e9, beidh muid go m\u00f3r i ngr\u00e1 leis.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    title=\"And they called him Thomas Thumb.\"\u003e\n    Agus thug siad air Tom\u00e1s Beag.\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 11, "level_name": "original", "vocab": "\u003ctr\u003e\n  \u003ctd\u003eadhmad\u00f3ir\u003c/td\u003e\n  \u003ctd\u003ecarpenter\u003c/td\u003e\n  \n\u003c/tr\u003e"}}};
       document.title = postData.title;
 
       // Get the content paragraph
