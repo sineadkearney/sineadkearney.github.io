@@ -77,3 +77,8 @@ span[data-bs-toggle="tooltip"] {
     left: 100%;
     margin-top: -1px;
   }
+
+  [data-bs-theme="dark"] .tooltip {
+    --bs-tooltip-bg: #ffffff;
+    --bs-tooltip-color: #000000;
+  }
