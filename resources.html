@@ -1,24 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-    <!-- https://bootswatch.com/flatly/ -->
-     <!-- see also: https://bootswatch.com/darkly/ -->
-  <head>
-    <meta charset="utf-8">
-    <title>Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">
+  <title>Help</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Load theme immediately (inline script runs before page renders) -->
+  <script src="/assets/js/load_theme.js"></script>
 
-    <!-- <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css">
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/assets/css/common.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-    <style>
-    .modal-backdrop.show {
-      opacity: 0.25;
-    }
-    </style>
   </head>
+
   <body class="d-flex flex-column min-vh-100">
     
     <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
@@ -235,92 +228,30 @@
     }
   }
 </script>
-    <main style="padding-top: 5em;" class="container flex-grow-1">
+    <main style="padding-top: 80px;" class="container flex-grow-1">
 
+      <!-- Buttons
+      ================================================== -->
       <div class="bs-docs-section">
         <div class="page-header">
           <div class="row">
             <div class="col-lg-12">
+
+            
+              <h3>Dictionaries</h3>
+              <ul>
+              <li><a href="https://www.teanglann.ie/">Teanglann.ie: English -> Irish, Irish -> English</a></li>
+              <li><a href="https://www.focloir.ie/en/">Foclóir.ie: English -> Irish</a></li>
+              </ul>
               
-                <div class="bs-component">
-                  <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" data-bs-toggle="tab" href="#bookmarks">Bookmarks</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="tab" href="#wordbank">Word Bank</a>
-                    </li>
-                  </ul>
-                  <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane fade show active" id="bookmarks">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th>Post Title</th>
-                            <th>Level</th>
-                            <th>Page</th>
-                            <th>Last Updated</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          
-                          <tr><td colspan="4" class="text-center">No bookmarks yet.</td></tr>
-                          
-                          
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="tab-pane fade" id="wordbank">
-                      <table class="table table-hover">
-                        <tbody>
-                          
-                          <tr><td colspan="3" class="text-center">No words yet.</td></tr>
-                          
-                          
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
 
 
             </div>
           </div>
         </div>
-
-        <!-- <div class="row">
-          <div class="col-lg-7">
-            <span>content, width 7</span> 
-          </div>
-          <div class="col-lg-5">
-            <div class="bs-component">
-              <span>content, width 5</span> 
-            </div>
-
-          </div>
-        </div> -->
       </div>
     </main>
       
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteBookmarkModal" tabindex="-1" aria-labelledby="deleteBookmarkModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="deleteBookmarkModalLabel">Confirm Delete</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to remove this bookmark?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- notification for when making bookmarks -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -369,200 +300,14 @@
     </div>
   </div>
 </div>
-
+    
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/common.js"></script>
+    <!-- <script src="../_assets/js/custom.js"></script> -->
     <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const toastEl = document.getElementById("bookmark-toast");
-      const toast = new bootstrap.Toast(toastEl);
+
+      </script>
       
-      // Get the modal
-      const deleteBookmarkModal = document.getElementById('deleteBookmarkModal')
-      const deleteModal = new bootstrap.Modal(deleteBookmarkModal);
-      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-      
-      const bookmark_table = document.querySelector('#bookmarks table');
-      const word_table = document.querySelector('#wordbank table');
-
-      // Store current bookmark to delete
-      let currentDeleteButton = null;
-
-      // Get all delete buttons
-      const delete_bookmark_buttons = document.querySelectorAll('.btn-delete-bookmark');
-      delete_bookmark_buttons.forEach(button => {
-        button.addEventListener('click', function() {
-          // Store reference to the button and data
-          currentDeleteButton = this;
-          // Show the modal
-          deleteBookmarkModal.querySelector(".modal-body").textContent = 'Are you sure you want to remove this bookmark?';
-          deleteModal.show();
-        });
-      });
-
-      const delete_word_buttons = document.querySelectorAll('.btn-delete-word');
-      delete_word_buttons.forEach(button => {
-        button.addEventListener('click', function() {
-          // Store reference to the button and data
-          currentDeleteButton = this;
-          // Show the modal
-          deleteBookmarkModal.querySelector(".modal-body").textContent = 'Are you sure you want to remove this word?';
-          deleteModal.show();
-        });
-      });
-      
-      // Handle confirm delete
-      confirmDeleteBtn.addEventListener('click', function() {
-        if (!currentDeleteButton) return;
-        // Disable button to prevent double-clicks
-        confirmDeleteBtn.disabled = true;
-        currentDeleteButton.disabled = true;
-        const is_bookmark_button = currentDeleteButton.classList.contains('btn-delete-bookmark');
-        if (is_bookmark_button) {
-          delete_bookmark();
-        } else {
-          delete_word();
-        }
-      });
-
-      function delete_word() {
-        fetch("/wordbank", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            word_id: parseInt(currentDeleteButton.dataset.wordBankId),
-            remove: true
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === "success") {
-            // Hide modal
-            deleteModal.hide();
-            
-            // Remove the row from the table
-            const row = currentDeleteButton.closest('tr');
-            row.remove();
-            
-            // Show toast notification
-            toastEl.querySelector(".toast-body").textContent = "Word removed to your Word Bank";
-            toastEl.classList.remove('text-bg-danger');
-            toastEl.classList.add('text-bg-success');
-            toast.show();
-            
-            // Check if table is now empty
-            const tbody = word_table.querySelector('table tbody');
-            if (tbody.children.length === 0) {
-              tbody.innerHTML = '<tr><td colspan="4" class="text-center">No words yet</td></tr>';
-            }
-            
-            // Reset
-            currentDeleteButton = null;
-            currentPostId = null;
-            currentPageIndex = null;
-          } else {
-            deleteModal.hide();
-            // Show toast notification
-            toastEl.querySelector(".toast-body").textContent = "Failed to remove word.";
-            toastEl.classList.remove('text-bg-success');
-            toastEl.classList.add('text-bg-danger');
-            toast.show();
-
-          }
-        })
-        .catch(() => {
-          deleteModal.hide();
-          // Show toast notification
-          toastEl.querySelector(".toast-body").textContent = "Server error. Failed to remove word.";
-          toastEl.classList.remove('text-bg-success');
-          toastEl.classList.add('text-bg-danger');
-          toast.show();
-        })
-        .finally(() => {
-          confirmDeleteBtn.disabled = false;
-          if (currentDeleteButton) {
-            currentDeleteButton.disabled = false;
-          }
-        });
-      }
-
-      function delete_bookmark(){
-        
-        fetch("/bookmark", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            post_version_id: parseInt(currentDeleteButton.dataset.postId),
-            page_index: parseInt(currentDeleteButton.dataset.pageIndex),
-            remove: true
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === "success") {
-            // Hide modal
-            deleteModal.hide();
-            
-            // Remove the row from the table
-            const row = currentDeleteButton.closest('tr');
-            row.remove();
-            
-            // Show toast notification
-            toastEl.querySelector(".toast-body").textContent = "Bookmark removed!";
-            toastEl.classList.remove('text-bg-danger');
-            toastEl.classList.add('text-bg-success');
-            toast.show();
-            
-            // Check if table is now empty
-            const tbody = bookmark_table.querySelector('tbody');
-            if (tbody.children.length === 0) {
-              tbody.innerHTML = '<tr><td colspan="4" class="text-center">No bookmarks yet.</td></tr>';
-            }
-            
-            // Reset
-            currentDeleteButton = null;
-            currentPostId = null;
-            currentPageIndex = null;
-          } else {
-            deleteModal.hide();
-            // Show toast notification
-            toastEl.querySelector(".toast-body").textContent = "Failed to remove bookmark.";
-            toastEl.classList.remove('text-bg-success');
-            toastEl.classList.add('text-bg-danger');
-            toast.show();
-
-          }
-        })
-        .catch(() => {
-          deleteModal.hide();
-          // Show toast notification
-          toastEl.querySelector(".toast-body").textContent = "Server error. Failed to remove bookmark.";
-          toastEl.classList.remove('text-bg-success');
-          toastEl.classList.add('text-bg-danger');
-          toast.show();
-        })
-        .finally(() => {
-          confirmDeleteBtn.disabled = false;
-          if (currentDeleteButton) {
-            currentDeleteButton.disabled = false;
-          }
-        });
-      }
-      
-      // Reset state when modal is closed
-      document.getElementById('deleteBookmarkModal').addEventListener('hidden.bs.modal', function () {
-        confirmDeleteBtn.disabled = false;
-        if (currentDeleteButton) {
-          currentDeleteButton.disabled = false;
-        }
-      });
-    });
-
-    </script>
   </body>
 </html>

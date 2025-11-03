@@ -3,22 +3,18 @@
   <meta charset="utf-8">
   <title>Gaeilge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- name="viewport" - Configures the viewport (visible area of the webpage)
-  width=device-width - Set page width to match the device's screen width
-  initial-scale=1 - Set initial zoom level to 100% (no zoom) -->
-  
   <!-- Load theme immediately (inline script runs before page renders) -->
   <script src="/assets/js/load_theme.js"></script>
-  
+
   <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="/assets/css/common.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 
-  <body class="d-flex flex-column min-vh-100">
-    
-    <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
   <div class="container">
     <a href="../" class="navbar-brand">Home</a>
     <button class="navbar-toggler" 
@@ -234,95 +230,41 @@
 </script>
     <main style="padding-top: 5em;" class="container flex-grow-1">
 
-      <!-- Buttons
-      ================================================== -->
-      <div class="bs-docs-section">
-        <div class="page-header">
-          <div class="row">
-            <div class="col-lg-12">
-              
-                <h1 id="title" class="text-center">
-                  <span 
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    data-bs-html="true"
-                    title='Welcome'>
-                    Fáilte
-                  </span>
-                </h1>
+  <h3 class="mb-4">Posts in Category: Arthur Conan Doyle</h3>
 
-              <h4 class="mb-4">
-                <span 
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  data-bs-html="true"
-                  title='Here are the three most-recent posts'>
-                  Seo iad na trí phost is déanaí:
-                </span>
-              </h4>
-
-              
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <h5 class="card-title">Cás Céannachta</h5>
-                    <p>
-                      
-                        <span class="card-text text-muted">Category:</span>
-                        
-                          <a href="/category/fiction">Fiction</a> > 
-                        
-                          <a href="/category/arthur-conan-doyle">Arthur Conan Doyle</a>
-                        
-                      
-                    </p>
-                    <p class="card-text text-muted">2025-11-02</p>
-                    <a href="/post/6.html" class="btn btn-primary">Read More</a>
-                  </div>
-                </div>
-              
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <h5 class="card-title">An Bosca Tintreach</h5>
-                    <p>
-                      
-                        <span class="card-text text-muted">Category:</span>
-                        
-                          <a href="/category/fairy-tales">Fairy Tales</a> > 
-                        
-                          <a href="/category/hans-christian-andersen">Hans Christian Andersen</a>
-                        
-                      
-                    </p>
-                    <p class="card-text text-muted">2025-11-02</p>
-                    <a href="/post/5.html" class="btn btn-primary">Read More</a>
-                  </div>
-                </div>
-              
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <h5 class="card-title">An Mac Tíre agus na Seacht Meannán Beaga</h5>
-                    <p>
-                      
-                        <span class="card-text text-muted">Category:</span>
-                        
-                          <a href="/category/grimms">Grimms</a> > 
-                        
-                          <a href="/category/fairy-tales">Fairy Tales</a>
-                        
-                      
-                    </p>
-                    <p class="card-text text-muted">2025-11-02</p>
-                    <a href="/post/4.html" class="btn btn-primary">Read More</a>
-                  </div>
-                </div>
-              
-          </div>
-        </div>
-
+  
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Cás Céannachta</h5>
+        <p class="card-text text-muted">2025-11-02</p>
+        <a href="/post/6.html" class="btn btn-primary">Read More</a>
       </div>
-    </main>
+    </div>
+  
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
       
-    <!-- notification for when making bookmarks -->
+        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+      
+
+      
+        
+          
+            <li class="page-item active"><span class="page-link">1</span></li>
+          
+        
+      
+
+      
+        <li class="page-item disabled"><span class="page-link">Next</span></li>
+      
+    </ul>
+  </nav>
+  </main>
+
+  <!-- notification for when making bookmarks -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -371,13 +313,7 @@
   </div>
 </div>
     
-    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/common.js"></script>
-    <!-- <script src="../_assets/js/custom.js"></script> -->
-    <script>
-
-
-      </script>
-      
-  </body>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/common.js"></script>
+</body>
 </html>
