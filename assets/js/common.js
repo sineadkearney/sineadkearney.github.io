@@ -2,6 +2,8 @@
 document.documentElement.setAttribute('data-bs-theme', 'light');
 let currentTheme = 'light';
 
+let user_is_auth = document.body.dataset.auth === "True";
+
 let current_post_id = null;
 let current_version_key = null;
 let current_page_index = null;
@@ -375,5 +377,8 @@ function close_translation_modal() {
     modalInstance.hide();
 }
 
-const toastEl = document.getElementById("bookmark-toast");
+// used in footer
+const toastEl = document.getElementById("main_toast");
 const toast = new bootstrap.Toast(toastEl);
+// Store current bookmark to delete
+let currentDeleteButton = null;

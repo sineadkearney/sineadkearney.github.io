@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Gaeilge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Load theme immediately -->
+  <script src="/assets/js/load_theme.js"></script>
+
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/css/common.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+  
+  <style>
+    /* App-like Layout Styles */
+    body {
+      overflow: hidden; /* Prevent body scroll, handle in columns */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header adjustments */
+    #header {
+      flex-shrink: 0;
+      z-index: 1030;
+    }
+
+    /* Main Container */
+    #main-container {
+      flex-grow: 1;
+      overflow: hidden;
+      padding-top: 50px; /* Adjust based on header height */
+      display: flex;
+    }
+
+    /* Columns */
+    .sidebar-col {
+      overflow-y: auto;
+      height: 100%;
+      padding: 1rem;
+      border-right: 1px solid var(--bs-border-color);
+    }
+    
+    #right-sidebar {
+      border-right: none;
+      border-left: 1px solid var(--bs-border-color);
+    }
+
+    #center-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    #content-area {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 2rem;
+      padding-bottom: 80px; /* Space for fixed nav */
+    }
+
+    #fixed-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bs-body-bg);
+      border-top: 1px solid var(--bs-border-color);
+      padding: 1rem;
+      z-index: 1020;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Words List Styling */
+    .word-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid var(--bs-border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .word-item:last-child {
+      border-bottom: none;
+    }
+    .word-irish {
+      font-weight: bold;
+      color: var(--bs-primary);
+      text-decoration: none;
+    }
+    .word-english {
+      font-size: 0.9em;
+      color: var(--bs-secondary-color);
+    }
+
+    /* Bookmark Item */
+    .bookmark-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      margin-bottom: 0.25rem;
+      cursor: pointer;
+    }
+    .bookmark-item:hover {
+      background-color: var(--bs-tertiary-bg);
+    }
+    .bookmark-item.active {
+      background-color: var(--bs-primary-bg-subtle);
+    }
+
+    /* Chapter break styling */
+    .chapter-break {
+      border: 0;
+      border-top: 2px solid var(--bs-border-color);
+      margin: 2rem 0;
+    }
+
+    #content {
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 991.98px) {
+      body {
+        overflow: auto; /* Allow normal scroll on mobile */
+        height: auto;
+      }
+      #main-container {
+        display: block;
+        padding-top: 60px;
+        height: auto;
+        overflow: visible;
+      }
+      .sidebar-col {
+        height: auto;
+        border: none;
+        overflow: visible;
+      }
+      #content-area {
+        height: auto;
+        overflow: visible;
+        padding-bottom: 1rem;
+      }
+      #fixed-nav {
+        position: sticky;
+        bottom: 0;
+      }
+      #left-sidebar, #right-sidebar {
+        display: none;
+      }
+      
+      #mobile-toolbar {
+        display: flex;
+        justify-content: space-around;
+        padding: 0.5rem;
+        background: var(--bs-body-bg);
+        border-bottom: 1px solid var(--bs-border-color);
+        position: sticky;
+        top: 50px; /* Below header */
+        z-index: 1010;
+      }
+    }
+
+    @media (min-width: 992px) {
+      #mobile-toolbar {
+        display: none;
+      }
+    }
+
+    /* Hide content initially to prevent flash during state restoration */
+    #center-col.loading {
+      opacity: 0;
+      transition: opacity 0.2s ease-in;
+    }
+  </style>
+</head>
+<body data-auth="False">
+
+  <style>
+  #header {
+    min-height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  #login_back_arrow {
+    display:none; 
+    font-size: 1.5em;
+    color: gray;
+    cursor: pointer;
+  }
+  #login_back_arrow:hover {
+    color:black;
+  }
+
+  /* Category submenu styles */
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  /* Desktop: Enable hover to open submenus */
+  @media (min-width: 992px) {
+    .dropdown-submenu:hover > .dropdown-menu {
+      display: block;
+    }
+    
+    .dropdown-submenu:hover > .dropdown-item {
+      background-color: var(--bs-dropdown-link-hover-bg);
+      color: var(--bs-dropdown-link-hover-color);
+    }
+  }
+</style>
+
+<div id="header" class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
+  <div class="container">
+    <a href="../" class="navbar-brand">Home</a>
+    <button class="navbar-toggler" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarResponsive" 
+      aria-controls="navbarResponsive" 
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="categories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="categories">
+              
+                  
+                  <li class="dropdown-submenu">
+    <a class="dropdown-item dropdown-toggle" 
+    href="/category/fairy-tales.html">
+      Fairy Tales
+    </a>
+    
+      <ul class="dropdown-menu">
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/grimms.html">
+      Grimms
+    </a>
+    
+  </li>
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/hans-christian-andersen.html">
+      Hans Christian Andersen
+    </a>
+    
+  </li>
+        
+      </ul>
+    
+  </li>
+              
+                  
+                  <li class="dropdown-submenu">
+    <a class="dropdown-item dropdown-toggle" 
+    href="/category/fiction.html">
+      Fiction
+    </a>
+    
+      <ul class="dropdown-menu">
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/arthur-conan-doyle.html">
+      Arthur Conan Doyle
+    </a>
+    
+  </li>
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/charles-dickens.html">
+      Charles Dickens
+    </a>
+    
+  </li>
+        
+      </ul>
+    
+  </li>
+              
+            </ul>
+          </li>
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/help.html">Help</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/resources.html">Resources</a>
+          </li>
+      </ul>
+
+      <ul class="navbar-nav ms-md-auto align-items-center">
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
+          <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+          <hr class="d-lg-none my-2 text-white-50">
+        </li>
+
+        <li class="nav-item" data-bs-theme="light">
+          <form id="search_form" class="d-flex" method="POST" action="/search">
+            <div class="position-relative">
+              <svg class="position-absolute top-50 start-0 translate-middle-y ms-2" width="16" height="16" fill="currentColor" style="pointer-events: none; color: #6c757d;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+              </svg>
+              <input 
+                id="searchInput"
+                class="form-control form-control-sm" 
+                type="search" 
+                placeholder="Cuardaigh" 
+                style="padding-left: 2.5rem;">
+            </div>
+          </form>
+        </li>
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
+          <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+          <hr class="d-lg-none my-2 text-white-50">
+        </li>
+
+        <li class="nav-item dropdown" data-bs-theme="light">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
+            <i class="bi bi-circle-half"></i>
+            <span class="d-lg-none ms-2">Toggle theme</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                <i class="bi bi-sun-fill"></i><span class="ms-2">Light</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="true">
+                <i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
+          <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+          <hr class="d-lg-none my-2 text-white-50">
+        </li>
+
+        <li class="nav-item dropdown" data-bs-theme="light">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="font-size-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Font Size">
+            <i class="bi bi-type"></i>
+            <span class="d-lg-none ms-2">Font Size</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
+                <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase">
+                <i class="bi bi-plus-circle"></i><span class="ms-2">Big</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase-big">
+                <i class="bi bi-plus-circle" style="font-size: 1.5em;"></i><span class="ms-2">Bigger</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown" data-bs-theme="light">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
+                <i class="bi bi-person-circle"></i>
+                <span class="d-lg-none ms-2">User Menu</span>
+            </a>
+            <ul id="user-menu-ul" class="dropdown-menu dropdown-menu-end">
+              <!-- initial content rendered by Jinja -->
+            </ul>            
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- login modal --->
+<div class="modal fade" id="login_prompt_modal" tabindex="-1" aria-labelledby="login_prompt_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <i id="login_back_arrow" class="fa-solid fa-arrow-left" onclick="back_to_login()"></i>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+      </div>
+      <div class="modal-body p-5 pt-0">
+         <form id="login_form" class="">
+            <div id="login_msg_display" class="text-center mb-3" style="display:none;"></div>
+            <div class="form-floating mb-3"> 
+              <input type="email" 
+                class="form-control rounded-3" 
+                id="email_login" 
+                placeholder="name@example.com"
+                required> 
+              <label for="email_login">Email address</label> 
+            </div>
+            <div id="first_password" class="form-floating"> 
+              <!-- <div style="position: relative;"> -->
+                <input type="password" 
+                  class="form-control rounded-3" 
+                  id="password_login" 
+                  placeholder="Password"
+                  > 
+                <label for="password_login">Password</label>
+                <i class="fa-solid fa-eye-slash"
+                    id="password_login_toggle"
+                    style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                    onclick="toggle_password_vis('password_login_toggle', 'password_login');">
+                </i>
+            </div>
+            <div id="second_password" class="form-floating mt-3 mb-3" style="display: none">
+              <input type="password" 
+                class="form-control rounded-3" 
+                id="password_register_2" 
+                placeholder="Password"
+              > 
+              <label for="password_register_2">Confirm Password</label>
+              <i class="fa-solid fa-eye-slash"
+                  id="password_register_2_toggle"
+                  style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                  onclick="toggle_password_vis('password_register_2_toggle', 'password_register_2');">
+              </i>
+          </div>
+            <div id="forgot_password_div" class="text-center p-2">
+              <small class="text-body-secondary">
+                <a href="#" onclick="event.preventDefault(); switch_to_forgot()">Forgot password?</a>
+              </small> 
+            </div>
+            <button id="login_btn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary">Log in</button> 
+            <button id="google_btn" class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3 disabled" type="submit">
+               <svg class="bi me-1" width="16" height="16" aria-hidden="true">
+                  <use xlink:href="#google"></use>
+               </svg>
+               Log in with Google
+            </button>
+            <div id="register_div" class="text-center">
+              <small class="text-body-secondary">
+                Don't have an account? <a href="#" onclick="event.preventDefault(); switch_to_register()">Register here</a>.
+              </small>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+  async function refreshUserMenu() {
+    const response = await fetch("/user-menu"); // endpoint returns just the <ul> content
+    const html = await response.text();
+    document.getElementById("user-menu-ul").innerHTML = html;
+  }
+  refreshUserMenu();
+
+  $(document).ready(function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // prevents form submission
+            const query = $('#searchInput').val().trim();
+            if (!query) return;
+
+            // Use Jinja to generate the base URL
+            const baseUrl = "/search";
+            window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
+        }
+        });
+    }
+  });
+
+  function resend_verification(){
+    console.log('resend_verification');
+    const email = document.getElementById('email_login').value;
+    fetch('/api/resend_verification', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({email:email})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        login_prompt_modal_instance.hide();
+        toastEl.classList.add("text-bg-success");
+        toastEl.classList.remove("text-bg-danger");
+        toastEl.querySelector(".toast-body").textContent = data.message;
+        toast.show();
+      } else {
+        login_msg_display.innerHTML = data.error;
+        login_msg_display.style.display = "block";
+      }
+      
+    })
+    .catch(() => {
+      login_msg_display.innerText = "An unexpected server error occurred.";
+      login_msg_display.style.display = "block";
+    });
+  }
+
+  function sign_out() {
+    // Perform request
+    fetch('/logout')
+    .then(res => res.json())
+    .then(data => {
+
+      const baseUrl = "/";
+      if (
+        window.location.pathname == '/dashboard.html' || 
+        window.location.pathname == '/bookmarks.html' ||
+        window.location.pathname == '/flashcards.html' ||
+        window.location.pathname == '/user-hub'
+      ) {
+        window.location.href=baseUrl;
+      } else {
+        window.location.reload();
+      }
+      
+      toastEl.classList.add("text-bg-success");
+      toastEl.classList.remove("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "Successfully logged out";
+      toast.show();
+
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/post/')) {
+        refresh_page();
+        return;
+      }
+
+    })
+    .catch(() => {
+      toastEl.classList.remove("text-bg-success");
+      toastEl.classList.add("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "An unexpected server error occurred.";
+      toast.show();
+    });
+  }
+
+  let login_prompt_modal_instance = null;
+  function showLoginModal(){
+    back_to_login();
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  function show_password_reset(){
+    switch_to_register();
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "Please enter and confirm your new password";
+    login_msg_display.style.display = "block";
+    
+    document.getElementById('login_btn').innerText = 'Update Password';
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  const loginForm = document.getElementById("login_form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const login_msg_display = document.getElementById("login_msg_display");
+        login_msg_display.style.display = 'none';
+
+        const email = document.getElementById('email_login').value;
+
+        // INPUT ELEMENTS (safer than reusing the wrapper divs)
+        const first_password_input = document.getElementById('password_login');
+        const second_password_input = document.getElementById('password_register_2');
+
+        const first_password_div = document.getElementById('first_password');
+        const second_password_div = document.getElementById('second_password');
+
+        let function_path = '';
+        let data = { email: email };
+        const login_btn = document.getElementById("login_btn");
+        const old_button_text = login_btn.innerText;
+        let new_button_text = "";
+        let user_already_exists = false;
+
+        // REGISTER OR RESET MODE (both visible)
+        console.log('first_password_div.style.display')
+        console.log(first_password_div.style.display)
+        console.log(' ')
+        console.log('second_password_div.style.display')
+        console.log(second_password_div.style.display)
+
+        if (first_password_div.style.display === 'block' && second_password_div.style.display === 'block') {
+        // REGISTER
+        if (login_btn.innerText === 'Update Password'){
+            function_path = '/api/update_password';
+            new_button_text = 'Update Password';
+        } else {
+            function_path = '/register';
+            new_button_text = 'Register';
+        }
+        
+        const password = first_password_input.value;
+        const confirm_password = second_password_input.value;
+
+        if (password !== confirm_password) {
+            login_msg_display.innerText = "Passwords do not match!";
+            login_msg_display.style.display = "block";
+            return;
+        }
+        data.password = password;
+        } 
+        // FORGOT PASSWORD MODE
+        else if (first_password_div.style.display === 'none' && second_password_div.style.display === 'none') {
+        function_path = '/api/reset_password_request';
+        new_button_text = 'Send Password Reset Link';
+        } 
+        // LOGIN MODE
+        else {
+        function_path = '/api/login';
+        new_button_text = 'Log in';
+        data.password = first_password_input.value;
+        }
+
+        // Disable button and show spinner
+        login_btn.disabled = true;
+        login_btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+        fetch(function_path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+        if (data.status === "success") {
+            if (function_path === '/api/login') {
+                // Always reload the page after login
+                window.location.reload();
+            } else if (function_path === '/register') {
+            // Show verification message
+            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+            login_msg_display.style.display = "block";
+            } else {
+            // Password reset or update
+            login_msg_display.innerText = data.message;
+            login_msg_display.style.display = "block";
+            if (function_path === '/api/update_password') {
+                setTimeout(() => {
+                back_to_login();
+                login_msg_display.innerText = "Password updated successfully. Please log in.";
+                login_msg_display.style.display = "block";
+                }, 2000);
+            }
+            }
+        } else {
+            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.style.display = "block";
+        }
+        })
+        .catch(err => {
+        console.error(err);
+        login_msg_display.innerText = "An unexpected server error occurred.";
+        login_msg_display.style.display = "block";
+        })
+        .finally(() => {
+        // Re-enable button
+        login_btn.disabled = false;
+        login_btn.innerText = new_button_text;
+        });
+    });
+  }
+
+  // Helper to refresh page (if needed)
+  function refresh_page(){
+    window.location.reload();
+  }
+
+  // TODO: email input from reset should be disabled
+  function back_to_login(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "block";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "block";
+
+    document.getElementById('login_btn').innerText = 'Log in';
+    document.getElementById('google_btn').innerText = 'Log in with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "none";
+  }
+
+  function switch_to_forgot() {
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "none";
+
+    const google_btn = document.getElementById('google_btn');
+    google_btn.style.display = "none";
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    const login_btn = document.getElementById('login_btn');
+    login_btn.innerText = 'Send Password Reset Link';
+  }
+
+  function switch_to_register(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const first_password_div = document.getElementById('first_password');
+    first_password_div.style.display = "block";
+    const second_password_div = document.getElementById('second_password');
+    second_password_div.style.display = "block";
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    document.getElementById('login_btn').innerText = 'Register';
+    document.getElementById('google_btn').innerText = 'Register with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+  }
+
+  function toggle_password_vis(toggleId, inputId){
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+    toggle.classList.toggle("fa-eye");
+    toggle.classList.toggle("fa-eye-slash");
+    toggle.style.color = isHidden ? "black" : "grey";
+  }
+
+  // Categories menu: Auto-close other submenus when opening one
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryDropdown = document.querySelector('#categories');
+    if (!categoryDropdown) return;
+
+    const mainDropdownMenu = categoryDropdown.nextElementSibling;
+    if (!mainDropdownMenu) return;
+
+    // Close all submenus when main dropdown is hidden
+    categoryDropdown.addEventListener('hidden.bs.dropdown', function() {
+      const allSubmenus = mainDropdownMenu.querySelectorAll('.dropdown-menu.show');
+      allSubmenus.forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+  });
+</script>
+
+  <!-- Mobile Toolbar -->
+  <div id="mobile-toolbar" class="d-lg-none">
+    <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft">
+      <i class="bi bi-list"></i> Menu
+    </button>
+    <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+      <i class="bi bi-translate"></i> Words
+    </button>
+  </div>
+
+  <div id="main-container" class="container-fluid">
+    
+    <!-- Left Sidebar (Desktop) -->
+    <div id="left-sidebar" class="col-lg-3 sidebar-col d-none d-lg-block">
+      <!-- Versions -->
+      <div class="mb-4">
+        <h5 class="text-uppercase text-muted fs-6 mb-3">Versions</h5>
+        <div class="d-grid gap-2">
+          
+            <button class="btn btn-outline-primary active" 
+                    id="version-btn-0.0"
+                    onclick="switchVersion('0.0')">
+              original
+            </button>
+          
+        </div>
+      </div>
+
+      <!-- Glossary / TOC -->
+      <div class="mb-4">
+        <h5 class="text-uppercase text-muted fs-6 mb-3">Glossary / Chapters</h5>
+        <div class="list-group list-group-flush" id="glossary-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Bookmarks -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="text-uppercase text-muted fs-6 mb-0">Bookmarks</h5>
+          <button class="btn btn-sm btn-outline-success" onclick="add_bookmark_current_page()">
+            <i class="bi bi-plus-lg"></i> Add
+          </button>
+        </div>
+        <div id="bookmarks-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Column (Content) -->
+    <div id="center-col" class="col-lg-6 col-12 loading">
+      <div id="content-area">
+        <h2 id="title" class="text-center mb-4">
+            <span 
+              data-bs-toggle="tooltip" 
+              data-bs-placement="top" 
+              data-bs-html="true"
+              title='A Christmas Carol'>
+              Carúl na Nollag
+            </span>
+        </h2>
+        
+        <div id="post_image" class="mb-4 text-center">
+            <img 
+            class="img-fluid rounded shadow-sm" 
+            src=../assets/img/posts/a-christmas-carol.jpg
+            alt="Carúl na Nollag - main image">
+        </div>
+
+        <div id="content" class="fs-6 lh-lg">
+            <!-- Content injected here -->
+        </div>
+        
+        <!-- Mark as Read Button -->
+        <div id="mark-read-button" style="display: none" class="text-center my-4">
+          <button id="mark_as_read_btn" class="btn btn-primary" onclick="mark_as_read()">Mark as Read</button>
+        </div>
+        
+        <!-- Spacer for fixed nav -->
+        <div style="height: 60px;"></div>
+      </div>
+
+      <!-- Fixed Navigation -->
+      <div id="fixed-nav">
+        <div id="pagination-controls"></div>
+        <!-- <button class="btn btn-outline-primary" id="prev-btn" onclick="prevPage()">
+          <i class="bi bi-arrow-left"></i> Previous
+        </button>
+        <span class="text-muted" id="page-indicator">Page 1</span>
+        <button class="btn btn-primary" id="next-btn" onclick="nextPage()">
+          Next <i class="bi bi-arrow-right"></i>
+        </button> -->
+      </div>
+    </div>
+
+    <!-- Right Sidebar (Desktop) -->
+    <div id="right-sidebar" class="col-lg-3 sidebar-col d-none d-lg-block">
+      <h5 class="text-uppercase text-muted fs-6 mb-3">Foclóir / Words</h5>
+      <div id="words-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Offcanvas Left (Mobile Menu) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasLeftLabel">Menu</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Clone of Left Sidebar Content -->
+      <div id="mobile-left-content"></div>
+    </div>
+  </div>
+
+  <!-- Offcanvas Right (Mobile Words) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">Foclóir</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Clone of Right Sidebar Content -->
+      <div id="mobile-right-content"></div>
+    </div>
+  </div>
+
+  <!-- main model (confirmation dialog) for the user -->
+<div class="modal fade" id="main_modal" tabindex="-1" aria-labelledby="main_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="main_modal_label">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this bookmark?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Just a message and "ok" -->
+<div class="modal fade" id="alert_modal" tabindex="-1" aria-labelledby="alert_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alert_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- custom buttons that must always be set -->
+<div class="modal fade" id="custom_modal" tabindex="-1" aria-labelledby="custom_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="custom_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- notification toast for users -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="main_toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Bookmark updated!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
+    <div class="container">
+      <ul class="list-unstyled">
+        <li class="float-end"><a href="#top">Back to top</a></li>
+        <!-- <li><a href="https://blog.bootswatch.com/">Blog</a></li> -->
+      </ul>
+      <p>Made by <a href="">Sinéad Kearney</a>.</p>
+    </div>
+</footer>
+
+<!-- Suggest Translation Modal -->
+<div class="modal fade" id="suggestModal" tabindex="-1" aria-labelledby="suggestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="suggestModalLabel">Have you found a mistranslation?</h5>
+        <button type="button" class="btn-close" onclick="close_translation_modal();" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="suggestError" class="alert alert-danger d-none py-2">
+          Please enter a suggestion before clicking send.
+        </div>
+
+        <p><strong>Irish:</strong> <span id="suggestIrish"></span></p>
+        <p><strong>English:</strong> <span id="suggestEnglish"></span></p>
+
+        <div class="mb-3">
+          <label for="suggestInput" class="form-label"><strong>Suggested Correction:</strong></label>
+          <textarea id="suggestInput" class="form-control" rows="3" placeholder="Type your suggestion here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="close_translation_modal();">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="send_suggested_translation();" id="sendSuggestBtn">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modals -->
+  <div class="modal fade" id="main_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Modal for Mark as Read -->
+  <div class="modal fade" id="custom_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="custom_modal_label">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <!-- Buttons populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/common.js"></script>
+  <script>
+    const postData = {"categories": [{"name": "Fiction", "slug": "fiction"}, {"name": "Charles Dickens", "slug": "charles-dickens"}], "current_version_key": "0.0", "id": 14, "image": "../assets/img/posts/a-christmas-carol.jpg", "initial_page": 0, "tags": [], "title": "Car\u00fal na Nollag", "title_tooltip": "A Christmas Carol", "versions": {"0.0": {"already_read": false, "bookmark_page_index": [], "chapters": [{"page_index": 0, "title": "CUID I - TAIBHSE MARLEY"}, {"page_index": 2, "title": "CUID II - AN CH\u00c9AD CHEANN DE NA TR\u00cd SPIORAD"}], "content": ["\u003cp\u003e\n\u003cstrong class=\"fs-4\"\u003eCUID I - TAIBHSE MARLEY\u003c/strong\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"There is no doubt whatever about that.\"\u003e\n    Bh\u00ed Marley marbh, ar dt\u00fas b\u00e1ire.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The register of his burial was signed by the clergyman, the clerk, the undertaker, and the chief mourner.\"\u003e\n    N\u00edl aon dabht ar bith faoi sin.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Scrooge signed it.\"\u003e\n    Sh\u00ednigh an sagart, an cl\u00e9ireach, an adhlac\u00f3ir, agus an pr\u00edomhchaoinead\u00f3ir cl\u00e1r a adhlactha.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"And Scrooge\u0026#x27;s name was good upon the Stock Exchange,\"\u003e\n    Sh\u00ednigh Scrooge \u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"for anything he chose to put his hand to.\"\u003e\n    Agus bh\u00ed ainm Scrooge maith ar an Stocmhalart\u00e1n,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    d\u0027aon rud ar roghnaigh s\u00e9 a l\u00e1mh a chur leis.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    Bh\u00ed Sean-Marley chomh marbh le tairne dorais.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I don\u0026#x27;t mean to say that I know,\"\u003e\n    Aire!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"of my own knowledge,\"\u003e\n    N\u00ed deirim go bhfuil a fhios agam,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what there is particularly dead about a door-nail.\"\u003e\n    as m\u0027eolas f\u00e9in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I might have been inclined, myself,\"\u003e\n    cad at\u00e1 go h\u00e1irithe marbh faoi thairne dorais.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to regard a coffin-nail as the deadest piece of ironmongery in the trade.\"\u003e\n    B\u0027fh\u00e9idir go mbeinn claonta, m\u00e9 f\u00e9in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But the wisdom of our ancestors is in the simile;\"\u003e\n    breathn\u00fa ar thairne c\u00f3nra mar an ph\u00edosa is marbh d\u0027iarann-earra\u00ed sa tr\u00e1d\u00e1il.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and my unhallowed hands shall not disturb it,\"\u003e\n    Ach t\u00e1 eagna \u00e1r sinsear sa chos\u00falacht;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"or the Country\u0026#x27;s done for.\"\u003e\n    agus n\u00ed chuirfidh mo l\u00e1mha neamh-naofa isteach air,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"You will therefore permit me to repeat, emphatically,\"\u003e\n    n\u00f3 t\u00e1 an T\u00edr cr\u00edochnaithe.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that Marley was as dead as a door-nail.\"\u003e\n    Cead\u00f3idh t\u00fa dom mar sin a athr\u00f3, go l\u00e1idir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    go raibh Marley chomh marbh le tairne dorais.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Of course he did.\"\u003e\n    An raibh a fhios ag Scrooge go raibh s\u00e9 marbh?\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"How could it be otherwise?\"\u003e\n    Ar nd\u00f3igh bh\u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Scrooge and he were partners for I don\u0026#x27;t know how many years.\"\u003e\n    Conas a d\u0027fh\u00e9adfadh s\u00e9 a bheith ar shl\u00ed eile?\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Scrooge was his sole executor,\"\u003e\n    Bh\u00ed Scrooge agus \u00e9 f\u00e9in ina gcomhph\u00e1irtithe ar feadh n\u00edl a fhios agam c\u00e9 mh\u00e9ad bliain.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"his sole administrator,\"\u003e\n    Ba \u00e9 Scrooge a sheicead\u00f3ir aonair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"his sole assign,\"\u003e\n    a riarth\u00f3ir aonair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"his sole residuary legatee,\"\u003e\n    a shannta aonair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"his sole friend,\"\u003e\n    a oidhre iarmharach aonair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and sole mourner.\"\u003e\n    a chara aonair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"And even Scrooge was not so dreadfully cut up by the sad event,\"\u003e\n    agus caoinead\u00f3ir aonair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but that he was an excellent man of business on the very day of the funeral,\"\u003e\n    Agus n\u00edor ghearr fi\u00fa Scrooge chomh huaf\u00e1sach sin leis an imeacht br\u00f3nach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and solemnised it with an undoubted bargain.\"\u003e\n    ach gur fear gn\u00f3 ar fheabhas \u00e9 ar an l\u00e1 f\u00e9in den tsochraid,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    agus rinne s\u00e9 soll\u00fantas de le margadh gan dabht.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"There is no doubt that Marley was dead.\"\u003e\n    Tugann tagairt do shochraid Marley ar ais m\u00e9 chuig an bpointe ar thosaigh m\u00e9 uaidh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"This must be distinctly understood,\"\u003e\n    N\u00edl aon dabht go raibh Marley marbh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"or nothing wonderful can come of the story I am going to relate.\"\u003e\n    Caithfear \u00e9 seo a thuiscint go soil\u00e9ir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"If we were not perfectly convinced that Hamlet\u0026#x27;s Father died before the play began,\"\u003e\n    n\u00f3 n\u00ed f\u00e9idir aon rud iontach a theacht as an sc\u00e9al at\u00e1 m\u00e9 chun a insint.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"there would be nothing more remarkable in his taking a stroll at night,\"\u003e\n    Mura rabhamar go hioml\u00e1n cinnte gur cailleadh Athair Hamlet roimh thosach an dr\u00e1ma,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"in an easterly wind,\"\u003e\n    n\u00ed bheadh aon rud n\u00edos suntasa\u00ed ina spaisteoir a dh\u00e9anamh san o\u00edche,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"upon his own ramparts,\"\u003e\n    i ngaoth anoir,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"than there would be in any other middle-aged gentleman rashly turning out after dark\"\u003e\n    ar a chaisle\u00e1n f\u00e9in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"in a breezy spot\"\u003e\n    n\u00e1 mar a bheadh in aon fhear aosta eile ag teacht amach go m\u00edmhachnamhach tar \u00e9is titim na ho\u00edche\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u2014say Saint Paul\u0026#x27;s Churchyard for instance\u2014\"\u003e\n    in \u00e1it ghaoithe\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"literally to astonish his son\u0026#x27;s weak mind.\"\u003e\n    \u2014abair Cl\u00f3s Eaglaise Naomh P\u00f3l mar shampla\u2014\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    go liteartha chun iontas a chur ar aigne lag a mhic.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"There it stood,\"\u003e\n    N\u00edor ph\u00e9inte\u00e1il Scrooge riamh amach ainm Shean-Marley.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"years afterwards,\"\u003e\n    Sheas s\u00e9 ansin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"above the warehouse door:\"\u003e\n    blianta ina dhiaidh sin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Scrooge and Marley.\"\u003e\n    os cionn doras an st\u00f3rais:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The firm was known as Scrooge and Marley.\"\u003e\n    Scrooge agus Marley.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Sometimes people new to the business called Scrooge Scrooge,\"\u003e\n    B\u0027aitheanta an gn\u00f3lacht mar Scrooge agus Marley.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and sometimes Marley,\"\u003e\n    Uaireanta thug daoine nua don ghn\u00f3 Scrooge ar Scrooge,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but he answered to both names.\"\u003e\n    agus uaireanta Marley,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It was all the same to him.\"\u003e\n    ach d\u0027fhreagair s\u00e9 don d\u00e1 ainm.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    Ba chuma leis \u00e9.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003chr class=\"chapter-break my-4\"\u003e\n\u003cstrong class=\"fs-4\"\u003eCUID II - AN CH\u00c9AD CHEANN DE NA TR\u00cd SPIORAD\u003c/strong\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that looking out of bed,\"\u003e\n    Nuair a dh\u00faisigh Scrooge, bh\u00ed s\u00e9 chomh dorcha sin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he could scarcely distinguish the transparent window from the opaque walls of his chamber.\"\u003e\n    go mbreatn\u00fa amach as an leaba,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He was endeavouring to pierce the darkness with his ferret eyes,\"\u003e\n    nach raibh s\u00e9 in ann an fhuinneog thr\u00e9dhearcach a aithint \u00f3 bhalla\u00ed teimhneacha a sheomra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"when the chimes of a neighbouring church struck the four quarters.\"\u003e\n    Bh\u00ed s\u00e9 ag iarraidh an dorchadas a pholl\u00fa lena sh\u00faile feiriteacha,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So he listened for the hour.\"\u003e\n    nuair a bhuail cloig\u00edn\u00ed eaglaise in aice l\u00e1imhe na ceithre cheathr\u00fana.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\"\u003e\n    Mar sin d\u0027\u00e9ist s\u00e9 leis an uair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"To his great astonishment the heavy bell went on from six to seven,\"\u003e\n    Le hiontas m\u00f3r bh\u00ed an clog trom ag dul ar aghaidh \u00f3 s\u00e9 go dt\u00ed seacht,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and from seven to eight,\"\u003e\n    agus \u00f3 sheacht go dt\u00ed ocht,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and regularly up to twelve;\"\u003e\n    agus go rialta suas go dt\u00ed d\u00f3 dh\u00e9ag;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"then stopped.\"\u003e\n    ansin stop s\u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Twelve!\"\u003e\n    D\u00f3 dh\u00e9ag!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It was past two when he went to bed.\"\u003e\n    Bh\u00ed s\u00e9 i ndiaidh a d\u00f3 nuair a chuaigh s\u00e9 a lu\u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The clock was wrong.\"\u003e\n    Bh\u00ed an clog m\u00edcheart.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"An icicle must have got into the works.\"\u003e\n    Caithfidh go bhfuair cuiteog isteach sna hoibreacha.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Twelve!\"\u003e\n    D\u00f3 dh\u00e9ag!\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 55, "level_name": "original", "vocab": []}}};
+    document.title = postData.title;
+
+    const contentDiv = document.getElementById("content");
+    const wordsListDiv = document.getElementById("words-list");
+    const glossaryListDiv = document.getElementById("glossary-list");
+    const bookmarksListDiv = document.getElementById("bookmarks-list");
+    const pageIndicator = document.getElementById("page-indicator");
+    // const prevBtn = document.getElementById("prev-btn");
+    // const nextBtn = document.getElementById("next-btn");
+
+    const paginationControls = document.getElementById("pagination-controls");
+    const maxVisiblePages = 5;
+    const mark_read_div = document.getElementById("mark-read-button");
+    const mark_as_read_btn = document.getElementById('mark_as_read_btn');
+
+    current_version_key = postData.current_version_key || Object.keys(postData.versions)[0];
+    current_page_index = postData.initial_page != null ? postData.initial_page : 0;
+    current_post_id = postData.id;
+    
+    user_is_auth = document.body.dataset.auth === 'True';
+
+    let custom_modal_dialog = null;
+    
+    // Initialize
+    document.addEventListener("DOMContentLoaded", function () {
+      // Read version and page from URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const versionParam = urlParams.get('version');
+      const pageParam = urlParams.get('page');
+      
+      if (versionParam) {
+        current_version_key = versionParam;
+      }
+      if (pageParam) {
+        current_page_index = parseInt(pageParam);
+      }
+      
+      switchVersion(current_version_key, true, current_page_index);
+      
+      // Show content after state is restored (remove loading class)
+      const centerCol = document.getElementById('center-col');
+      if (centerCol) {
+        centerCol.classList.remove('loading');
+      }
+      
+      // Clone content for mobile offcanvas
+      const mobileLeft = document.getElementById("mobile-left-content");
+      if (mobileLeft) mobileLeft.innerHTML = document.getElementById("left-sidebar").innerHTML;
+      
+      // Re-bind listeners for mobile elements
+      bindMobileListeners();
+
+      // Swipe support
+      enableSwipe();
+
+      // Initialize custom modal
+      const custom_modal = document.getElementById('custom_modal');
+      if (custom_modal) {
+        custom_modal_dialog = new bootstrap.Modal(custom_modal);
+      }
+    });
+
+    function bindMobileListeners() {
+        updateMobileLists();
+    }
+
+    function updateMobileLists() {
+        const mobileLeft = document.getElementById("mobile-left-content");
+        const mobileRight = document.getElementById("mobile-right-content");
+        const desktopLeft = document.getElementById("left-sidebar");
+        const desktopRight = document.getElementById("right-sidebar");
+
+        if (mobileLeft && desktopLeft) mobileLeft.innerHTML = desktopLeft.innerHTML;
+        if (mobileRight && desktopRight) mobileRight.innerHTML = desktopRight.innerHTML;
+    }
+
+    function create_pagination_html(
+        pageIndex,
+        pages
+      ){
+        let paginationHTML = `
+          <div class="bs-component">
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3">
+              <ul class="pagination mb-0">
+                <li class="page-item ${pageIndex === 0 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${pageIndex - 1})">&laquo;</a>
+                </li>`;
+
+        // Calculate page range to show
+        let startPage = Math.max(0, pageIndex - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(pages.length, startPage + maxVisiblePages);
+
+        // Adjust if we're near the end
+        if (endPage - startPage < maxVisiblePages) {
+          startPage = Math.max(0, endPage - maxVisiblePages);
+        }
+
+        // Add first page and ellipsis if needed
+        if (startPage > 0) {
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(0)">1</a>
+                </li>`;
+          if (startPage > 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+        }
+
+        // Add page numbers
+        for (let i = startPage; i < endPage; i++) {
+          paginationHTML += `
+                <li class="page-item ${i === pageIndex ? 'active' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${i})">${i + 1}</a>
+                </li>`;
+        }
+
+        // Add last page and ellipsis if needed
+        if (endPage < pages.length) {
+          if (endPage < pages.length - 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${pages.length - 1})">${pages.length}</a>
+                </li>`;
+        }
+
+        paginationHTML += `
+                <li class="page-item ${pageIndex === pages.length - 1 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${pageIndex + 1})">&raquo;</a>
+                </li>
+              </ul>
+              
+              <div class="d-flex align-items-center gap-2">
+                <label for="page-jump-select" class="mb-0 text-nowrap">Jump:</label>
+                <select id="page-jump-select" class="form-select form-select-sm" style="width: auto;" onchange="jumpToPage(this.value)">`;
+        
+        // Add all page options to dropdown
+        for (let i = 0; i < pages.length; i++) {
+          paginationHTML += `<option value="${i}" ${i === pageIndex ? 'selected' : ''}>Page ${i + 1}</option>`;
+        }
+        
+        paginationHTML += `
+                </select>
+              </div>
+            </div>
+          </div>`;
+
+        paginationControls.innerHTML = paginationHTML;
+      }
+
+      function jumpToPage(pageIndex) {
+        renderPage(parseInt(pageIndex), false);
+      }
+
+    function switchVersion(versionKey, instant=true, pageIndex=0) {
+      current_version_key = versionKey;
+      current_page_index = pageIndex;
+
+      // Update URL with version param
+      const url = new URL(window.location);
+      url.searchParams.set('version', versionKey);
+      url.searchParams.set('page', pageIndex);
+      window.history.replaceState({}, '', url);
+
+      // Update Active Button
+      document.querySelectorAll('[id^="version-btn-"]').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`version-btn-${versionKey}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Render Words
+      renderWords(postData.versions[versionKey].vocab);
+
+      // Render Glossary (Chapters)
+      renderGlossary();
+
+      // Render Bookmarks
+      renderBookmarks();
+
+      // Render Content
+      renderPage(current_page_index, instant);
+      
+      updateMobileLists();
+    }
+
+    function renderPage(pageIndex, instant=true) {
+      const pages = postData.versions[current_version_key].content;
+      if (!pages || !pages[pageIndex]) return;
+
+      current_page_index = pageIndex;
+
+      // Update URL with page param
+      const url = new URL(window.location);
+      url.searchParams.set('page', pageIndex);
+      window.history.replaceState({}, '', url);
+
+      // Image Visibility
+      const postImage = document.getElementById('post_image');
+      if (postImage) {
+          postImage.style.display = (pageIndex === 0) ? 'block' : 'none';
+      }
+
+      if (instant) {
+        contentDiv.innerHTML = pages[pageIndex];
+        reinitializeTooltips();
+      } else {
+        contentDiv.style.opacity = 0;
+        setTimeout(() => {
+          contentDiv.innerHTML = pages[pageIndex];
+          contentDiv.style.opacity = 1;
+          reinitializeTooltips();
+        }, 150);
+      }
+
+      // Update Nav Buttons
+      // prevBtn.disabled = pageIndex === 0;
+      // nextBtn.disabled = pageIndex === pages.length - 1;
+      // pageIndicator.textContent = `Page ${pageIndex + 1} of ${pages.length}`;
+      create_pagination_html(pageIndex, pages);
+    
+      // Show/Hide Mark as Read button (only on last page)
+      if (mark_read_div) {
+        if (pageIndex === pages.length - 1) {
+          if (postData.versions[current_version_key].already_read) {
+            mark_as_read_btn.innerText = 'Mark as Unread';
+            mark_as_read_btn.onclick = mark_as_unread;
+          } else {
+            mark_as_read_btn.innerText = 'Mark as Read';
+            mark_as_read_btn.onclick = mark_as_read;
+          }
+        }
+        mark_read_div.style.display = pageIndex === pages.length - 1 ? "block" : "none";
+      }
+
+      // Scroll to top of content area
+      document.getElementById("content-area").scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
+
+      // Update Glossary Active State
+      const chapters = postData.versions[current_version_key].chapters;
+      if (chapters && chapters.length > 0) {
+          document.querySelectorAll('.glossary-item').forEach(item => item.classList.remove('active'));
+          // Find active chapter
+          let activeChapterIdx = -1;
+          for (let i = 0; i < chapters.length; i++) {
+               if (pageIndex >= chapters[i].page_index) {
+                   activeChapterIdx = i;
+               }
+          }
+          
+          if (activeChapterIdx > -1) {
+              const activeItem = document.getElementById(`glossary-item-${activeChapterIdx}`);
+              if (activeItem) activeItem.classList.add('active');
+          }
+      }
+    }
+
+    function prevPage() {
+      if (current_page_index > 0) renderPage(current_page_index - 1, false);
+    }
+
+    function nextPage() {
+      const pages = postData.versions[current_version_key].content;
+      if (current_page_index < pages.length - 1) renderPage(current_page_index + 1, false);
+    }
+
+    function renderGlossary() {
+      const chapters = postData.versions[current_version_key].chapters;
+      let html = '';
+      if (chapters && chapters.length > 0) {
+          chapters.forEach((chapter, index) => {
+            html += `
+              <button type="button" 
+                      class="list-group-item list-group-item-action glossary-item" 
+                      id="glossary-item-${index}"
+                      onclick="renderPage(${chapter.page_index}, false)">
+                ${chapter.title}
+              </button>
+            `;
+          });
+      } else {
+          html = '<p class="text-muted small p-3">No chapters found.</p>';
+      }
+      glossaryListDiv.innerHTML = html;
+    }
+
+    function renderBookmarks() {
+      const bookmarks = postData.versions[current_version_key].bookmark_page_index;
+      if (bookmarks.length === 0) {
+        bookmarksListDiv.innerHTML = '<p class="text-muted small">No bookmarks yet.</p>';
+        return;
+      }
+      
+      let html = '';
+      bookmarks.sort((a, b) => a - b).forEach(pageIdx => {
+        html += `
+          <div class="bookmark-item" onclick="renderPage(${pageIdx}, false)">
+            <span>Page ${pageIdx + 1}</span>
+            <button class="btn btn-sm btn-outline-danger border-0" 
+                    onclick="event.stopPropagation(); delete_bookmark(${pageIdx})">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        `;
+      });
+      bookmarksListDiv.innerHTML = html;
+    }
+
+    function renderWords(vocabList) {
+        let newHtml = '';
+        if (!vocabList || vocabList.length === 0) {
+            newHtml = '<p class="text-muted small p-2">No vocabulary words.</p>';
+        } else {
+            vocabList.forEach(word => {
+                const speakerHtml = word.audio 
+                    ? `<span class="speaker-icon" onclick="playAudio('${word.audio}', this)" style="cursor: pointer; font-size: 1.2em;">
+                         <i class="fa-solid fa-volume-high"></i>
+                       </span>`
+                    : `<span class="speaker-icon disabled text-muted" style="font-size: 1.2em;">
+                         <i class="fa-solid fa-volume-high"></i>
+                       </span>`;
+                
+                const btnClass = word.in_bank ? 'btn-danger' : 'btn-success';
+                const btnText = word.in_bank ? 'Delete' : 'Add';
+                const btnAction = word.in_bank ? 'delete_word' : 'add_word';
+                
+                newHtml += `
+                    <div class="word-item">
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                ${speakerHtml}
+                                <a href="/word/${word.irish}.html" class="word-irish">${word.irish}</a>
+                            </div>
+                            <div class="word-english">${word.english}</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm ${btnClass}" onclick="${btnAction}(${word.translation_id}, event)">${btnText}</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        wordsListDiv.innerHTML = newHtml;
+    }
+
+    function add_bookmark_current_page() {
+        toggle_bookmark(current_page_index, false);
+    }
+
+    function delete_bookmark(pageIndex) {
+        toggle_bookmark(pageIndex, true); // true = remove
+    }
+
+    function toggle_bookmark(pageIndex, remove) {
+        if (!user_is_auth) {
+            back_to_login();
+            const login_msg_display = document.getElementById("login_msg_display");
+            login_msg_display.innerHTML = 'Sign in to create bookmarks';
+            login_msg_display.style.display = "block";
+            const login_prompt_modal = document.getElementById('login_prompt_modal');
+            const login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+            login_prompt_modal_instance.show();
+            return;
+        }
+
+        const bookmarks = postData.versions[current_version_key].bookmark_page_index;
+        if (!remove && bookmarks.includes(pageIndex)) {
+            alert("Page is already bookmarked.");
+            return;
+        }
+
+        fetch("/bookmark", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                post_version_id: postData.versions[current_version_key].id,
+                page_index: pageIndex,
+                remove: remove
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                if (remove) {
+                    const idx = bookmarks.indexOf(pageIndex);
+                    if (idx > -1) bookmarks.splice(idx, 1);
+                } else {
+                    bookmarks.push(pageIndex);
+                }
+                renderBookmarks();
+                updateMobileLists();
+                
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = remove ? "Bookmark removed!" : "Page bookmarked!";
+                toast.show();
+            } else {
+                alert("Failed to update bookmark.");
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
+    // --- Audio & Word Bank ---
+    let audioCache = new Map();
+    function playAudio(filename, audioIcon) {
+        audioIcon.classList.add('playing');
+        let audio = audioCache.get(filename);
+        if (!audio) {
+            audio = new Audio(`/api/audio/${filename}`);
+            audioCache.set(filename, audio);
+        }
+        audio.currentTime = 0;
+        audio.play().catch(err => console.error(err));
+        audio.onended = () => audioIcon.classList.remove('playing');
+    }
+
+    function add_word(word_id, event) {
+        if (!user_is_auth) {
+            back_to_login();
+            const login_msg_display = document.getElementById("login_msg_display");
+            login_msg_display.innerHTML = 'Sign in to save a word to your flashcards.';
+            login_msg_display.style.display = "block";
+            const login_prompt_modal = document.getElementById('login_prompt_modal');
+            const login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+            login_prompt_modal_instance.show();
+            return;
+        }
+        handleWordAction(word_id, false, event.target);
+    }
+
+    function delete_word(word_id, event) {
+        handleWordAction(word_id, true, event.target);
+    }
+
+    function handleWordAction(word_id, remove, btnElement) {
+        btnElement.disabled = true;
+
+        fetch("/api/wordbank", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ word_id: word_id, remove: remove })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                // Toggle button state
+                if (remove) {
+                    btnElement.classList.replace('btn-danger', 'btn-success');
+                    btnElement.innerText = 'Add';
+                    btnElement.setAttribute('onclick', `add_word(${word_id}, event)`);
+                } else {
+                    btnElement.classList.replace('btn-success', 'btn-danger');
+                    btnElement.innerText = 'Delete';
+                    btnElement.setAttribute('onclick', `delete_word(${word_id}, event)`);
+                }
+                
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = remove ? "Word removed from your flash cards!" : "Word added to your flash cards!";
+                toast.show();
+            } else {
+                alert("Failed to update word bank.");
+            }
+        })
+        .finally(() => {
+            btnElement.disabled = false;
+        });
+    }
+
+    // --- Mark as Read Functionality ---
+    function mark_as_read() {
+        if (!user_is_auth) {
+            back_to_login();
+            const login_msg_display = document.getElementById("login_msg_display");
+            login_msg_display.innerHTML = 'Sign in to mark articles as "read"';
+            login_msg_display.style.display = "block";
+            const login_prompt_modal = document.getElementById('login_prompt_modal');
+            const login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+            login_prompt_modal_instance.show();
+            return;
+        }
+
+        const num_bookmarks = postData.versions[current_version_key].bookmark_page_index.length;
+        if (num_bookmarks === 0) {
+            mark_as_read_callback(false);
+        } else {
+            document.getElementById('custom_modal_label').innerHTML = 'Mark as Read';
+            const custom_modal = document.getElementById('custom_modal');
+            const text = num_bookmarks === 1 
+                ? "Well done! Would you like to keep this version's bookmark or remove it?"
+                : "Well done! Would you like to keep this version's bookmarks or remove them?";
+            custom_modal.querySelector(".modal-body").textContent = text;
+            
+            let buttonHtml = `<button type="button" class="btn btn-secondary" onclick="mark_as_read_callback(false)">Keep</button>`;
+            buttonHtml += `<button type="button" class="btn btn-secondary" onclick="mark_as_read_callback(true)">Remove</button>`;
+            custom_modal.querySelector(".modal-footer").innerHTML = buttonHtml;
+            custom_modal_dialog.show();
+        }
+    }
+
+    function mark_as_read_callback(remove_bookmarks=false) {
+        if (custom_modal_dialog) custom_modal_dialog.hide();
+
+        const data = {
+            post_version_id: postData.versions[current_version_key].id,
+            post_id: current_post_id,
+            is_read: true
+        };
+
+        fetch("/api/mark_as_read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Marked as read";
+                
+                mark_as_read_btn.innerText = 'Mark as Unread';
+                mark_as_read_btn.onclick = mark_as_unread;
+                postData.versions[current_version_key].already_read = true;
+                
+                if (remove_bookmarks) {
+                    remove_all_bookmarks("Marked as read and ");
+                } else {
+                    toast.show();
+                }
+            } else {
+                toastEl.classList.remove('text-bg-success');
+                toastEl.classList.add('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Failed to mark as read";
+                toast.show();
+            }
+        })
+        .catch(() => {
+            toastEl.classList.remove('text-bg-success');
+            toastEl.classList.add('text-bg-danger');
+            toastEl.querySelector(".toast-body").textContent = "Server error.";
+            toast.show();
+        });
+    }
+
+    function mark_as_unread() {
+        const data = {
+            post_version_id: postData.versions[current_version_key].id,
+            post_id: current_post_id,
+            is_read: false
+        };
+
+        fetch("/api/mark_as_read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Marked as unread";
+                toast.show();
+                
+                mark_as_read_btn.innerText = 'Mark as Read';
+                mark_as_read_btn.onclick = mark_as_read;
+                postData.versions[current_version_key].already_read = false;
+            } else {
+                toastEl.classList.remove('text-bg-success');
+                toastEl.classList.add('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Failed to mark as unread";
+                toast.show();
+            }
+        })
+        .catch(() => {
+            toastEl.classList.remove('text-bg-success');
+            toastEl.classList.add('text-bg-danger');
+            toastEl.querySelector(".toast-body").textContent = "Server error.";
+            toast.show();
+        });
+    }
+
+    function remove_all_bookmarks(starting_toast_text="") {
+        if (custom_modal_dialog) custom_modal_dialog.hide();
+        
+        const num_bookmarks = postData.versions[current_version_key].bookmark_page_index.length;
+        
+        fetch("/api/bookmark_remove_all", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                post_version_id: postData.versions[current_version_key].id
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                let toast_text = starting_toast_text + (num_bookmarks > 1 ? "Bookmarks removed." : "Bookmark removed.");
+                postData.versions[current_version_key].bookmark_page_index = [];
+                renderBookmarks();
+                updateMobileLists();
+                
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = toast_text;
+                toast.show();
+            } else {
+                let toast_text = starting_toast_text + (num_bookmarks > 1 ? "Failed to remove the bookmarks." : "Failed to remove the bookmark.");
+                toastEl.classList.remove('text-bg-success');
+                toastEl.classList.add('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = toast_text;
+                toast.show();
+            }
+        })
+        .catch(() => {
+            toastEl.classList.remove('text-bg-success');
+            toastEl.classList.add('text-bg-danger');
+            toastEl.querySelector(".toast-body").textContent = "Server error.";
+            toast.show();
+        });
+    }
+
+    // --- Swipe Support ---
+    function enableSwipe() {
+        const touchArea = document.getElementById("content-area");
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        touchArea.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        touchArea.addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (touchEndX < touchStartX - threshold) {
+                nextPage(); // Swipe Left -> Next
+            }
+            if (touchEndX > touchStartX + threshold) {
+                prevPage(); // Swipe Right -> Prev
+            }
+        }
+    }
+
+    // --- Keyboard Support ---
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") prevPage();
+        else if (e.key === "ArrowRight") nextPage();
+    });
+
+  </script>
+</body>
+</html>

@@ -1,3 +1,169 @@
+[data-bs-theme="dark"] {
+  --bs-card-bg: #484848;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+  color:#ffffff;
+}
+
+main {
+  padding-top: 5em; 
+  /* padding-bottom:2em; */
+}
+
+.speaker-icon {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  margin-left: 10px;
+}
+[data-bs-theme="dark"] .speaker-icon.enabled {
+  /* background: #5a67d8; */
+  color: white;
+}
+[data-bs-theme="light"] .speaker-icon.enabled {
+  /* background: #5a67d8; */
+  color: black;
+}
+.speaker-icon.enabled:hover {
+  /* background: #4c51bf; */
+  transform: scale(1.1);
+}
+.speaker-icon.disabled {
+  background: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+.speaker-icon.playing {
+  animation: pulse 0.5s ease-in-out;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+span[data-bs-toggle="tooltip"] {
+    transition: all 0.2s ease;
+    /* padding: 2px 4px; */
+    border-radius: 3px;
+    }
+
+    span[data-bs-toggle="tooltip"]:hover {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-emphasis-color);
+    }
+
+    /* Make highlight more visible in dark mode */
+    [data-bs-theme="dark"] span[data-bs-toggle="tooltip"]:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    }
+  
+    /* Fix navbar and content width on mobile */
+    body {
+      overflow-x: hidden;
+    }
+  
+    .navbar .container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  
+    @media (max-width: 991px) {
+      .navbar .container {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+  
+    /* Ensure images scale properly */
+    .bs-docs-section img {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    /*make the first TD bold, in every row*/
+    tbody td:first-child {
+    font-weight: bold;
+    }
+
+    /* Ensure table text respects theme */
+    /* .table {
+    --bs-table-color: var(--bs-body-color);
+    --bs-table-bg: var(--bs-body-bg);
+    }
+
+    .table td,
+    .table th {
+    color: var(--bs-body-color); */
+    /* Fix striped table for theme switching */
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-bg-type: transparent;
+    background-color: transparent;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(even) > * {
+    background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Dark theme adjustments */
+    [data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) > * {
+    background-color: rgba(255, 255, 255, 0.05);
+    
+    }
+
+    /* Enable dropdown-submenu positioning */
+.dropdown-submenu {
+    position: relative;
+  }
+  
+[data-bs-theme="dark"] {
+  --bs-card-bg: #484848;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+  color:#ffffff;
+}
+
+main {
+  padding-top: 5em; 
+  /* padding-bottom:2em; */
+}
+
+.speaker-icon {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  margin-left: 10px;
+}
+[data-bs-theme="dark"] .speaker-icon.enabled {
+  /* background: #5a67d8; */
+  color: white;
+}
+[data-bs-theme="light"] .speaker-icon.enabled {
+  /* background: #5a67d8; */
+  color: black;
+}
+.speaker-icon.enabled:hover {
+  /* background: #4c51bf; */
+  transform: scale(1.1);
+}
+.speaker-icon.disabled {
+  background: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+.speaker-icon.playing {
+  animation: pulse 0.5s ease-in-out;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
 span[data-bs-toggle="tooltip"] {
     transition: all 0.2s ease;
     /* padding: 2px 4px; */
@@ -82,3 +248,64 @@ span[data-bs-toggle="tooltip"] {
     --bs-tooltip-bg: #ffffff;
     --bs-tooltip-color: #000000;
   }
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: -5em; /* Counteract main padding */
+  padding-top: 5em; /* Add back padding for content */
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay for text readability */
+  z-index: 0;
+}
+
+/* Animations */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards */
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.section-title {
+  font-weight: 700;
+  color: var(--bs-heading-color);
+}
+
+.title-underline {
+  width: 60px;
+  height: 4px;
+  background-color: var(--bs-primary);
+  border-radius: 2px;
+}

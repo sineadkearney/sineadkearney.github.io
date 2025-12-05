@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Gaeilge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Load theme immediately -->
+  <script src="/assets/js/load_theme.js"></script>
+
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/css/common.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+  
+  <style>
+    /* App-like Layout Styles */
+    body {
+      overflow: hidden; /* Prevent body scroll, handle in columns */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header adjustments */
+    #header {
+      flex-shrink: 0;
+      z-index: 1030;
+    }
+
+    /* Main Container */
+    #main-container {
+      flex-grow: 1;
+      overflow: hidden;
+      padding-top: 50px; /* Adjust based on header height */
+      display: flex;
+    }
+
+    /* Columns */
+    .sidebar-col {
+      overflow-y: auto;
+      height: 100%;
+      padding: 1rem;
+      border-right: 1px solid var(--bs-border-color);
+    }
+    
+    #right-sidebar {
+      border-right: none;
+      border-left: 1px solid var(--bs-border-color);
+    }
+
+    #center-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    #content-area {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 2rem;
+      padding-bottom: 80px; /* Space for fixed nav */
+    }
+
+    #fixed-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bs-body-bg);
+      border-top: 1px solid var(--bs-border-color);
+      padding: 1rem;
+      z-index: 1020;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Words List Styling */
+    .word-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid var(--bs-border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .word-item:last-child {
+      border-bottom: none;
+    }
+    .word-irish {
+      font-weight: bold;
+      color: var(--bs-primary);
+      text-decoration: none;
+    }
+    .word-english {
+      font-size: 0.9em;
+      color: var(--bs-secondary-color);
+    }
+
+    /* Bookmark Item */
+    .bookmark-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      margin-bottom: 0.25rem;
+      cursor: pointer;
+    }
+    .bookmark-item:hover {
+      background-color: var(--bs-tertiary-bg);
+    }
+    .bookmark-item.active {
+      background-color: var(--bs-primary-bg-subtle);
+    }
+
+    /* Chapter break styling */
+    .chapter-break {
+      border: 0;
+      border-top: 2px solid var(--bs-border-color);
+      margin: 2rem 0;
+    }
+
+    #content {
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 991.98px) {
+      body {
+        overflow: auto; /* Allow normal scroll on mobile */
+        height: auto;
+      }
+      #main-container {
+        display: block;
+        padding-top: 60px;
+        height: auto;
+        overflow: visible;
+      }
+      .sidebar-col {
+        height: auto;
+        border: none;
+        overflow: visible;
+      }
+      #content-area {
+        height: auto;
+        overflow: visible;
+        padding-bottom: 1rem;
+      }
+      #fixed-nav {
+        position: sticky;
+        bottom: 0;
+      }
+      #left-sidebar, #right-sidebar {
+        display: none;
+      }
+      
+      #mobile-toolbar {
+        display: flex;
+        justify-content: space-around;
+        padding: 0.5rem;
+        background: var(--bs-body-bg);
+        border-bottom: 1px solid var(--bs-border-color);
+        position: sticky;
+        top: 50px; /* Below header */
+        z-index: 1010;
+      }
+    }
+
+    @media (min-width: 992px) {
+      #mobile-toolbar {
+        display: none;
+      }
+    }
+
+    /* Hide content initially to prevent flash during state restoration */
+    #center-col.loading {
+      opacity: 0;
+      transition: opacity 0.2s ease-in;
+    }
+  </style>
+</head>
+<body data-auth="False">
+
+  <style>
+  #header {
+    min-height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  #login_back_arrow {
+    display:none; 
+    font-size: 1.5em;
+    color: gray;
+    cursor: pointer;
+  }
+  #login_back_arrow:hover {
+    color:black;
+  }
+
+  /* Category submenu styles */
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  /* Desktop: Enable hover to open submenus */
+  @media (min-width: 992px) {
+    .dropdown-submenu:hover > .dropdown-menu {
+      display: block;
+    }
+    
+    .dropdown-submenu:hover > .dropdown-item {
+      background-color: var(--bs-dropdown-link-hover-bg);
+      color: var(--bs-dropdown-link-hover-color);
+    }
+  }
+</style>
+
+<div id="header" class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
+  <div class="container">
+    <a href="../" class="navbar-brand">Home</a>
+    <button class="navbar-toggler" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarResponsive" 
+      aria-controls="navbarResponsive" 
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="categories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="categories">
+              
+                  
+                  <li class="dropdown-submenu">
+    <a class="dropdown-item dropdown-toggle" 
+    href="/category/fairy-tales.html">
+      Fairy Tales
+    </a>
+    
+      <ul class="dropdown-menu">
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/grimms.html">
+      Grimms
+    </a>
+    
+  </li>
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/hans-christian-andersen.html">
+      Hans Christian Andersen
+    </a>
+    
+  </li>
+        
+      </ul>
+    
+  </li>
+              
+                  
+                  <li class="dropdown-submenu">
+    <a class="dropdown-item dropdown-toggle" 
+    href="/category/fiction.html">
+      Fiction
+    </a>
+    
+      <ul class="dropdown-menu">
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/arthur-conan-doyle.html">
+      Arthur Conan Doyle
+    </a>
+    
+  </li>
+        
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/charles-dickens.html">
+      Charles Dickens
+    </a>
+    
+  </li>
+        
+      </ul>
+    
+  </li>
+              
+            </ul>
+          </li>
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/help.html">Help</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/resources.html">Resources</a>
+          </li>
+      </ul>
+
+      <ul class="navbar-nav ms-md-auto align-items-center">
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
+          <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+          <hr class="d-lg-none my-2 text-white-50">
+        </li>
+
+        <li class="nav-item" data-bs-theme="light">
+          <form id="search_form" class="d-flex" method="POST" action="/search">
+            <div class="position-relative">
+              <svg class="position-absolute top-50 start-0 translate-middle-y ms-2" width="16" height="16" fill="currentColor" style="pointer-events: none; color: #6c757d;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+              </svg>
+              <input 
+                id="searchInput"
+                class="form-control form-control-sm" 
+                type="search" 
+                placeholder="Cuardaigh" 
+                style="padding-left: 2.5rem;">
+            </div>
+          </form>
+        </li>
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
+          <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+          <hr class="d-lg-none my-2 text-white-50">
+        </li>
+
+        <li class="nav-item dropdown" data-bs-theme="light">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
+            <i class="bi bi-circle-half"></i>
+            <span class="d-lg-none ms-2">Toggle theme</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                <i class="bi bi-sun-fill"></i><span class="ms-2">Light</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="true">
+                <i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
+          <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+          <hr class="d-lg-none my-2 text-white-50">
+        </li>
+
+        <li class="nav-item dropdown" data-bs-theme="light">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="font-size-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Font Size">
+            <i class="bi bi-type"></i>
+            <span class="d-lg-none ms-2">Font Size</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
+                <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase">
+                <i class="bi bi-plus-circle"></i><span class="ms-2">Big</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center" id="font-increase-big">
+                <i class="bi bi-plus-circle" style="font-size: 1.5em;"></i><span class="ms-2">Bigger</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown" data-bs-theme="light">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
+                <i class="bi bi-person-circle"></i>
+                <span class="d-lg-none ms-2">User Menu</span>
+            </a>
+            <ul id="user-menu-ul" class="dropdown-menu dropdown-menu-end">
+              <!-- initial content rendered by Jinja -->
+            </ul>            
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- login modal --->
+<div class="modal fade" id="login_prompt_modal" tabindex="-1" aria-labelledby="login_prompt_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <i id="login_back_arrow" class="fa-solid fa-arrow-left" onclick="back_to_login()"></i>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+      </div>
+      <div class="modal-body p-5 pt-0">
+         <form id="login_form" class="">
+            <div id="login_msg_display" class="text-center mb-3" style="display:none;"></div>
+            <div class="form-floating mb-3"> 
+              <input type="email" 
+                class="form-control rounded-3" 
+                id="email_login" 
+                placeholder="name@example.com"
+                required> 
+              <label for="email_login">Email address</label> 
+            </div>
+            <div id="first_password" class="form-floating"> 
+              <!-- <div style="position: relative;"> -->
+                <input type="password" 
+                  class="form-control rounded-3" 
+                  id="password_login" 
+                  placeholder="Password"
+                  > 
+                <label for="password_login">Password</label>
+                <i class="fa-solid fa-eye-slash"
+                    id="password_login_toggle"
+                    style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                    onclick="toggle_password_vis('password_login_toggle', 'password_login');">
+                </i>
+            </div>
+            <div id="second_password" class="form-floating mt-3 mb-3" style="display: none">
+              <input type="password" 
+                class="form-control rounded-3" 
+                id="password_register_2" 
+                placeholder="Password"
+              > 
+              <label for="password_register_2">Confirm Password</label>
+              <i class="fa-solid fa-eye-slash"
+                  id="password_register_2_toggle"
+                  style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                  onclick="toggle_password_vis('password_register_2_toggle', 'password_register_2');">
+              </i>
+          </div>
+            <div id="forgot_password_div" class="text-center p-2">
+              <small class="text-body-secondary">
+                <a href="#" onclick="event.preventDefault(); switch_to_forgot()">Forgot password?</a>
+              </small> 
+            </div>
+            <button id="login_btn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary">Log in</button> 
+            <button id="google_btn" class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3 disabled" type="submit">
+               <svg class="bi me-1" width="16" height="16" aria-hidden="true">
+                  <use xlink:href="#google"></use>
+               </svg>
+               Log in with Google
+            </button>
+            <div id="register_div" class="text-center">
+              <small class="text-body-secondary">
+                Don't have an account? <a href="#" onclick="event.preventDefault(); switch_to_register()">Register here</a>.
+              </small>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+  async function refreshUserMenu() {
+    const response = await fetch("/user-menu"); // endpoint returns just the <ul> content
+    const html = await response.text();
+    document.getElementById("user-menu-ul").innerHTML = html;
+  }
+  refreshUserMenu();
+
+  $(document).ready(function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // prevents form submission
+            const query = $('#searchInput').val().trim();
+            if (!query) return;
+
+            // Use Jinja to generate the base URL
+            const baseUrl = "/search";
+            window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
+        }
+        });
+    }
+  });
+
+  function resend_verification(){
+    console.log('resend_verification');
+    const email = document.getElementById('email_login').value;
+    fetch('/api/resend_verification', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({email:email})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        login_prompt_modal_instance.hide();
+        toastEl.classList.add("text-bg-success");
+        toastEl.classList.remove("text-bg-danger");
+        toastEl.querySelector(".toast-body").textContent = data.message;
+        toast.show();
+      } else {
+        login_msg_display.innerHTML = data.error;
+        login_msg_display.style.display = "block";
+      }
+      
+    })
+    .catch(() => {
+      login_msg_display.innerText = "An unexpected server error occurred.";
+      login_msg_display.style.display = "block";
+    });
+  }
+
+  function sign_out() {
+    // Perform request
+    fetch('/logout')
+    .then(res => res.json())
+    .then(data => {
+
+      const baseUrl = "/";
+      if (
+        window.location.pathname == '/dashboard.html' || 
+        window.location.pathname == '/bookmarks.html' ||
+        window.location.pathname == '/flashcards.html' ||
+        window.location.pathname == '/user-hub'
+      ) {
+        window.location.href=baseUrl;
+      } else {
+        window.location.reload();
+      }
+      
+      toastEl.classList.add("text-bg-success");
+      toastEl.classList.remove("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "Successfully logged out";
+      toast.show();
+
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/post/')) {
+        refresh_page();
+        return;
+      }
+
+    })
+    .catch(() => {
+      toastEl.classList.remove("text-bg-success");
+      toastEl.classList.add("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "An unexpected server error occurred.";
+      toast.show();
+    });
+  }
+
+  let login_prompt_modal_instance = null;
+  function showLoginModal(){
+    back_to_login();
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  function show_password_reset(){
+    switch_to_register();
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "Please enter and confirm your new password";
+    login_msg_display.style.display = "block";
+    
+    document.getElementById('login_btn').innerText = 'Update Password';
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  const loginForm = document.getElementById("login_form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const login_msg_display = document.getElementById("login_msg_display");
+        login_msg_display.style.display = 'none';
+
+        const email = document.getElementById('email_login').value;
+
+        // INPUT ELEMENTS (safer than reusing the wrapper divs)
+        const first_password_input = document.getElementById('password_login');
+        const second_password_input = document.getElementById('password_register_2');
+
+        const first_password_div = document.getElementById('first_password');
+        const second_password_div = document.getElementById('second_password');
+
+        let function_path = '';
+        let data = { email: email };
+        const login_btn = document.getElementById("login_btn");
+        const old_button_text = login_btn.innerText;
+        let new_button_text = "";
+        let user_already_exists = false;
+
+        // REGISTER OR RESET MODE (both visible)
+        console.log('first_password_div.style.display')
+        console.log(first_password_div.style.display)
+        console.log(' ')
+        console.log('second_password_div.style.display')
+        console.log(second_password_div.style.display)
+
+        if (first_password_div.style.display === 'block' && second_password_div.style.display === 'block') {
+        // REGISTER
+        if (login_btn.innerText === 'Update Password'){
+            function_path = '/api/update_password';
+            new_button_text = 'Update Password';
+        } else {
+            function_path = '/register';
+            new_button_text = 'Register';
+        }
+        
+        const password = first_password_input.value;
+        const confirm_password = second_password_input.value;
+
+        if (password !== confirm_password) {
+            login_msg_display.innerText = "Passwords do not match!";
+            login_msg_display.style.display = "block";
+            return;
+        }
+        data.password = password;
+        } 
+        // FORGOT PASSWORD MODE
+        else if (first_password_div.style.display === 'none' && second_password_div.style.display === 'none') {
+        function_path = '/api/reset_password_request';
+        new_button_text = 'Send Password Reset Link';
+        } 
+        // LOGIN MODE
+        else {
+        function_path = '/api/login';
+        new_button_text = 'Log in';
+        data.password = first_password_input.value;
+        }
+
+        // Disable button and show spinner
+        login_btn.disabled = true;
+        login_btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+        fetch(function_path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+        if (data.status === "success") {
+            if (function_path === '/api/login') {
+                // Always reload the page after login
+                window.location.reload();
+            } else if (function_path === '/register') {
+            // Show verification message
+            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+            login_msg_display.style.display = "block";
+            } else {
+            // Password reset or update
+            login_msg_display.innerText = data.message;
+            login_msg_display.style.display = "block";
+            if (function_path === '/api/update_password') {
+                setTimeout(() => {
+                back_to_login();
+                login_msg_display.innerText = "Password updated successfully. Please log in.";
+                login_msg_display.style.display = "block";
+                }, 2000);
+            }
+            }
+        } else {
+            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.style.display = "block";
+        }
+        })
+        .catch(err => {
+        console.error(err);
+        login_msg_display.innerText = "An unexpected server error occurred.";
+        login_msg_display.style.display = "block";
+        })
+        .finally(() => {
+        // Re-enable button
+        login_btn.disabled = false;
+        login_btn.innerText = new_button_text;
+        });
+    });
+  }
+
+  // Helper to refresh page (if needed)
+  function refresh_page(){
+    window.location.reload();
+  }
+
+  // TODO: email input from reset should be disabled
+  function back_to_login(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "block";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "block";
+
+    document.getElementById('login_btn').innerText = 'Log in';
+    document.getElementById('google_btn').innerText = 'Log in with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "none";
+  }
+
+  function switch_to_forgot() {
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "none";
+
+    const google_btn = document.getElementById('google_btn');
+    google_btn.style.display = "none";
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    const login_btn = document.getElementById('login_btn');
+    login_btn.innerText = 'Send Password Reset Link';
+  }
+
+  function switch_to_register(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const first_password_div = document.getElementById('first_password');
+    first_password_div.style.display = "block";
+    const second_password_div = document.getElementById('second_password');
+    second_password_div.style.display = "block";
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    document.getElementById('login_btn').innerText = 'Register';
+    document.getElementById('google_btn').innerText = 'Register with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+  }
+
+  function toggle_password_vis(toggleId, inputId){
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+    toggle.classList.toggle("fa-eye");
+    toggle.classList.toggle("fa-eye-slash");
+    toggle.style.color = isHidden ? "black" : "grey";
+  }
+
+  // Categories menu: Auto-close other submenus when opening one
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryDropdown = document.querySelector('#categories');
+    if (!categoryDropdown) return;
+
+    const mainDropdownMenu = categoryDropdown.nextElementSibling;
+    if (!mainDropdownMenu) return;
+
+    // Close all submenus when main dropdown is hidden
+    categoryDropdown.addEventListener('hidden.bs.dropdown', function() {
+      const allSubmenus = mainDropdownMenu.querySelectorAll('.dropdown-menu.show');
+      allSubmenus.forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+  });
+</script>
+
+  <!-- Mobile Toolbar -->
+  <div id="mobile-toolbar" class="d-lg-none">
+    <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft">
+      <i class="bi bi-list"></i> Menu
+    </button>
+    <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+      <i class="bi bi-translate"></i> Words
+    </button>
+  </div>
+
+  <div id="main-container" class="container-fluid">
+    
+    <!-- Left Sidebar (Desktop) -->
+    <div id="left-sidebar" class="col-lg-3 sidebar-col d-none d-lg-block">
+      <!-- Versions -->
+      <div class="mb-4">
+        <h5 class="text-uppercase text-muted fs-6 mb-3">Versions</h5>
+        <div class="d-grid gap-2">
+          
+            <button class="btn btn-outline-primary active" 
+                    id="version-btn-0.0"
+                    onclick="switchVersion('0.0')">
+              original
+            </button>
+          
+            <button class="btn btn-outline-primary " 
+                    id="version-btn-1.0"
+                    onclick="switchVersion('1.0')">
+              simple
+            </button>
+          
+        </div>
+      </div>
+
+      <!-- Glossary / TOC -->
+      <div class="mb-4">
+        <h5 class="text-uppercase text-muted fs-6 mb-3">Glossary / Chapters</h5>
+        <div class="list-group list-group-flush" id="glossary-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Bookmarks -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="text-uppercase text-muted fs-6 mb-0">Bookmarks</h5>
+          <button class="btn btn-sm btn-outline-success" onclick="add_bookmark_current_page()">
+            <i class="bi bi-plus-lg"></i> Add
+          </button>
+        </div>
+        <div id="bookmarks-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Column (Content) -->
+    <div id="center-col" class="col-lg-6 col-12 loading">
+      <div id="content-area">
+        <h2 id="title" class="text-center mb-4">
+            <span 
+              data-bs-toggle="tooltip" 
+              data-bs-placement="top" 
+              data-bs-html="true"
+              title='Little Red-Cap (Little Red Riding Hood)'>
+              Caipín Dearg Beag
+            </span>
+        </h2>
+        
+        <div id="post_image" class="mb-4 text-center">
+            <img 
+            class="img-fluid rounded shadow-sm" 
+            src=../assets/img/posts/red-riding-hood.jpg
+            alt="Caipín Dearg Beag - main image">
+        </div>
+
+        <div id="content" class="fs-6 lh-lg">
+            <!-- Content injected here -->
+        </div>
+        
+        <!-- Mark as Read Button -->
+        <div id="mark-read-button" style="display: none" class="text-center my-4">
+          <button id="mark_as_read_btn" class="btn btn-primary" onclick="mark_as_read()">Mark as Read</button>
+        </div>
+        
+        <!-- Spacer for fixed nav -->
+        <div style="height: 60px;"></div>
+      </div>
+
+      <!-- Fixed Navigation -->
+      <div id="fixed-nav">
+        <div id="pagination-controls"></div>
+        <!-- <button class="btn btn-outline-primary" id="prev-btn" onclick="prevPage()">
+          <i class="bi bi-arrow-left"></i> Previous
+        </button>
+        <span class="text-muted" id="page-indicator">Page 1</span>
+        <button class="btn btn-primary" id="next-btn" onclick="nextPage()">
+          Next <i class="bi bi-arrow-right"></i>
+        </button> -->
+      </div>
+    </div>
+
+    <!-- Right Sidebar (Desktop) -->
+    <div id="right-sidebar" class="col-lg-3 sidebar-col d-none d-lg-block">
+      <h5 class="text-uppercase text-muted fs-6 mb-3">Foclóir / Words</h5>
+      <div id="words-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Offcanvas Left (Mobile Menu) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasLeftLabel">Menu</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Clone of Left Sidebar Content -->
+      <div id="mobile-left-content"></div>
+    </div>
+  </div>
+
+  <!-- Offcanvas Right (Mobile Words) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">Foclóir</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Clone of Right Sidebar Content -->
+      <div id="mobile-right-content"></div>
+    </div>
+  </div>
+
+  <!-- main model (confirmation dialog) for the user -->
+<div class="modal fade" id="main_modal" tabindex="-1" aria-labelledby="main_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="main_modal_label">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this bookmark?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Just a message and "ok" -->
+<div class="modal fade" id="alert_modal" tabindex="-1" aria-labelledby="alert_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alert_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- custom buttons that must always be set -->
+<div class="modal fade" id="custom_modal" tabindex="-1" aria-labelledby="custom_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="custom_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- notification toast for users -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="main_toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Bookmark updated!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" class="bg-primary mt-auto" data-bs-theme="dark">
+    <div class="container">
+      <ul class="list-unstyled">
+        <li class="float-end"><a href="#top">Back to top</a></li>
+        <!-- <li><a href="https://blog.bootswatch.com/">Blog</a></li> -->
+      </ul>
+      <p>Made by <a href="">Sinéad Kearney</a>.</p>
+    </div>
+</footer>
+
+<!-- Suggest Translation Modal -->
+<div class="modal fade" id="suggestModal" tabindex="-1" aria-labelledby="suggestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="suggestModalLabel">Have you found a mistranslation?</h5>
+        <button type="button" class="btn-close" onclick="close_translation_modal();" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="suggestError" class="alert alert-danger d-none py-2">
+          Please enter a suggestion before clicking send.
+        </div>
+
+        <p><strong>Irish:</strong> <span id="suggestIrish"></span></p>
+        <p><strong>English:</strong> <span id="suggestEnglish"></span></p>
+
+        <div class="mb-3">
+          <label for="suggestInput" class="form-label"><strong>Suggested Correction:</strong></label>
+          <textarea id="suggestInput" class="form-control" rows="3" placeholder="Type your suggestion here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="close_translation_modal();">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="send_suggested_translation();" id="sendSuggestBtn">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modals -->
+  <div class="modal fade" id="main_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Modal for Mark as Read -->
+  <div class="modal fade" id="custom_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="custom_modal_label">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <!-- Buttons populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/common.js"></script>
+  <script>
+    const postData = {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "current_version_key": "0.0", "id": 13, "image": "../assets/img/posts/red-riding-hood.jpg", "initial_page": 0, "tags": [], "title": "Caip\u00edn Dearg Beag", "title_tooltip": "Little Red-Cap (Little Red Riding Hood)", "versions": {"0.0": {"already_read": false, "bookmark_page_index": [], "chapters": [], "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Once upon a time there\"\u003e\n    Fad\u00f3, fad\u00f3\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"was a dear little girl\"\u003e\n    bh\u00ed cail\u00edn beag deas ann\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"who was loved by everyone who looked at her,\"\u003e\n    a raibh gr\u00e1 ag gach duine a d\u0027fheach uirthi di,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but most of all by her grandmother,\"\u003e\n    ach go h\u00e1irithe ag a seanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and there was nothing that she would not have given to the child.\"\u003e\n    agus n\u00ed raibh aon rud nach dtabharfadh s\u00ed don leanbh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Once she gave her a little cap of red velvet,\"\u003e\n    Uair amh\u00e1in thug s\u00ed caip\u00edn beag de veilibh\u00edt dearg di,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"which suited her so well\"\u003e\n    a d\u0027oirigh chomh maith di\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that she would never wear anything else;\"\u003e\n    nach gcaithfeadh s\u00ed aon rud eile riamh;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so she was always called \u0026quot;Little Red-Cap.\u0026quot;\"\u003e\n    mar sin tugadh \"Caip\u00edn Dearg Beag\" uirthi i gc\u00f3na\u00ed.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"One day her mother said to her:\"\u003e\n    L\u00e1 amh\u00e1in d\u00fairt a m\u00e1thair l\u00e9i:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Come,\"\u003e\n    \"Tar,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap,\"\u003e\n    a Chaip\u00edn Dearg Beag,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"here is a piece of cake and a bottle of wine;\"\u003e\n    seo c\u00e1ca agus buid\u00e9al f\u00edona;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"take them to your grandmother,\"\u003e\n    tabhair chuig do sheanmh\u00e1thair iad,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she is ill and weak,\"\u003e\n    t\u00e1 s\u00ed tinn agus lag,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and they will do her good.\"\u003e\n    agus d\u00e9anfaidh siad maith di.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Set out before it gets hot,\"\u003e\n    Imigh sula n-\u00e9ir\u00edonn s\u00e9 te,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when you are going,\"\u003e\n    agus nuair at\u00e1 t\u00fa ag dul,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"walk nicely and quietly and do not run off the path,\"\u003e\n    si\u00fail go deas ci\u00fain agus n\u00e1 rith \u00f3n gcos\u00e1n,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"or you may fall and break the bottle,\"\u003e\n    n\u00f3 d\u0027fh\u00e9adf\u00e1 titim agus an buid\u00e9al a bhriseadh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and then your grandmother will get nothing;\"\u003e\n    agus ansin n\u00ed bhfaighidh do sheanmh\u00e1thair dada;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when you go into her room,\"\u003e\n    agus nuair a rachaidh t\u00fa isteach ina seomra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"don\u0026#x27;t forget to say,\"\u003e\n    n\u00e1 d\u00e9an dearmad a r\u00e1,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026#x27;Good morning\u0026#x27;,\"\u003e\n    \u0027Maidin mhaith\u0027,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and don\u0026#x27;t peep into every corner before you do it.\u0026quot;\"\u003e\n    agus n\u00e1 b\u00ed ag spi\u00fanadh i ngach c\u00fainne sula nd\u00e9anann t\u00fa \u00e9.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I will take great care,\u0026quot;\"\u003e\n    \"Tabharfaidh m\u00e9 aire mh\u00f3r,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said Little Red-Cap to her mother,\"\u003e\n    arsa Caip\u00edn Dearg Beag lena m\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and gave her hand on it.\"\u003e\n    agus thug s\u00ed a l\u00e1mh air.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The grandmother lived out in the wood,\"\u003e\n    Ch\u00f3naigh an tseanmh\u00e1thair amuigh sa choill,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"half a league from the village,\"\u003e\n    leathleag \u00f3n sr\u00e1idbhaile,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and just as Little Red-Cap entered the wood,\"\u003e\n    agus d\u00edreach nuair a chuaigh Caip\u00edn Dearg Beag isteach sa choill,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"a wolf met her.\"\u003e\n    casadh mac t\u00edre uirthi.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap did not know what a wicked creature he was,\"\u003e\n    N\u00ed raibh a fhios ag Caip\u00edn Dearg c\u00e9 chomh hol\u00f3g\u00e1nta agus a bh\u00ed s\u00e9,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and was not at all afraid of him.\"\u003e\n    agus n\u00ed raibh eagla ar bith uirthi roimhe.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Good day,\"\u003e\n    \"L\u00e1 maith,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap,\u0026quot;\"\u003e\n    a Chaip\u00edn Dearg Beag,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said he.\"\u003e\n    ar seisean.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Thank you kindly,\"\u003e\n    \"Go raibh maith agat,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"wolf.\u0026quot;\"\u003e\n    a mhic t\u00edre.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Whither away so early,\"\u003e\n    \"C\u00e1 bhfuil t\u00fa ag gabh\u00e1il chomh luath,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap?\u0026quot;\"\u003e\n    a Chaip\u00edn Dearg Beag?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;To my grandmother\u0026#x27;s.\u0026quot;\"\u003e\n    \"Chuig teach mo sheanmh\u00e1thar.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;What have you got in your apron?\u0026quot;\"\u003e\n    \"Cad at\u00e1 agat i do napr\u00fan?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Cake and wine;\"\u003e\n    \"C\u00e1ca agus f\u00edon;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"yesterday was baking-day,\"\u003e\n    inn\u00e9 bh\u00ed l\u00e1 b\u00e1c\u00e1la ann,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so poor sick grandmother is to have something good,\"\u003e\n    mar sin t\u00e1 rud \u00e9igin maith le f\u00e1il ag an seanmh\u00e1thair thinn bhocht,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to make her stronger.\u0026quot;\"\u003e\n    le \u00ed a neart\u00fa.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Where does your grandmother live,\"\u003e\n    \"C\u00e1 gc\u00f3na\u00edonn do sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap?\u0026quot;\"\u003e\n    a Chaip\u00edn Dearg Beag?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;A good quarter of a league farther on in the wood;\"\u003e\n    \"Ceathr\u00fa leag maith n\u00edos faide isteach sa choill;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"her house stands under the three large oak-trees,\"\u003e\n    t\u00e1 a teach faoi na tr\u00ed chrann darach mh\u00f3ra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"the nut-trees are just below;\"\u003e\n    t\u00e1 na crainn chn\u00f3 d\u00edreach th\u00edos;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"you surely must know it,\u0026quot;\"\u003e\n    is cinnte go maith go bhfuil aithne agat air,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"replied Little Red-Cap.\"\u003e\n    d\u0027fhreagair Caip\u00edn Dearg Beag.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf thought to himself:\"\u003e\n    Sh\u00edl an mac t\u00edre leis f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;What a tender young creature!\"\u003e\n    \"Nach maoth \u00f3g an cr\u00e9at\u00far \u00ed!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"What a nice plump mouthful.\"\u003e\n    Nach deas tiubh an greim b\u00e9il \u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She will be better to eat than the old woman.\"\u003e\n    Beidh s\u00ed n\u00edos fearr le hithe n\u00e1 an tseanbhean.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I must act craftily,\"\u003e\n    Caithfidh m\u00e9 gn\u00edomh\u00fa go cleasach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so as to catch both.\u0026quot;\"\u003e\n    chun an bheirt acu a ghabh\u00e1il.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So he walked for a short time\"\u003e\n    Mar sin shi\u00fail s\u00e9 ar feadh tamaill gairid\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"by the side of Little Red-Cap,\"\u003e\n    in aice le Caip\u00edn Dearg Beag,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and then he said:\"\u003e\n    agus ansin d\u00fairt s\u00e9:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;See,\"\u003e\n    \"F\u00e9ach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap,\"\u003e\n    a Chaip\u00edn Dearg Beag,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"how pretty the flowers are about here.\"\u003e\n    nach \u00e1lainn na bl\u00e1thanna thart anseo.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Why do you not look round?\"\u003e\n    C\u00e9n f\u00e1th nach mbreatn\u00f3inn t\u00fa thart?\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I believe, too,\"\u003e\n    Creidim, freisin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that you do not hear\"\u003e\n    nach gcloiseann t\u00fa\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"how sweetly the little birds are singing;\"\u003e\n    chomh binn agus at\u00e1 na h\u00e9in bheaga ag canadh;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"you walk gravely along\"\u003e\n    si\u00falann t\u00fa go tromch\u00faiseach ar aghaidh\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"as if you were going to school,\"\u003e\n    amhail is d\u00e1 mbeif\u00e1 ag dul ar scoil,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"while everything else out here in the wood is merry.\u0026quot;\"\u003e\n    fad at\u00e1 gach rud eile amuigh anseo sa choill go meidhreach.\"\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap raised her eyes,\"\u003e\n    D\u0027ardaigh Caip\u00edn Dearg Beag a s\u00faile,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when she saw the sunbeams\"\u003e\n    agus nuair a chonaic s\u00ed gathanna na gr\u00e9ine\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"dancing here and there through the trees,\"\u003e\n    ag rince anseo is ansi\u00fad tr\u00ed na crainn,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and pretty flowers growing everywhere,\"\u003e\n    agus bl\u00e1thanna deasa ag f\u00e1s gach \u00e1it,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she thought:\"\u003e\n    sh\u00edl s\u00ed:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Suppose I take grandmother a fresh nosegay;\"\u003e\n    \"Mura dt\u00f3gfainn bl\u00e1thbheart \u00far do sheanmh\u00e1thair;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that would please her too.\"\u003e\n    chuirfeadh sin \u00e1thas uirthi freisin.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It is so early in the day\"\u003e\n    T\u00e1 s\u00e9 chomh luath sa l\u00e1\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that I shall still get there in good time\u0026quot;;\"\u003e\n    go sroichfidh m\u00e9 ann in am maith f\u00f3s\";\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and so she ran from the path\"\u003e\n    agus mar sin rith s\u00ed \u00f3n gcos\u00e1n\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"into the wood to look for flowers.\"\u003e\n    isteach sa choill ag lorg bl\u00e1thanna.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"And whenever she had picked one,\"\u003e\n    Agus gach uair a phioc s\u00ed ceann,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she fancied that she saw a still prettier one farther on,\"\u003e\n    sh\u00edl s\u00ed go bhfaca s\u00ed ceann n\u00edos deise f\u00f3s n\u00edos faide ar aghaidh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and ran after it,\"\u003e\n    agus rith s\u00ed ina dhiaidh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and so got deeper\"\u003e\n    agus mar sin chuaigh s\u00ed n\u00edos doimhne\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and deeper into the wood.\"\u003e\n    agus n\u00edos doimhne isteach sa choill.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Meanwhile the wolf ran straight\"\u003e\n    Idir an d\u00e1 linn rith an mac t\u00edre d\u00edreach\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to the grandmother\u0026#x27;s house\"\u003e\n    chuig teach na seanmh\u00e1thar\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and knocked at the door.\"\u003e\n    agus bhuail s\u00e9 ar an doras.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Who is there?\u0026quot;\"\u003e\n    \"C\u00e9 at\u00e1 ann?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Little Red-Cap,\u0026quot;\"\u003e\n    \"Caip\u00edn Dearg Beag,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"replied the wolf.\"\u003e\n    d\u0027fhreagair an mac t\u00edre.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;She is bringing cake and wine;\"\u003e\n    \"T\u00e1 s\u00ed ag tabhairt c\u00e1ca agus f\u00edona;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"open the door.\u0026quot;\"\u003e\n    oscail an doras.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Lift the latch,\u0026quot;\"\u003e\n    \"Ardaigh an laiste,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"called out the grandmother,\"\u003e\n    a scairt an tseanmh\u00e1thair amach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I am too weak,\"\u003e\n    \"t\u00e1im r\u00f3fhann,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and cannot get up.\u0026quot;\"\u003e\n    agus n\u00ed f\u00e9idir liom \u00e9ir\u00ed.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf lifted the latch,\"\u003e\n    D\u0027ardaigh an mac t\u00edre an laiste,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"the door sprang open,\"\u003e\n    phreab an doras ar oscailt,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and without saying a word\"\u003e\n    agus gan focal a r\u00e1\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he went straight to the grandmother\u0026#x27;s bed,\"\u003e\n    chuaigh s\u00e9 d\u00edreach chuig leaba na seanmh\u00e1thar,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and devoured her.\"\u003e\n    agus shlug s\u00e9 \u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then he put on her clothes,\"\u003e\n    Ansin chuir s\u00e9 uirthi a cuid \u00e9ada\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"dressed himself in her cap,\"\u003e\n    chuir s\u00e9 air f\u00e9in a caip\u00edn,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"laid himself in bed\"\u003e\n    luigh s\u00e9 sa leaba\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and drew the curtains.\"\u003e\n    agus tharraing s\u00e9 na cuirt\u00edn\u00ed.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap,\"\u003e\n    Bh\u00ed Caip\u00edn Dearg Beag,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"however,\"\u003e\n    \u00e1fach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"had been running about picking flowers,\"\u003e\n    tar \u00e9is a bheith ag rith thart ag piocadh bl\u00e1thanna,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when she had gathered so many\"\u003e\n    agus nuair a bh\u00ed an oiread sin bailithe aici\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that she could carry no more,\"\u003e\n    nach bhf\u00e9adfadh s\u00ed a thuilleadh a iompar,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she remembered her grandmother,\"\u003e\n    chuimhnigh s\u00ed ar a seanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and set out on the way to her.\"\u003e\n    agus chuir s\u00ed f\u00faithi ar an mbealach chuici.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She was surprised to find the cottage-door standing open,\"\u003e\n    Chuir s\u00e9 iontas uirthi doras an bhoth\u00e1n a fh\u00e1il ar oscailt,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when she went into the room,\"\u003e\n    agus nuair a chuaigh s\u00ed isteach sa seomra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she had such a strange feeling\"\u003e\n    bh\u00ed moth\u00fach\u00e1n chomh haisteach sin aici\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that she said to herself:\"\u003e\n    gur d\u00fairt s\u00ed l\u00e9i f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Oh dear!\"\u003e\n    \"A Thiarna!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"how uneasy I feel today,\"\u003e\n    chomh m\u00edchompordach agus a mhotha\u00edm inniu,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and at other times\"\u003e\n    agus ar amanna eile\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I like being with grandmother so much.\u0026quot;\"\u003e\n    is bre\u00e1 liom a bheith le seanmh\u00e1thair.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She called out:\"\u003e\n    Ghlaoigh s\u00ed amach:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Good morning,\u0026quot;\"\u003e\n    \"Maidin mhaith,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but received no answer;\"\u003e\n    ach n\u00ed bhfuair s\u00ed freagra ar bith;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so she went to the bed\"\u003e\n    mar sin chuaigh s\u00ed chuig an leaba\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and drew back the curtains.\"\u003e\n    agus tharraing s\u00ed siar na cuirt\u00edn\u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"There lay her grandmother\"\u003e\n    Bh\u00ed a seanmh\u00e1thair ansin ina lu\u00ed\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"with her cap pulled far over her face,\"\u003e\n    lena caip\u00edn tarraingthe i bhfad thar a h\u00e9adan,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and looking very strange.\"\u003e\n    agus ag breathn\u00fa an-aisteach.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Oh! grandmother,\u0026quot;\"\u003e\n    \"\u00d3! a sheanmh\u00e1thair,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she said,\"\u003e\n    ar sise,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;what big ears you have!\u0026quot;\"\u003e\n    \"nach m\u00f3ra na cluasa at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to hear you with,\"\u003e\n    \"D\u00e1 bhfeabhas le h\u00e9isteacht leat,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"my child,\u0026quot;\"\u003e\n    a leanbh,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"was the reply.\"\u003e\n    ba \u00ed an fhreagra.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;But,\"\u003e\n    \"Ach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"grandmother,\"\u003e\n    a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what big eyes you have!\u0026quot;\"\u003e\n    nach m\u00f3ra na s\u00faile at\u00e1 agat!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she said.\"\u003e\n    ar sise.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to see you with,\"\u003e\n    \"D\u00e1 bhfeabhas le breathn\u00fa ort,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"my dear.\u0026quot;\"\u003e\n    a st\u00f3r.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;But,\"\u003e\n    \"Ach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"grandmother,\"\u003e\n    a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what large hands you have!\u0026quot;\"\u003e\n    nach m\u00f3ra na l\u00e1mha at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to hug you with.\u0026quot;\"\u003e\n    \"D\u00e1 bhfeabhas le barr\u00f3g a thabhairt duit.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Oh! but,\"\u003e\n    \"\u00d3! ach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"grandmother,\"\u003e\n    a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what a terrible big mouth you have!\u0026quot;\"\u003e\n    nach uaf\u00e1sach m\u00f3r an b\u00e9al at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to eat you with!\u0026quot;\"\u003e\n    \"D\u00e1 bhfeabhas le th\u00fa a ithe!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"And scarcely had the wolf said this,\"\u003e\n    Agus ar \u00e9igean a bh\u00ed an focal seo r\u00e1ite ag an mac t\u00edre,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"than with one bound he was out of bed\"\u003e\n    n\u00e1 le l\u00e9im amh\u00e1in bh\u00ed s\u00e9 amuigh as an leaba\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and swallowed up Red-Cap.\"\u003e\n    agus shlog s\u00e9 Caip\u00edn Dearg.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"When the wolf had appeased his appetite,\"\u003e\n    Nuair a bh\u00ed ocras an mhic t\u00edre s\u00e1sta,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he lay down again in the bed,\"\u003e\n    luigh s\u00e9 s\u00edos ar\u00eds sa leaba,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"fell asleep\"\u003e\n    thit s\u00e9 ina chodladh\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and began to snore very loud.\"\u003e\n    agus thosaigh s\u00e9 ag srannadh go han-ard.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The huntsman was just passing the house,\"\u003e\n    Bh\u00ed an sealgaire d\u00edreach ag dul thar an teach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and thought to himself:\"\u003e\n    agus sh\u00edl s\u00e9 leis f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;How the old woman is snoring!\"\u003e\n    \"Nach hard at\u00e1 an tseanbhean ag srannadh!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I must just see if she wants anything.\u0026quot;\"\u003e\n    Caithfidh m\u00e9 f\u00e9achaint an bhfuil aon rud uaithi.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So he went into the room,\"\u003e\n    Mar sin chuaigh s\u00e9 isteach sa seomra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when he came to the bed,\"\u003e\n    agus nuair a th\u00e1inig s\u00e9 chuig an leaba,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he saw that the wolf was lying in it.\"\u003e\n    chonaic s\u00e9 go raibh an mac t\u00edre ina lu\u00ed inti.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Do I find you here,\"\u003e\n    \"An anseo a fhaighim th\u00fa,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"you old sinner!\u0026quot;\"\u003e\n    a sheandrochaduine!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said he.\"\u003e\n    ar seisean.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I have long sought you!\u0026quot;\"\u003e\n    \"T\u00e1im do do lorg le fada!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then just as he was going to fire at him,\"\u003e\n    Ansin d\u00edreach nuair a bh\u00ed s\u00e9 chun scaoileadh leis,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"it occurred to him\"\u003e\n    rith s\u00e9 leis\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that the wolf might have devoured the grandmother,\"\u003e\n    gur shlog an mac t\u00edre b\u0027fh\u00e9idir an tseanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and that she might still be saved,\"\u003e\n    agus go bhf\u00e9adfa\u00ed \u00ed a tharrth\u00e1il f\u00f3s,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so he did not fire,\"\u003e\n    mar sin n\u00edor scaoil s\u00e9,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but took a pair of scissors,\"\u003e\n    ach th\u00f3g s\u00e9 p\u00e9ire sios\u00far,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and began to cut open the stomach of the sleeping wolf.\"\u003e\n    agus thosaigh s\u00e9 ag gearradh ar oscailt bolg an mhic t\u00edre ina chodladh.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"When he had made two snips,\"\u003e\n    Nuair a rinne s\u00e9 dh\u00e1 shnaidhm,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he saw the little Red-Cap shining,\"\u003e\n    chonaic s\u00e9 Caip\u00edn Dearg Beag ag gealadh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and then he made two snips more,\"\u003e\n    agus ansin rinne s\u00e9 dh\u00e1 shnaidhm eile,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and the little girl sprang out,\"\u003e\n    agus phreab an cail\u00edn beag amach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"crying: \u0026quot;Ah,\"\u003e\n    ag scairteadh: \"Ach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"how frightened I have been!\"\u003e\n    nach scanraithe a bh\u00ed m\u00e9!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"How dark it was inside the wolf\u0026quot;;\"\u003e\n    Chomh dorcha agus a bh\u00ed s\u00e9 istigh sa mhac t\u00edre\";\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and after that the aged grandmother came out alive also,\"\u003e\n    agus ina dhiaidh sin th\u00e1inig an tseanmh\u00e1thair aosta amach beo freisin,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but scarcely able to breathe.\"\u003e\n    ach ar \u00e9igean in ann an\u00e1l\u00fa.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap quickly fetched\"\u003e\n    D\u0027fh\u00e1igh Caip\u00edn Dearg go tapa\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"great stones with which they filled the wolf\u0026#x27;s belly,\"\u003e\n    clocha m\u00f3ra lena l\u00edon siad bolg an mhic t\u00edre,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and when he awoke,\"\u003e\n    agus nuair a dh\u00faisigh s\u00e9,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he wanted to run away,\"\u003e\n    theastaigh uaidh \u00e9al\u00fa,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but the stones were so heavy\"\u003e\n    ach bh\u00ed na clocha chomh trom sin\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that he collapsed at once,\"\u003e\n    gur thit s\u00e9 i laige l\u00e1ithreach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and fell dead.\"\u003e\n    agus thit s\u00e9 marbh.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then all three were delighted.\"\u003e\n    Ansin bh\u00ed \u00e1thas ar an tri\u00far acu.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The huntsman drew off the wolf\u0026#x27;s skin\"\u003e\n    Tharraing an sealgaire craiceann an mhic t\u00edre de\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and went home with it;\"\u003e\n    agus chuaigh s\u00e9 abhaile leis;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"the grandmother ate the cake\"\u003e\n    d\u0027ith an tseanmh\u00e1thair an c\u00e1ca\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and drank the wine which Red-Cap had brought,\"\u003e\n    agus d\u0027\u00f3l s\u00ed an f\u00edon a thug Caip\u00edn Dearg,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and revived,\"\u003e\n    agus th\u00e1inig s\u00ed chuici f\u00e9in,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but Red-Cap thought to herself:\"\u003e\n    ach sh\u00edl Caip\u00edn Dearg l\u00e9i f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;As long as I live,\"\u003e\n    \"Chomh fada agus a bheidh m\u00e9 beo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I will never by myself leave the path,\"\u003e\n    n\u00ed fh\u00e1gfaidh m\u00e9 an cos\u00e1n liom f\u00e9in riamh,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to run into the wood,\"\u003e\n    le rith isteach sa choill,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"when my mother has forbidden me to do so.\u0026quot;\"\u003e\n    nuair a bheidh mo mh\u00e1thair tar \u00e9is toirmeasc a chur orm \u00e9 a dh\u00e9anamh.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It also related that once\"\u003e\n    Deirtear freisin uair amh\u00e1in\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"when Red-Cap was again taking cakes\"\u003e\n    nuair a bh\u00ed Caip\u00edn Dearg ag tabhairt c\u00e1ca\u00ed ar\u00eds\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to the old grandmother,\"\u003e\n    don tseanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"another wolf spoke to her,\"\u003e\n    gur labhair mac t\u00edre eile l\u00e9i,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and tried to entice her from the path.\"\u003e\n    agus gur iarr s\u00e9 \u00ed a mhealladh \u00f3n gcos\u00e1n.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap,\"\u003e\n    Bh\u00ed Caip\u00edn Dearg,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"however,\"\u003e\n    \u00e1fach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"was on her guard,\"\u003e\n    ar a hairdeall,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and went straight forward on her way,\"\u003e\n    agus chuaigh s\u00ed d\u00edreach ar aghaidh ar a bealach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and told her grandmother\"\u003e\n    agus d\u0027inis s\u00ed d\u00e1 seanmh\u00e1thair\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that she had met the wolf,\"\u003e\n    gur casadh an mac t\u00edre uirthi,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and that he had said\"\u003e\n    agus gur d\u00fairt s\u00e9\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;good morning\u0026quot;\"\u003e\n    \"maidin mhaith\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to her,\"\u003e\n    l\u00e9i,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"but with such a wicked look in his eyes,\"\u003e\n    ach le f\u00e9achaint chomh hol\u00f3g\u00e1nta sin ina sh\u00faile,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that if they had not been on the public road\"\u003e\n    mura raibh siad ar an mb\u00f3thar poibl\u00ed\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she was certain he would have eaten her up.\"\u003e\n    go raibh s\u00ed cinnte go n-\u00edosfadh s\u00e9 \u00ed.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Well,\u0026quot;\"\u003e\n    \"Bhuel,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said the grandmother,\"\u003e\n    arsa an tseanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;we will shut the door,\"\u003e\n    \"d\u00fanfaimid an doras,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that he may not come in.\u0026quot;\"\u003e\n    nach f\u00e9idir leis teacht isteach.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Soon afterwards the wolf knocked,\"\u003e\n    Go gairid ina dhiaidh sin bhuail an mac t\u00edre,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and cried:\"\u003e\n    agus scairt s\u00e9:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Open the door,\"\u003e\n    \"Oscail an doras,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"grandmother,\"\u003e\n    a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I am Little Red-Cap,\"\u003e\n    is mise Caip\u00edn Dearg Beag,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and am bringing you some cakes.\u0026quot;\"\u003e\n    agus t\u00e1im ag tabhairt c\u00e1ca\u00ed duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But they did not speak,\"\u003e\n    Ach n\u00edor labhair siad,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"or open the door,\"\u003e\n    n\u00e1 n\u00edor oscail siad an doras,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so the grey-beard stole\"\u003e\n    mar sin shi\u00fail an f\u00e9as\u00f3g liath\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"twice or thrice round the house,\"\u003e\n    dh\u00e1 n\u00f3 tr\u00ed huaire thart ar an teach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and at last jumped on the roof,\"\u003e\n    agus ar deireadh l\u00e9im s\u00e9 ar an d\u00edon,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"intending to wait until Red-Cap went home in the evening,\"\u003e\n    ag beart\u00fa fanacht go dt\u00ed go rachaidh Caip\u00edn Dearg abhaile tr\u00e1thn\u00f3na,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and then to steal after her\"\u003e\n    agus ansin goid ina diaidh\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and devour her in the darkness.\"\u003e\n    agus \u00ed a shlugadh sa dorchadas.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But the grandmother saw what was in his thoughts.\"\u003e\n    Ach chonaic an tseanmh\u00e1thair cad a bh\u00ed ina smaointe.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"In front of the house was a great stone trough,\"\u003e\n    Os comhair an t\u00ed bh\u00ed umair mh\u00f3r chloiche,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so she said to the child:\"\u003e\n    mar sin d\u00fairt s\u00ed leis an leanbh:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Take the pail,\"\u003e\n    \"T\u00f3g an buic\u00e9ad,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap;\"\u003e\n    a Chaip\u00edn Dearg;\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I made some sausages yesterday,\"\u003e\n    rinne m\u00e9 isp\u00edn\u00ed inn\u00e9,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"so carry the water in which I boiled them to the trough.\u0026quot;\"\u003e\n    mar sin iompair an t-uisce inar bhruith m\u00e9 iad chuig an umair.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap carried until the great trough was quite full.\"\u003e\n    D\u0027iompair Caip\u00edn Dearg go dt\u00ed go raibh an umair mh\u00f3r ioml\u00e1n l\u00e1n.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then the smell of the sausages reached the wolf,\"\u003e\n    Ansin shroich boladh na n-isp\u00edn\u00ed an mac t\u00edre,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and he sniffed and peeped down,\"\u003e\n    agus rinne s\u00e9 bol\u00fa agus spi\u00fanadh s\u00edos,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and at last stretched out his neck so far\"\u003e\n    agus ar deireadh sh\u00edn s\u00e9 amach a mhuine\u00e1l chomh fada sin\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"that he could no longer keep his footing\"\u003e\n    nach raibh s\u00e9 in ann a chosa a choinne\u00e1il faoi\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and began to slip,\"\u003e\n    agus thosaigh s\u00e9 ag sleamhn\u00fa,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and slipped down from the roof\"\u003e\n    agus shleamhnaigh s\u00e9 anuas \u00f3n d\u00edon\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"straight into the great trough,\"\u003e\n    d\u00edreach isteach san umair mh\u00f3r,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and was drowned.\"\u003e\n    agus b\u00e1itheadh \u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But Red-Cap went joyously home,\"\u003e\n    Ach chuaigh Caip\u00edn Dearg abhaile go h\u00e1thasach,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"and no one ever did anything to harm her again.\"\u003e\n    agus n\u00edor rinne aon duine aon rud le dochar a dh\u00e9anamh di ar\u00eds.\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 51, "level_name": "original", "vocab": [{"audio": null, "english": "death", "in_bank": false, "irish": "b\u00e1s", "translation_id": 161}, {"audio": null, "english": "mouth", "in_bank": false, "irish": "b\u00e9al", "translation_id": 293}, {"audio": null, "english": "doorstep", "in_bank": false, "irish": "b\u00e9al dorais", "translation_id": 367}, {"audio": null, "english": "flowers", "in_bank": false, "irish": "bl\u00e1thanna", "translation_id": 236}, {"audio": null, "english": "stomach", "in_bank": false, "irish": "bolg", "translation_id": 30}, {"audio": null, "english": "bottle", "in_bank": false, "irish": "buid\u00e9al", "translation_id": 349}, {"audio": null, "english": "cake", "in_bank": false, "irish": "c\u00e1ca", "translation_id": 351}, {"audio": null, "english": "girl", "in_bank": false, "irish": "cail\u00edn", "translation_id": 295}, {"audio": null, "english": "cap", "in_bank": false, "irish": "caip\u00edn", "translation_id": 345}, {"audio": null, "english": "singing", "in_bank": false, "irish": "canadh", "translation_id": 259}, {"audio": null, "english": "stones", "in_bank": false, "irish": "clocha", "translation_id": 153}, {"audio": null, "english": "ears", "in_bank": false, "irish": "cluasa", "translation_id": 298}, {"audio": null, "english": "forest", "in_bank": false, "irish": "coill", "translation_id": 112}, {"audio": null, "english": "path", "in_bank": false, "irish": "cos\u00e1n", "translation_id": 348}, {"audio": null, "english": "curtains", "in_bank": false, "irish": "cuirt\u00edn\u00ed", "translation_id": 362}, {"audio": null, "english": "red", "in_bank": false, "irish": "dearg", "translation_id": 346}, {"audio": null, "english": "nice", "in_bank": false, "irish": "deas", "translation_id": 301}, {"audio": null, "english": "dark", "in_bank": false, "irish": "dorcha", "translation_id": 216}, {"audio": null, "english": "person", "in_bank": false, "irish": "duine", "translation_id": 303}, {"audio": null, "english": "fear", "in_bank": false, "irish": "eagla", "translation_id": 53}, {"audio": null, "english": "bird", "in_bank": false, "irish": "\u00e9an", "translation_id": 183}, {"audio": null, "english": "wine", "in_bank": false, "irish": "f\u00edon", "translation_id": 350}, {"audio": null, "english": "rays", "in_bank": false, "irish": "gathanna", "translation_id": 360}, {"audio": null, "english": "cutting", "in_bank": false, "irish": "gearradh", "translation_id": 366}, {"audio": null, "english": "love", "in_bank": false, "irish": "gr\u00e1", "translation_id": 83}, {"audio": null, "english": "sun", "in_bank": false, "irish": "gr\u00e9ine", "translation_id": 361}, {"audio": null, "english": "sausages", "in_bank": false, "irish": "isp\u00edn\u00ed", "translation_id": 368}, {"audio": null, "english": "weak", "in_bank": false, "irish": "lag", "translation_id": 353}, {"audio": null, "english": "hand", "in_bank": false, "irish": "l\u00e1mh", "translation_id": 359}, {"audio": null, "english": "hands", "in_bank": false, "irish": "l\u00e1mha", "translation_id": 363}, {"audio": null, "english": "child", "in_bank": false, "irish": "leanbh", "translation_id": 61}, {"audio": null, "english": "wolf", "in_bank": false, "irish": "mac t\u00edre", "translation_id": 17}, {"audio": null, "english": "morning", "in_bank": false, "irish": "maidin", "translation_id": 357}, {"audio": null, "english": "apron", "in_bank": false, "irish": "napr\u00fan", "translation_id": 158}, {"audio": null, "english": "run", "in_bank": false, "irish": "rith", "translation_id": 355}, {"audio": null, "english": "scared", "in_bank": false, "irish": "scanraithe", "translation_id": 116}, {"audio": null, "english": "huntsman", "in_bank": false, "irish": "sealgaire", "translation_id": 365}, {"audio": null, "english": "grandmother", "in_bank": false, "irish": "seanmh\u00e1thair", "translation_id": 344}, {"audio": null, "english": "room", "in_bank": false, "irish": "seomra", "translation_id": 356}, {"audio": null, "english": "scissors", "in_bank": false, "irish": "sios\u00far", "translation_id": 136}, {"audio": null, "english": "walk", "in_bank": false, "irish": "si\u00fail", "translation_id": 354}, {"audio": null, "english": "snooping", "in_bank": false, "irish": "spi\u00fanadh", "translation_id": 358}, {"audio": null, "english": "village", "in_bank": false, "irish": "sr\u00e1idbhaile", "translation_id": 213}, {"audio": null, "english": "snoring", "in_bank": false, "irish": "srannadh", "translation_id": 364}, {"audio": null, "english": "eyes", "in_bank": false, "irish": "s\u00faile", "translation_id": 320}, {"audio": null, "english": "sick", "in_bank": false, "irish": "tinn", "translation_id": 352}, {"audio": null, "english": "fall", "in_bank": false, "irish": "titim", "translation_id": 70}, {"audio": null, "english": "velvet", "in_bank": false, "irish": "veilibh\u00edt", "translation_id": 347}]}, "1.0": {"already_read": false, "bookmark_page_index": [], "chapters": [], "content": ["\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Once upon a time\"\u003e\n    Fad\u00f3, fad\u00f3\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"there was a little girl.\"\u003e\n    bh\u00ed cail\u00edn beag ann.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Everyone who saw her loved her.\"\u003e\n    Bh\u00ed gr\u00e1 ag gach duine a chonaic \u00ed di.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Her grandmother loved her most of all.\"\u003e\n    Bh\u00ed an gr\u00e1 ab m\u00f3 ag a seanmh\u00e1thair di.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She would give the child anything.\"\u003e\n    Thabharfadh s\u00ed aon rud don leanbh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"One time she gave her a little red cap.\"\u003e\n    Uair amh\u00e1in thug s\u00ed caip\u00edn beag dearg di.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It looked so good on her.\"\u003e\n    Bh\u00ed s\u00e9 chomh deas uirthi.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She never wanted to wear anything else.\"\u003e\n    N\u00edor theastaigh uaithi aon rud eile a chaitheamh riamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So everyone called her \u0026quot;Little Red-Cap.\u0026quot;\"\u003e\n    Mar sin thug gach duine \"Caip\u00edn Dearg Beag\" uirthi.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"One day her mother said to her:\"\u003e\n    L\u00e1 amh\u00e1in d\u00fairt a m\u00e1thair l\u00e9i:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Come here,\"\u003e\n    \"Tar anseo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap.\"\u003e\n    a Chaip\u00edn Dearg Beag.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Here is some cake and a bottle of wine.\"\u003e\n    Seo c\u00e1ca agus buid\u00e9al f\u00edona.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Take them to your grandmother.\"\u003e\n    Tabhair chuig do sheanmh\u00e1thair iad.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She is sick and weak.\"\u003e\n    T\u00e1 s\u00ed tinn agus lag.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"They will make her feel better.\"\u003e\n    Cuirfidh siad feabhas uirthi.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Leave before it gets hot.\"\u003e\n    Imigh sula n-\u00e9ir\u00edonn s\u00e9 te.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Walk nicely and quietly.\"\u003e\n    Si\u00fail go deas ci\u00fain.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Do not run off the path.\"\u003e\n    N\u00e1 rith \u00f3n gcos\u00e1n.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"You might fall and break the bottle.\"\u003e\n    D\u0027fh\u00e9adf\u00e1 titim agus an buid\u00e9al a bhriseadh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then your grandmother will get nothing.\"\u003e\n    Ansin n\u00ed bhfaighidh do sheanmh\u00e1thair dada.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"When you go into her room,\"\u003e\n    Nuair a rachaidh t\u00fa isteach ina seomra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"say \u0026#x27;Good morning.\u0026#x27;\"\u003e\n    abair \u0027Maidin mhaith.\u0027\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Don\u0026#x27;t look into every corner first.\u0026quot;\"\u003e\n    N\u00e1 b\u00ed ag breathn\u00fa i ngach c\u00fainne ar dt\u00fas.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I will be very careful,\u0026quot;\"\u003e\n    \"Beidh m\u00e9 an-ch\u00faramach,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said Little Red-Cap.\"\u003e\n    arsa Caip\u00edn Dearg Beag.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She gave her mother her hand on it.\"\u003e\n    Thug s\u00ed a l\u00e1mh d\u00e1 m\u00e1thair air.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The grandmother lived in the woods.\"\u003e\n    Ch\u00f3naigh an tseanmh\u00e1thair sa choill.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She lived half a league from the village.\"\u003e\n    Ch\u00f3naigh s\u00ed leathleag \u00f3n sr\u00e1idbhaile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap went into the woods.\"\u003e\n    Chuaigh Caip\u00edn Dearg Beag isteach sa choill.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"A wolf met her.\"\u003e\n    Casadh mac t\u00edre uirthi.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap did not know he was bad.\"\u003e\n    N\u00ed raibh a fhios ag Caip\u00edn Dearg go raibh s\u00e9 olc.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She was not afraid of him.\"\u003e\n    N\u00ed raibh eagla uirthi roimhe.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Good day, Little Red-Cap,\u0026quot;\"\u003e\n    \"L\u00e1 maith, a Chaip\u00edn Dearg Beag,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said the wolf.\"\u003e\n    arsa an mac t\u00edre.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Thank you, wolf.\u0026quot;\"\u003e\n    \"Go raibh maith agat, a mhic t\u00edre.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Where are you going so early?\u0026quot;\"\u003e\n    \"C\u00e1 bhfuil t\u00fa ag dul chomh luath?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;To my grandmother\u0026#x27;s house.\u0026quot;\"\u003e\n    \"Chuig teach mo sheanmh\u00e1thar.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;What do you have in your apron?\u0026quot;\"\u003e\n    \"Cad at\u00e1 agat i do napr\u00fan?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Cake and wine.\"\u003e\n    \"C\u00e1ca agus f\u00edon.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Yesterday was baking day.\"\u003e\n    Inn\u00e9 bh\u00ed l\u00e1 b\u00e1c\u00e1la ann.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"My poor sick grandmother needs something good.\"\u003e\n    T\u00e1 rud \u00e9igin maith ag teast\u00e1il \u00f3 mo sheanmh\u00e1thair thinn bhocht.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It will make her stronger.\u0026quot;\"\u003e\n    Cuirfidh s\u00e9 neart inti.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Where does your grandmother live?\u0026quot;\"\u003e\n    \"C\u00e1 gc\u00f3na\u00edonn do sheanmh\u00e1thair?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;A good way into the woods.\"\u003e\n    \"Fad maith isteach sa choill.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Her house is under three big oak trees.\"\u003e\n    T\u00e1 a teach faoi thr\u00ed chrann darach mh\u00f3ra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The nut trees are just below.\"\u003e\n    T\u00e1 na crainn chn\u00f3 d\u00edreach th\u00edos.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"You must know it,\u0026quot;\"\u003e\n    Caithfidh go bhfuil aithne agat air,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said Little Red-Cap.\"\u003e\n    arsa Caip\u00edn Dearg Beag.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf thought to himself:\"\u003e\n    Sh\u00edl an mac t\u00edre leis f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;What a tender young thing!\"\u003e\n    \"Nach maoth \u00f3g an rud \u00ed!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"What a nice fat bite.\"\u003e\n    Nach deas ramhar an greim \u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She will taste better than the old woman.\"\u003e\n    Beidh s\u00ed n\u00edos blasta n\u00e1 an tseanbhean.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I must be clever.\"\u003e\n    Caithfidh m\u00e9 a bheith cliste.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I will catch them both.\u0026quot;\"\u003e\n    Gabhfaidh m\u00e9 an bheirt acu.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He walked next to Little Red-Cap for a bit.\"\u003e\n    Shi\u00fail s\u00e9 in aice le Caip\u00edn Dearg Beag ar feadh tamaill.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then he said:\"\u003e\n    Ansin d\u00fairt s\u00e9:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Look, Little Red-Cap.\"\u003e\n    \"F\u00e9ach, a Chaip\u00edn Dearg Beag.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The flowers here are so pretty.\"\u003e\n    T\u00e1 na bl\u00e1thanna anseo chomh h\u00e1lainn.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Why don\u0026#x27;t you look around?\"\u003e\n    C\u00e9n f\u00e1th nach mbreatn\u00f3inn t\u00fa thart?\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I think you don\u0026#x27;t hear the little birds singing.\"\u003e\n    S\u00edlim nach gcloiseann t\u00fa na h\u00e9in bheaga ag canadh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"You walk like you are going to school.\"\u003e\n    Si\u00falann t\u00fa amhail is d\u00e1 mbeif\u00e1 ag dul ar scoil.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Everything else in the woods is happy.\u0026quot;\"\u003e\n    T\u00e1 gach rud eile sa choill sona.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap looked up.\"\u003e\n    D\u0027ardaigh Caip\u00edn Dearg Beag a s\u00faile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She saw the sunlight dancing through the trees.\"\u003e\n    Chonaic s\u00ed solas na gr\u00e9ine ag rince tr\u00ed na crainn.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Pretty flowers grew everywhere.\"\u003e\n    Bh\u00ed bl\u00e1thanna deasa ag f\u00e1s gach \u00e1it.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She thought:\"\u003e\n    Sh\u00edl s\u00ed:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I could pick grandmother some fresh flowers.\"\u003e\n    \"D\u0027fh\u00e9adfainn bl\u00e1thanna \u00fara a phiocadh do sheanmh\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"That would make her happy too.\"\u003e\n    Chuirfeadh sin \u00e1thas uirthi freisin.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It is still early.\"\u003e\n    T\u00e1 s\u00e9 f\u00f3s luath.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I will still get there in time.\u0026quot;\"\u003e\n    Sroichfidh m\u00e9 ann in am f\u00f3s.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So she ran off the path into the woods.\"\u003e\n    Mar sin rith s\u00ed \u00f3n gcos\u00e1n isteach sa choill.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She looked for flowers.\"\u003e\n    Chuaigh s\u00ed ag lorg bl\u00e1thanna.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Every time she picked one,\"\u003e\n    Gach uair a phioc s\u00ed ceann,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she saw a prettier one further away.\"\u003e\n    chonaic s\u00ed ceann n\u00edos deise n\u00edos faide i gc\u00e9in.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She ran after it.\"\u003e\n    Rith s\u00ed ina dhiaidh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She got deeper and deeper into the woods.\"\u003e\n    Chuaigh s\u00ed n\u00edos doimhne agus n\u00edos doimhne isteach sa choill.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf ran straight to the grandmother\u0026#x27;s house.\"\u003e\n    Rith an mac t\u00edre d\u00edreach chuig teach na seanmh\u00e1thar.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He knocked at the door.\"\u003e\n    Bhuail s\u00e9 ar an doras.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Who is there?\u0026quot;\"\u003e\n    \"C\u00e9 at\u00e1 ann?\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Little Red-Cap,\u0026quot;\"\u003e\n    \"Caip\u00edn Dearg Beag,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"said the wolf.\"\u003e\n    arsa an mac t\u00edre.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I am bringing cake and wine.\"\u003e\n    \"T\u00e1im ag tabhairt c\u00e1ca agus f\u00edona.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Open the door.\u0026quot;\"\u003e\n    Oscail an doras.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Lift the latch,\u0026quot;\"\u003e\n    \"Ardaigh an laiste,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"called the grandmother.\"\u003e\n    a ghlaoigh an tseanmh\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I am too weak.\"\u003e\n    \"T\u00e1im r\u00f3fhann.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I cannot get up.\u0026quot;\"\u003e\n    N\u00ed f\u00e9idir liom \u00e9ir\u00ed.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf lifted the latch.\"\u003e\n    D\u0027ardaigh an mac t\u00edre an laiste.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The door opened.\"\u003e\n    D\u0027oscail an doras.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He did not say a word.\"\u003e\n    N\u00edor labhair s\u00e9 focal.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He went straight to the grandmother\u0026#x27;s bed.\"\u003e\n    Chuaigh s\u00e9 d\u00edreach chuig leaba na seanmh\u00e1thar.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He ate her up.\"\u003e\n    D\u0027ith s\u00e9 suas \u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then he put on her clothes.\"\u003e\n    Ansin chuir s\u00e9 uirthi a cuid \u00e9ada\u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He put on her cap.\"\u003e\n    Chuir s\u00e9 air a caip\u00edn.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He got into bed.\"\u003e\n    Chuaigh s\u00e9 isteach sa leaba.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He pulled the curtains.\"\u003e\n    Tharraing s\u00e9 na cuirt\u00edn\u00ed.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Little Red-Cap had been running around\"\u003e\n    Bh\u00ed Caip\u00edn Dearg Beag tar \u00e9is a bheith ag rith thart\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"picking flowers.\"\u003e\n    ag piocadh bl\u00e1thanna.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She had gathered so many\"\u003e\n    Bh\u00ed an oiread sin bailithe aici\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she could not carry more.\"\u003e\n    nach bhf\u00e9adfadh s\u00ed a thuilleadh a iompar.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then she remembered her grandmother.\"\u003e\n    Ansin chuimhnigh s\u00ed ar a seanmh\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She went to her house.\"\u003e\n    Chuaigh s\u00ed chuig a teach.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She was surprised.\"\u003e\n    Chuir s\u00e9 iontas uirthi.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The cottage door was open.\"\u003e\n    Bh\u00ed doras an bhoth\u00e1n ar oscailt.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"When she went into the room,\"\u003e\n    Nuair a chuaigh s\u00ed isteach sa seomra,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she felt strange.\"\u003e\n    mhothaigh s\u00ed aisteach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She said to herself:\"\u003e\n    D\u00fairt s\u00ed l\u00e9i f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Oh dear!\"\u003e\n    \"A Thiarna!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I feel so uneasy today.\"\u003e\n    Motha\u00edm chomh m\u00edchompordach inniu.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Usually I like being with grandmother.\u0026quot;\"\u003e\n    De ghn\u00e1th is bre\u00e1 liom a bheith le seanmh\u00e1thair.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She called out:\"\u003e\n    Ghlaoigh s\u00ed amach:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Good morning.\u0026quot;\"\u003e\n    \"Maidin mhaith.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But no one answered.\"\u003e\n    Ach n\u00edor fhreagair aon duine.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So she went to the bed.\"\u003e\n    Mar sin chuaigh s\u00ed chuig an leaba.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She pulled back the curtains.\"\u003e\n    Tharraing s\u00ed siar na cuirt\u00edn\u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Her grandmother lay there.\"\u003e\n    Bh\u00ed a seanmh\u00e1thair ansin ina lu\u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Her cap was pulled far over her face.\"\u003e\n    Bh\u00ed a caip\u00edn tarraingthe i bhfad thar a h\u00e9adan.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She looked very strange.\"\u003e\n    Bhreathnaigh s\u00ed an-aisteach.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Oh, grandmother,\u0026quot;\"\u003e\n    \"\u00d3, a sheanmh\u00e1thair,\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she said.\"\u003e\n    ar sise.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;What big ears you have!\u0026quot;\"\u003e\n    \"Nach m\u00f3ra na cluasa at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to hear you with, my child.\u0026quot;\"\u003e\n    \"D\u00e1 bhfeabhas le h\u00e9isteacht leat, a leanbh.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;But grandmother,\"\u003e\n    \"Ach a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what big eyes you have!\u0026quot;\"\u003e\n    nach m\u00f3ra na s\u00faile at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to see you with, my dear.\u0026quot;\"\u003e\n    \"D\u00e1 bhfeabhas le breathn\u00fa ort, a st\u00f3r.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;But grandmother,\"\u003e\n    \"Ach a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what big hands you have!\u0026quot;\"\u003e\n    nach m\u00f3ra na l\u00e1mha at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to hug you with.\u0026quot;\"\u003e\n    \"D\u00e1 bhfeabhas le barr\u00f3g a thabhairt duit.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Oh, but grandmother,\"\u003e\n    \"\u00d3, ach a sheanmh\u00e1thair,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"what a big mouth you have!\u0026quot;\"\u003e\n    nach m\u00f3r an b\u00e9al at\u00e1 agat!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;The better to eat you with!\u0026quot;\"\u003e\n    \"D\u00e1 bhfeabhas le th\u00fa a ithe!\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf said this.\"\u003e\n    D\u00fairt an mac t\u00edre seo.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then with one jump he was out of bed.\"\u003e\n    Ansin le l\u00e9im amh\u00e1in bh\u00ed s\u00e9 amuigh as an leaba.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He swallowed up Red-Cap.\"\u003e\n    Shlog s\u00e9 Caip\u00edn Dearg.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The wolf\u0026#x27;s hunger was satisfied.\"\u003e\n    Bh\u00ed ocras an mhic t\u00edre s\u00e1sta.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He lay down in the bed again.\"\u003e\n    Luigh s\u00e9 s\u00edos sa leaba ar\u00eds.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He fell asleep.\"\u003e\n    Thit s\u00e9 ina chodladh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He began to snore very loud.\"\u003e\n    Thosaigh s\u00e9 ag srannadh go han-ard.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"A huntsman was walking past the house.\"\u003e\n    Bh\u00ed sealgaire ag si\u00fal thar an teach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He thought to himself:\"\u003e\n    Sh\u00edl s\u00e9 leis f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;How loud the old woman is snoring!\"\u003e\n    \"Nach hard at\u00e1 an tseanbhean ag srannadh!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I should see if she needs anything.\u0026quot;\"\u003e\n    Ba cheart dom f\u00e9achaint an bhfuil aon rud uaithi.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He went into the room.\"\u003e\n    Chuaigh s\u00e9 isteach sa seomra.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"When he came to the bed,\"\u003e\n    Nuair a th\u00e1inig s\u00e9 chuig an leaba,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he saw the wolf lying in it.\"\u003e\n    chonaic s\u00e9 an mac t\u00edre ina lu\u00ed inti.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Do I find you here, you old devil!\u0026quot; he said.\"\u003e\n    \"An anseo a fhaighim th\u00fa, a sheandiabaill!\" ar seisean.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;I have been looking for you for a long time!\u0026quot;\"\u003e\n    \"T\u00e1im do do lorg le fada!\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He was about to shoot him.\"\u003e\n    Bh\u00ed s\u00e9 ar t\u00ed scaoileadh leis.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then he thought the wolf might have eaten the grandmother.\"\u003e\n    Ansin sh\u00edl s\u00e9 go mb\u0027fh\u00e9idir gur ith an mac t\u00edre an tseanmh\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She might still be saved.\"\u003e\n    B\u0027fh\u00e9idir go bhf\u00e9adfa\u00ed \u00ed a tharrth\u00e1il f\u00f3s.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So he did not shoot.\"\u003e\n    Mar sin n\u00edor scaoil s\u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He took a pair of scissors.\"\u003e\n    Th\u00f3g s\u00e9 p\u00e9ire sios\u00far.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He began to cut open the sleeping wolf\u0026#x27;s stomach.\"\u003e\n    Thosaigh s\u00e9 ag gearradh ar oscailt bolg an mhic t\u00edre ina chodladh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He made two cuts.\"\u003e\n    Rinne s\u00e9 dh\u00e1 ghearradh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He saw Little Red-Cap shining.\"\u003e\n    Chonaic s\u00e9 Caip\u00edn Dearg Beag ag gealadh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He made two more cuts.\"\u003e\n    Rinne s\u00e9 dh\u00e1 ghearradh eile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The little girl jumped out.\"\u003e\n    L\u00e9im an cail\u00edn beag amach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She cried: \u0026quot;Oh, how scared I was!\"\u003e\n    Scairt s\u00ed: \"\u00d3, chomh scanraithe agus a bh\u00ed m\u00e9!\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"It was so dark inside the wolf.\u0026quot;\"\u003e\n    Bh\u00ed s\u00e9 chomh dorcha istigh sa mhac t\u00edre.\"\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"After that the old grandmother came out alive too.\"\u003e\n    Ina dhiaidh sin th\u00e1inig an tseanmh\u00e1thair aosta amach beo freisin.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But she could hardly breathe.\"\u003e\n    Ach ar \u00e9igean a bh\u00ed s\u00ed in ann an\u00e1l\u00fa.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap quickly got big stones.\"\u003e\n    Fuair Caip\u00edn Dearg clocha m\u00f3ra go tapa.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"They filled the wolf\u0026#x27;s belly with them.\"\u003e\n    L\u00edon siad bolg an mhic t\u00edre leo.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"When he woke up, he wanted to run away.\"\u003e\n    Nuair a dh\u00faisigh s\u00e9, theastaigh uaidh \u00e9al\u00fa.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But the stones were so heavy.\"\u003e\n    Ach bh\u00ed na clocha chomh trom sin.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He fell down at once.\"\u003e\n    Thit s\u00e9 s\u00edos l\u00e1ithreach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He died.\"\u003e\n    Fuair s\u00e9 b\u00e1s.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"All three were happy.\"\u003e\n    Bh\u00ed \u00e1thas ar an tri\u00far acu.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The huntsman took off the wolf\u0026#x27;s skin.\"\u003e\n    Bhain an sealgaire craiceann an mhic t\u00edre de.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He went home with it.\"\u003e\n    Chuaigh s\u00e9 abhaile leis.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"The grandmother ate the cake.\"\u003e\n    D\u0027ith an tseanmh\u00e1thair an c\u00e1ca.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She drank the wine Red-Cap had brought.\"\u003e\n    D\u0027\u00f3l s\u00ed an f\u00edon a thug Caip\u00edn Dearg.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She felt better.\"\u003e\n    Mhothaigh s\u00ed n\u00edos fearr.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But Red-Cap thought to herself:\"\u003e\n    Ach sh\u00edl Caip\u00edn Dearg l\u00e9i f\u00e9in:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;As long as I live,\"\u003e\n    \"Chomh fada agus a bheidh m\u00e9 beo,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I will never leave the path by myself.\"\u003e\n    n\u00ed fh\u00e1gfaidh m\u00e9 an cos\u00e1n liom f\u00e9in riamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I will never run into the woods.\"\u003e\n    N\u00ed rithfidh m\u00e9 isteach sa choill riamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Not when my mother has told me\"\u003e\n    N\u00ed dh\u00e9anfaidh nuair a bheidh mo mh\u00e1thair tar \u00e9is \u00e9 a r\u00e1 liom\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"not to.\u0026quot;\"\u003e\n    gan \u00e9 a dh\u00e9anamh.\"\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"There is more to tell.\"\u003e\n    T\u00e1 n\u00edos m\u00f3 le hinsint.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Once Red-Cap was taking cakes\"\u003e\n    Uair amh\u00e1in bh\u00ed Caip\u00edn Dearg ag tabhairt c\u00e1ca\u00ed\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"to the old grandmother again.\"\u003e\n    don tseanmh\u00e1thair ar\u00eds.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Another wolf spoke to her.\"\u003e\n    Labhair mac t\u00edre eile l\u00e9i.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He tried to get her to leave the path.\"\u003e\n    D\u0027iarr s\u00e9 uirthi an cos\u00e1n a fh\u00e1g\u00e1il.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But Red-Cap was careful.\"\u003e\n    Ach bh\u00ed Caip\u00edn Dearg c\u00faramach.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She went straight forward.\"\u003e\n    Chuaigh s\u00ed d\u00edreach ar aghaidh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She told her grandmother\"\u003e\n    D\u0027inis s\u00ed d\u00e1 seanmh\u00e1thair\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she had met the wolf.\"\u003e\n    gur casadh an mac t\u00edre uirthi.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He had said \u0026quot;good morning\u0026quot; to her.\"\u003e\n    D\u00fairt s\u00e9 \"maidin mhaith\" l\u00e9i.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But he had such a bad look in his eyes.\"\u003e\n    Ach bh\u00ed f\u00e9achaint chomh holc sin ina sh\u00faile.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"If they had not been on the public road,\"\u003e\n    Mura raibh siad ar an mb\u00f3thar poibl\u00ed,\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"she was sure he would have eaten her.\"\u003e\n    bh\u00ed s\u00ed cinnte go n-\u00edosfadh s\u00e9 \u00ed.\n\u003c/span\u003e\n\u003c/p\u003e\n\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Well,\u0026quot; said the grandmother.\"\u003e\n    \"Bhuel,\" arsa an tseanmh\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;We will shut the door.\"\u003e\n    \"D\u00fanfaimid an doras.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then he cannot come in.\u0026quot;\"\u003e\n    Ansin n\u00ed f\u00e9idir leis teacht isteach.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Soon the wolf knocked.\"\u003e\n    Go luath bhuail an mac t\u00edre.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He cried:\"\u003e\n    Scairt s\u00e9:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Open the door, grandmother.\"\u003e\n    \"Oscail an doras, a sheanmh\u00e1thair.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I am Little Red-Cap.\"\u003e\n    Is mise Caip\u00edn Dearg Beag.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I am bringing you some cakes.\u0026quot;\"\u003e\n    T\u00e1im ag tabhairt c\u00e1ca\u00ed duit.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But they did not speak.\"\u003e\n    Ach n\u00edor labhair siad.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"They did not open the door.\"\u003e\n    N\u00edor oscail siad an doras.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"So the gray wolf walked around the house\"\u003e\n    Mar sin shi\u00fail an mac t\u00edre liath thart ar an teach\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"two or three times.\"\u003e\n    dh\u00e1 n\u00f3 tr\u00ed huaire.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"At last he jumped on the roof.\"\u003e\n    Ar deireadh l\u00e9im s\u00e9 ar an d\u00edon.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He wanted to wait\"\u003e\n    Theastaigh uaidh fanacht\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"until Red-Cap went home in the evening.\"\u003e\n    go dt\u00ed go rachaidh Caip\u00edn Dearg abhaile tr\u00e1thn\u00f3na.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then he would follow her.\"\u003e\n    Ansin leanfadh s\u00e9 \u00ed.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He would eat her in the dark.\"\u003e\n    D\u0027\u00edosfadh s\u00e9 \u00ed sa dorchadas.\n\u003c/span\u003e\n\u003c/p\u003e", "\u003cp\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But the grandmother saw what he was thinking.\"\u003e\n    Ach chonaic an tseanmh\u00e1thair cad a bh\u00ed s\u00e9 a smaoineamh.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"In front of the house was a big stone trough.\"\u003e\n    Os comhair an t\u00ed bh\u00ed umair mh\u00f3r chloiche.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"She said to the child:\"\u003e\n    D\u00fairt s\u00ed leis an leanbh:\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"\u0026quot;Take the pail, Red-Cap.\"\u003e\n    \"T\u00f3g an buic\u00e9ad, a Chaip\u00edn Dearg.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"I made some sausages yesterday.\"\u003e\n    Rinne m\u00e9 isp\u00edn\u00ed inn\u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Carry the water I boiled them in to the trough.\u0026quot;\"\u003e\n    Iompair an t-uisce a bhruith m\u00e9 iad ann chuig an umair.\"\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Red-Cap carried water\"\u003e\n    D\u0027iompair Caip\u00edn Dearg uisce\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"until the big trough was full.\"\u003e\n    go dt\u00ed go raibh an umair mh\u00f3r l\u00e1n.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"Then the smell of the sausages reached the wolf.\"\u003e\n    Ansin shroich boladh na n-isp\u00edn\u00ed an mac t\u00edre.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He sniffed and looked down.\"\u003e\n    Rinne s\u00e9 bol\u00fa agus breathn\u00fa s\u00edos.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"At last he stretched out his neck so far\"\u003e\n    Ar deireadh sh\u00edn s\u00e9 amach a mhuine\u00e1l chomh fada sin\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"he could not keep his balance.\"\u003e\n    nach raibh s\u00e9 in ann a chothroma\u00edocht a choinne\u00e1il.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He began to slip.\"\u003e\n    Thosaigh s\u00e9 ag sleamhn\u00fa.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He slipped down from the roof\"\u003e\n    Shleamhnaigh s\u00e9 anuas \u00f3n d\u00edon\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"straight into the big trough.\"\u003e\n    d\u00edreach isteach san umair mh\u00f3r.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"He drowned.\"\u003e\n    B\u00e1itheadh \u00e9.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"But Red-Cap went home happy.\"\u003e\n    Ach chuaigh Caip\u00edn Dearg abhaile sona.\n\u003c/span\u003e\n\u003cspan\n    data-bs-toggle=\"tooltip\" \n    data-bs-placement=\"top\" \n    data-bs-html=\"true\"\n    title=\"No one ever harmed her again.\"\u003e\n    N\u00edor ghortaigh aon duine \u00ed ar\u00eds riamh.\n\u003c/span\u003e\n\u003c/p\u003e"], "id": 53, "level_name": "simple", "vocab": [{"audio": null, "english": "death", "in_bank": false, "irish": "b\u00e1s", "translation_id": 161}, {"audio": null, "english": "mouth", "in_bank": false, "irish": "b\u00e9al", "translation_id": 293}, {"audio": null, "english": "flowers", "in_bank": false, "irish": "bl\u00e1thanna", "translation_id": 236}, {"audio": null, "english": "stomach", "in_bank": false, "irish": "bolg", "translation_id": 30}, {"audio": null, "english": "cake", "in_bank": false, "irish": "c\u00e1ca", "translation_id": 351}, {"audio": null, "english": "girl", "in_bank": false, "irish": "cail\u00edn", "translation_id": 295}, {"audio": null, "english": "cap", "in_bank": false, "irish": "caip\u00edn", "translation_id": 345}, {"audio": null, "english": "singing", "in_bank": false, "irish": "canadh", "translation_id": 259}, {"audio": null, "english": "stones", "in_bank": false, "irish": "clocha", "translation_id": 153}, {"audio": null, "english": "ears", "in_bank": false, "irish": "cluasa", "translation_id": 298}, {"audio": null, "english": "forest", "in_bank": false, "irish": "coill", "translation_id": 112}, {"audio": null, "english": "path", "in_bank": false, "irish": "cos\u00e1n", "translation_id": 348}, {"audio": null, "english": "curtains", "in_bank": false, "irish": "cuirt\u00edn\u00ed", "translation_id": 362}, {"audio": null, "english": "red", "in_bank": false, "irish": "dearg", "translation_id": 346}, {"audio": null, "english": "dark", "in_bank": false, "irish": "dorcha", "translation_id": 216}, {"audio": null, "english": "fear", "in_bank": false, "irish": "eagla", "translation_id": 53}, {"audio": null, "english": "bird", "in_bank": false, "irish": "\u00e9an", "translation_id": 183}, {"audio": null, "english": "wine", "in_bank": false, "irish": "f\u00edon", "translation_id": 350}, {"audio": null, "english": "cutting", "in_bank": false, "irish": "gearradh", "translation_id": 366}, {"audio": null, "english": "love", "in_bank": false, "irish": "gr\u00e1", "translation_id": 83}, {"audio": null, "english": "sun", "in_bank": false, "irish": "gr\u00e9ine", "translation_id": 361}, {"audio": null, "english": "sausages", "in_bank": false, "irish": "isp\u00edn\u00ed", "translation_id": 368}, {"audio": null, "english": "weak", "in_bank": false, "irish": "lag", "translation_id": 353}, {"audio": null, "english": "hand", "in_bank": false, "irish": "l\u00e1mh", "translation_id": 359}, {"audio": null, "english": "hands", "in_bank": false, "irish": "l\u00e1mha", "translation_id": 363}, {"audio": null, "english": "child", "in_bank": false, "irish": "leanbh", "translation_id": 61}, {"audio": null, "english": "wolf", "in_bank": false, "irish": "mac t\u00edre", "translation_id": 17}, {"audio": null, "english": "morning", "in_bank": false, "irish": "maidin", "translation_id": 357}, {"audio": null, "english": "apron", "in_bank": false, "irish": "napr\u00fan", "translation_id": 158}, {"audio": null, "english": "run", "in_bank": false, "irish": "rith", "translation_id": 355}, {"audio": null, "english": "scared", "in_bank": false, "irish": "scanraithe", "translation_id": 116}, {"audio": null, "english": "huntsman", "in_bank": false, "irish": "sealgaire", "translation_id": 365}, {"audio": null, "english": "grandmother", "in_bank": false, "irish": "seanmh\u00e1thair", "translation_id": 344}, {"audio": null, "english": "room", "in_bank": false, "irish": "seomra", "translation_id": 356}, {"audio": null, "english": "scissors", "in_bank": false, "irish": "sios\u00far", "translation_id": 136}, {"audio": null, "english": "walk", "in_bank": false, "irish": "si\u00fail", "translation_id": 354}, {"audio": null, "english": "village", "in_bank": false, "irish": "sr\u00e1idbhaile", "translation_id": 213}, {"audio": null, "english": "snoring", "in_bank": false, "irish": "srannadh", "translation_id": 364}, {"audio": null, "english": "eyes", "in_bank": false, "irish": "s\u00faile", "translation_id": 320}, {"audio": null, "english": "sick", "in_bank": false, "irish": "tinn", "translation_id": 352}, {"audio": null, "english": "fall", "in_bank": false, "irish": "titim", "translation_id": 70}]}}};
+    document.title = postData.title;
+
+    const contentDiv = document.getElementById("content");
+    const wordsListDiv = document.getElementById("words-list");
+    const glossaryListDiv = document.getElementById("glossary-list");
+    const bookmarksListDiv = document.getElementById("bookmarks-list");
+    const pageIndicator = document.getElementById("page-indicator");
+    // const prevBtn = document.getElementById("prev-btn");
+    // const nextBtn = document.getElementById("next-btn");
+
+    const paginationControls = document.getElementById("pagination-controls");
+    const maxVisiblePages = 5;
+    const mark_read_div = document.getElementById("mark-read-button");
+    const mark_as_read_btn = document.getElementById('mark_as_read_btn');
+
+    current_version_key = postData.current_version_key || Object.keys(postData.versions)[0];
+    current_page_index = postData.initial_page != null ? postData.initial_page : 0;
+    current_post_id = postData.id;
+    
+    user_is_auth = document.body.dataset.auth === 'True';
+
+    let custom_modal_dialog = null;
+    
+    // Initialize
+    document.addEventListener("DOMContentLoaded", function () {
+      // Read version and page from URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const versionParam = urlParams.get('version');
+      const pageParam = urlParams.get('page');
+      
+      if (versionParam) {
+        current_version_key = versionParam;
+      }
+      if (pageParam) {
+        current_page_index = parseInt(pageParam);
+      }
+      
+      switchVersion(current_version_key, true, current_page_index);
+      
+      // Show content after state is restored (remove loading class)
+      const centerCol = document.getElementById('center-col');
+      if (centerCol) {
+        centerCol.classList.remove('loading');
+      }
+      
+      // Clone content for mobile offcanvas
+      const mobileLeft = document.getElementById("mobile-left-content");
+      if (mobileLeft) mobileLeft.innerHTML = document.getElementById("left-sidebar").innerHTML;
+      
+      // Re-bind listeners for mobile elements
+      bindMobileListeners();
+
+      // Swipe support
+      enableSwipe();
+
+      // Initialize custom modal
+      const custom_modal = document.getElementById('custom_modal');
+      if (custom_modal) {
+        custom_modal_dialog = new bootstrap.Modal(custom_modal);
+      }
+    });
+
+    function bindMobileListeners() {
+        updateMobileLists();
+    }
+
+    function updateMobileLists() {
+        const mobileLeft = document.getElementById("mobile-left-content");
+        const mobileRight = document.getElementById("mobile-right-content");
+        const desktopLeft = document.getElementById("left-sidebar");
+        const desktopRight = document.getElementById("right-sidebar");
+
+        if (mobileLeft && desktopLeft) mobileLeft.innerHTML = desktopLeft.innerHTML;
+        if (mobileRight && desktopRight) mobileRight.innerHTML = desktopRight.innerHTML;
+    }
+
+    function create_pagination_html(
+        pageIndex,
+        pages
+      ){
+        let paginationHTML = `
+          <div class="bs-component">
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3">
+              <ul class="pagination mb-0">
+                <li class="page-item ${pageIndex === 0 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${pageIndex - 1})">&laquo;</a>
+                </li>`;
+
+        // Calculate page range to show
+        let startPage = Math.max(0, pageIndex - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(pages.length, startPage + maxVisiblePages);
+
+        // Adjust if we're near the end
+        if (endPage - startPage < maxVisiblePages) {
+          startPage = Math.max(0, endPage - maxVisiblePages);
+        }
+
+        // Add first page and ellipsis if needed
+        if (startPage > 0) {
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(0)">1</a>
+                </li>`;
+          if (startPage > 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+        }
+
+        // Add page numbers
+        for (let i = startPage; i < endPage; i++) {
+          paginationHTML += `
+                <li class="page-item ${i === pageIndex ? 'active' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${i})">${i + 1}</a>
+                </li>`;
+        }
+
+        // Add last page and ellipsis if needed
+        if (endPage < pages.length) {
+          if (endPage < pages.length - 1) {
+            paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+          }
+          paginationHTML += `
+                <li class="page-item">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${pages.length - 1})">${pages.length}</a>
+                </li>`;
+        }
+
+        paginationHTML += `
+                <li class="page-item ${pageIndex === pages.length - 1 ? 'disabled' : ''}">
+                  <a class="page-link" href="#" onclick="event.preventDefault(); renderPage(${pageIndex + 1})">&raquo;</a>
+                </li>
+              </ul>
+              
+              <div class="d-flex align-items-center gap-2">
+                <label for="page-jump-select" class="mb-0 text-nowrap">Jump:</label>
+                <select id="page-jump-select" class="form-select form-select-sm" style="width: auto;" onchange="jumpToPage(this.value)">`;
+        
+        // Add all page options to dropdown
+        for (let i = 0; i < pages.length; i++) {
+          paginationHTML += `<option value="${i}" ${i === pageIndex ? 'selected' : ''}>Page ${i + 1}</option>`;
+        }
+        
+        paginationHTML += `
+                </select>
+              </div>
+            </div>
+          </div>`;
+
+        paginationControls.innerHTML = paginationHTML;
+      }
+
+      function jumpToPage(pageIndex) {
+        renderPage(parseInt(pageIndex), false);
+      }
+
+    function switchVersion(versionKey, instant=true, pageIndex=0) {
+      current_version_key = versionKey;
+      current_page_index = pageIndex;
+
+      // Update URL with version param
+      const url = new URL(window.location);
+      url.searchParams.set('version', versionKey);
+      url.searchParams.set('page', pageIndex);
+      window.history.replaceState({}, '', url);
+
+      // Update Active Button
+      document.querySelectorAll('[id^="version-btn-"]').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`version-btn-${versionKey}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Render Words
+      renderWords(postData.versions[versionKey].vocab);
+
+      // Render Glossary (Chapters)
+      renderGlossary();
+
+      // Render Bookmarks
+      renderBookmarks();
+
+      // Render Content
+      renderPage(current_page_index, instant);
+      
+      updateMobileLists();
+    }
+
+    function renderPage(pageIndex, instant=true) {
+      const pages = postData.versions[current_version_key].content;
+      if (!pages || !pages[pageIndex]) return;
+
+      current_page_index = pageIndex;
+
+      // Update URL with page param
+      const url = new URL(window.location);
+      url.searchParams.set('page', pageIndex);
+      window.history.replaceState({}, '', url);
+
+      // Image Visibility
+      const postImage = document.getElementById('post_image');
+      if (postImage) {
+          postImage.style.display = (pageIndex === 0) ? 'block' : 'none';
+      }
+
+      if (instant) {
+        contentDiv.innerHTML = pages[pageIndex];
+        reinitializeTooltips();
+      } else {
+        contentDiv.style.opacity = 0;
+        setTimeout(() => {
+          contentDiv.innerHTML = pages[pageIndex];
+          contentDiv.style.opacity = 1;
+          reinitializeTooltips();
+        }, 150);
+      }
+
+      // Update Nav Buttons
+      // prevBtn.disabled = pageIndex === 0;
+      // nextBtn.disabled = pageIndex === pages.length - 1;
+      // pageIndicator.textContent = `Page ${pageIndex + 1} of ${pages.length}`;
+      create_pagination_html(pageIndex, pages);
+    
+      // Show/Hide Mark as Read button (only on last page)
+      if (mark_read_div) {
+        if (pageIndex === pages.length - 1) {
+          if (postData.versions[current_version_key].already_read) {
+            mark_as_read_btn.innerText = 'Mark as Unread';
+            mark_as_read_btn.onclick = mark_as_unread;
+          } else {
+            mark_as_read_btn.innerText = 'Mark as Read';
+            mark_as_read_btn.onclick = mark_as_read;
+          }
+        }
+        mark_read_div.style.display = pageIndex === pages.length - 1 ? "block" : "none";
+      }
+
+      // Scroll to top of content area
+      document.getElementById("content-area").scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
+
+      // Update Glossary Active State
+      const chapters = postData.versions[current_version_key].chapters;
+      if (chapters && chapters.length > 0) {
+          document.querySelectorAll('.glossary-item').forEach(item => item.classList.remove('active'));
+          // Find active chapter
+          let activeChapterIdx = -1;
+          for (let i = 0; i < chapters.length; i++) {
+               if (pageIndex >= chapters[i].page_index) {
+                   activeChapterIdx = i;
+               }
+          }
+          
+          if (activeChapterIdx > -1) {
+              const activeItem = document.getElementById(`glossary-item-${activeChapterIdx}`);
+              if (activeItem) activeItem.classList.add('active');
+          }
+      }
+    }
+
+    function prevPage() {
+      if (current_page_index > 0) renderPage(current_page_index - 1, false);
+    }
+
+    function nextPage() {
+      const pages = postData.versions[current_version_key].content;
+      if (current_page_index < pages.length - 1) renderPage(current_page_index + 1, false);
+    }
+
+    function renderGlossary() {
+      const chapters = postData.versions[current_version_key].chapters;
+      let html = '';
+      if (chapters && chapters.length > 0) {
+          chapters.forEach((chapter, index) => {
+            html += `
+              <button type="button" 
+                      class="list-group-item list-group-item-action glossary-item" 
+                      id="glossary-item-${index}"
+                      onclick="renderPage(${chapter.page_index}, false)">
+                ${chapter.title}
+              </button>
+            `;
+          });
+      } else {
+          html = '<p class="text-muted small p-3">No chapters found.</p>';
+      }
+      glossaryListDiv.innerHTML = html;
+    }
+
+    function renderBookmarks() {
+      const bookmarks = postData.versions[current_version_key].bookmark_page_index;
+      if (bookmarks.length === 0) {
+        bookmarksListDiv.innerHTML = '<p class="text-muted small">No bookmarks yet.</p>';
+        return;
+      }
+      
+      let html = '';
+      bookmarks.sort((a, b) => a - b).forEach(pageIdx => {
+        html += `
+          <div class="bookmark-item" onclick="renderPage(${pageIdx}, false)">
+            <span>Page ${pageIdx + 1}</span>
+            <button class="btn btn-sm btn-outline-danger border-0" 
+                    onclick="event.stopPropagation(); delete_bookmark(${pageIdx})">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        `;
+      });
+      bookmarksListDiv.innerHTML = html;
+    }
+
+    function renderWords(vocabList) {
+        let newHtml = '';
+        if (!vocabList || vocabList.length === 0) {
+            newHtml = '<p class="text-muted small p-2">No vocabulary words.</p>';
+        } else {
+            vocabList.forEach(word => {
+                const speakerHtml = word.audio 
+                    ? `<span class="speaker-icon" onclick="playAudio('${word.audio}', this)" style="cursor: pointer; font-size: 1.2em;">
+                         <i class="fa-solid fa-volume-high"></i>
+                       </span>`
+                    : `<span class="speaker-icon disabled text-muted" style="font-size: 1.2em;">
+                         <i class="fa-solid fa-volume-high"></i>
+                       </span>`;
+                
+                const btnClass = word.in_bank ? 'btn-danger' : 'btn-success';
+                const btnText = word.in_bank ? 'Delete' : 'Add';
+                const btnAction = word.in_bank ? 'delete_word' : 'add_word';
+                
+                newHtml += `
+                    <div class="word-item">
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                ${speakerHtml}
+                                <a href="/word/${word.irish}.html" class="word-irish">${word.irish}</a>
+                            </div>
+                            <div class="word-english">${word.english}</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm ${btnClass}" onclick="${btnAction}(${word.translation_id}, event)">${btnText}</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        wordsListDiv.innerHTML = newHtml;
+    }
+
+    function add_bookmark_current_page() {
+        toggle_bookmark(current_page_index, false);
+    }
+
+    function delete_bookmark(pageIndex) {
+        toggle_bookmark(pageIndex, true); // true = remove
+    }
+
+    function toggle_bookmark(pageIndex, remove) {
+        if (!user_is_auth) {
+            back_to_login();
+            const login_msg_display = document.getElementById("login_msg_display");
+            login_msg_display.innerHTML = 'Sign in to create bookmarks';
+            login_msg_display.style.display = "block";
+            const login_prompt_modal = document.getElementById('login_prompt_modal');
+            const login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+            login_prompt_modal_instance.show();
+            return;
+        }
+
+        const bookmarks = postData.versions[current_version_key].bookmark_page_index;
+        if (!remove && bookmarks.includes(pageIndex)) {
+            alert("Page is already bookmarked.");
+            return;
+        }
+
+        fetch("/bookmark", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                post_version_id: postData.versions[current_version_key].id,
+                page_index: pageIndex,
+                remove: remove
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                if (remove) {
+                    const idx = bookmarks.indexOf(pageIndex);
+                    if (idx > -1) bookmarks.splice(idx, 1);
+                } else {
+                    bookmarks.push(pageIndex);
+                }
+                renderBookmarks();
+                updateMobileLists();
+                
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = remove ? "Bookmark removed!" : "Page bookmarked!";
+                toast.show();
+            } else {
+                alert("Failed to update bookmark.");
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
+    // --- Audio & Word Bank ---
+    let audioCache = new Map();
+    function playAudio(filename, audioIcon) {
+        audioIcon.classList.add('playing');
+        let audio = audioCache.get(filename);
+        if (!audio) {
+            audio = new Audio(`/api/audio/${filename}`);
+            audioCache.set(filename, audio);
+        }
+        audio.currentTime = 0;
+        audio.play().catch(err => console.error(err));
+        audio.onended = () => audioIcon.classList.remove('playing');
+    }
+
+    function add_word(word_id, event) {
+        if (!user_is_auth) {
+            back_to_login();
+            const login_msg_display = document.getElementById("login_msg_display");
+            login_msg_display.innerHTML = 'Sign in to save a word to your flashcards.';
+            login_msg_display.style.display = "block";
+            const login_prompt_modal = document.getElementById('login_prompt_modal');
+            const login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+            login_prompt_modal_instance.show();
+            return;
+        }
+        handleWordAction(word_id, false, event.target);
+    }
+
+    function delete_word(word_id, event) {
+        handleWordAction(word_id, true, event.target);
+    }
+
+    function handleWordAction(word_id, remove, btnElement) {
+        btnElement.disabled = true;
+
+        fetch("/api/wordbank", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ word_id: word_id, remove: remove })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                // Toggle button state
+                if (remove) {
+                    btnElement.classList.replace('btn-danger', 'btn-success');
+                    btnElement.innerText = 'Add';
+                    btnElement.setAttribute('onclick', `add_word(${word_id}, event)`);
+                } else {
+                    btnElement.classList.replace('btn-success', 'btn-danger');
+                    btnElement.innerText = 'Delete';
+                    btnElement.setAttribute('onclick', `delete_word(${word_id}, event)`);
+                }
+                
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = remove ? "Word removed from your flash cards!" : "Word added to your flash cards!";
+                toast.show();
+            } else {
+                alert("Failed to update word bank.");
+            }
+        })
+        .finally(() => {
+            btnElement.disabled = false;
+        });
+    }
+
+    // --- Mark as Read Functionality ---
+    function mark_as_read() {
+        if (!user_is_auth) {
+            back_to_login();
+            const login_msg_display = document.getElementById("login_msg_display");
+            login_msg_display.innerHTML = 'Sign in to mark articles as "read"';
+            login_msg_display.style.display = "block";
+            const login_prompt_modal = document.getElementById('login_prompt_modal');
+            const login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+            login_prompt_modal_instance.show();
+            return;
+        }
+
+        const num_bookmarks = postData.versions[current_version_key].bookmark_page_index.length;
+        if (num_bookmarks === 0) {
+            mark_as_read_callback(false);
+        } else {
+            document.getElementById('custom_modal_label').innerHTML = 'Mark as Read';
+            const custom_modal = document.getElementById('custom_modal');
+            const text = num_bookmarks === 1 
+                ? "Well done! Would you like to keep this version's bookmark or remove it?"
+                : "Well done! Would you like to keep this version's bookmarks or remove them?";
+            custom_modal.querySelector(".modal-body").textContent = text;
+            
+            let buttonHtml = `<button type="button" class="btn btn-secondary" onclick="mark_as_read_callback(false)">Keep</button>`;
+            buttonHtml += `<button type="button" class="btn btn-secondary" onclick="mark_as_read_callback(true)">Remove</button>`;
+            custom_modal.querySelector(".modal-footer").innerHTML = buttonHtml;
+            custom_modal_dialog.show();
+        }
+    }
+
+    function mark_as_read_callback(remove_bookmarks=false) {
+        if (custom_modal_dialog) custom_modal_dialog.hide();
+
+        const data = {
+            post_version_id: postData.versions[current_version_key].id,
+            post_id: current_post_id,
+            is_read: true
+        };
+
+        fetch("/api/mark_as_read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Marked as read";
+                
+                mark_as_read_btn.innerText = 'Mark as Unread';
+                mark_as_read_btn.onclick = mark_as_unread;
+                postData.versions[current_version_key].already_read = true;
+                
+                if (remove_bookmarks) {
+                    remove_all_bookmarks("Marked as read and ");
+                } else {
+                    toast.show();
+                }
+            } else {
+                toastEl.classList.remove('text-bg-success');
+                toastEl.classList.add('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Failed to mark as read";
+                toast.show();
+            }
+        })
+        .catch(() => {
+            toastEl.classList.remove('text-bg-success');
+            toastEl.classList.add('text-bg-danger');
+            toastEl.querySelector(".toast-body").textContent = "Server error.";
+            toast.show();
+        });
+    }
+
+    function mark_as_unread() {
+        const data = {
+            post_version_id: postData.versions[current_version_key].id,
+            post_id: current_post_id,
+            is_read: false
+        };
+
+        fetch("/api/mark_as_read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Marked as unread";
+                toast.show();
+                
+                mark_as_read_btn.innerText = 'Mark as Read';
+                mark_as_read_btn.onclick = mark_as_read;
+                postData.versions[current_version_key].already_read = false;
+            } else {
+                toastEl.classList.remove('text-bg-success');
+                toastEl.classList.add('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = "Failed to mark as unread";
+                toast.show();
+            }
+        })
+        .catch(() => {
+            toastEl.classList.remove('text-bg-success');
+            toastEl.classList.add('text-bg-danger');
+            toastEl.querySelector(".toast-body").textContent = "Server error.";
+            toast.show();
+        });
+    }
+
+    function remove_all_bookmarks(starting_toast_text="") {
+        if (custom_modal_dialog) custom_modal_dialog.hide();
+        
+        const num_bookmarks = postData.versions[current_version_key].bookmark_page_index.length;
+        
+        fetch("/api/bookmark_remove_all", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                post_version_id: postData.versions[current_version_key].id
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                let toast_text = starting_toast_text + (num_bookmarks > 1 ? "Bookmarks removed." : "Bookmark removed.");
+                postData.versions[current_version_key].bookmark_page_index = [];
+                renderBookmarks();
+                updateMobileLists();
+                
+                toastEl.classList.add('text-bg-success');
+                toastEl.classList.remove('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = toast_text;
+                toast.show();
+            } else {
+                let toast_text = starting_toast_text + (num_bookmarks > 1 ? "Failed to remove the bookmarks." : "Failed to remove the bookmark.");
+                toastEl.classList.remove('text-bg-success');
+                toastEl.classList.add('text-bg-danger');
+                toastEl.querySelector(".toast-body").textContent = toast_text;
+                toast.show();
+            }
+        })
+        .catch(() => {
+            toastEl.classList.remove('text-bg-success');
+            toastEl.classList.add('text-bg-danger');
+            toastEl.querySelector(".toast-body").textContent = "Server error.";
+            toast.show();
+        });
+    }
+
+    // --- Swipe Support ---
+    function enableSwipe() {
+        const touchArea = document.getElementById("content-area");
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        touchArea.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        touchArea.addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (touchEndX < touchStartX - threshold) {
+                nextPage(); // Swipe Left -> Next
+            }
+            if (touchEndX > touchStartX + threshold) {
+                prevPage(); // Swipe Right -> Prev
+            }
+        }
+    }
+
+    // --- Keyboard Support ---
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") prevPage();
+        else if (e.key === "ArrowRight") nextPage();
+    });
+
+  </script>
+</body>
+</html>

@@ -14,7 +14,48 @@
 
   <body class="d-flex flex-column min-vh-100">
     
-    <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
+    <style>
+  #header {
+    min-height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  #login_back_arrow {
+    display:none; 
+    font-size: 1.5em;
+    color: gray;
+    cursor: pointer;
+  }
+  #login_back_arrow:hover {
+    color:black;
+  }
+
+  /* Category submenu styles */
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  /* Desktop: Enable hover to open submenus */
+  @media (min-width: 992px) {
+    .dropdown-submenu:hover > .dropdown-menu {
+      display: block;
+    }
+    
+    .dropdown-submenu:hover > .dropdown-item {
+      background-color: var(--bs-dropdown-link-hover-bg);
+      color: var(--bs-dropdown-link-hover-color);
+    }
+  }
+</style>
+
+<div id="header" class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
   <div class="container">
     <a href="../" class="navbar-brand">Home</a>
     <button class="navbar-toggler" 
@@ -82,12 +123,20 @@
     
   </li>
         
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/charles-dickens.html">
+      Charles Dickens
+    </a>
+    
+  </li>
+        
       </ul>
     
   </li>
               
             </ul>
-        
           </li>
         
           <li class="nav-item">
@@ -97,40 +146,35 @@
           <li class="nav-item">
             <a class="nav-link" href="/resources.html">Resources</a>
           </li>
-        </ul>
+      </ul>
 
-      <ul class="navbar-nav ms-md-auto">
-        <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+      <ul class="navbar-nav ms-md-auto align-items-center">
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
           <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
           <hr class="d-lg-none my-2 text-white-50">
         </li>
 
         <li class="nav-item" data-bs-theme="light">
-          <form id="search_form" class="d-flex" method="POST" action="/search"></form>
+          <form id="search_form" class="d-flex" method="POST" action="/search">
             <div class="position-relative">
               <svg class="position-absolute top-50 start-0 translate-middle-y ms-2" width="16" height="16" fill="currentColor" style="pointer-events: none; color: #6c757d;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
               </svg>
               <input 
                 id="searchInput"
-                class="form-control" 
+                class="form-control form-control-sm" 
                 type="search" 
                 placeholder="Cuardaigh" 
                 style="padding-left: 2.5rem;">
             </div>
           </form>
-          <!-- position-relative - Creates positioning context
-          position-absolute - Positions the icon absolutely
-          top-50 start-0 - Positions icon vertically centered at the left
-          translate-middle-y - Centers the icon perfectly
-          ms-2 - Adds left margin to the icon
-          ps-4 or padding-left: 2.5rem - Adds left padding to input so text doesn't overlap icon
-          d-none d-lg-block - Hides on mobile, shows on desktop -->
         </li>
-        <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
           <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
           <hr class="d-lg-none my-2 text-white-50">
         </li>
+
         <li class="nav-item dropdown" data-bs-theme="light">
           <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
             <i class="bi bi-circle-half"></i>
@@ -149,21 +193,18 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
           <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
           <hr class="d-lg-none my-2 text-white-50">
         </li>
+
         <li class="nav-item dropdown" data-bs-theme="light">
           <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="font-size-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Font Size">
             <i class="bi bi-type"></i>
             <span class="d-lg-none ms-2">Font Size</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <!-- <li>
-              <button type="button" class="dropdown-item d-flex align-items-center" id="font-decrease">
-                <i class="bi bi-dash-circle"></i><span class="ms-2">Decrease</span>
-              </button>
-            </li> -->
             <li>
               <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
                 <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
@@ -181,52 +222,419 @@
             </li>
           </ul>
         </li>
+
         <li class="nav-item dropdown" data-bs-theme="light">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
                 <i class="bi bi-person-circle"></i>
                 <span class="d-lg-none ms-2">User Menu</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              
-              <li>
-                  <button id="sign-in-btn" type="button" class="dropdown-item d-flex align-items-center"
-                          data-bs-theme-value="light" aria-pressed="false"
-                          onclick="window.location.href='/login.html?next=' + encodeURIComponent(window.location.pathname)">
-                  <i class="bi bi-box-arrow-in-right"></i><span class="ms-2">Sign In</span>
-                  </button>
-              </li>
-              
-            
-            </ul>
-            </li>
+            <ul id="user-menu-ul" class="dropdown-menu dropdown-menu-end">
+              <!-- initial content rendered by Jinja -->
+            </ul>            
+        </li>
       </ul>
     </div>
   </div>
 </div>
 
-<script>
-  $(document).ready(function() {
-    document.getElementById('searchInput').addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault(); // prevents form submission
-        const query = $('#searchInput').val().trim();
-        if (!query) return;
+<!-- login modal --->
+<div class="modal fade" id="login_prompt_modal" tabindex="-1" aria-labelledby="login_prompt_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <i id="login_back_arrow" class="fa-solid fa-arrow-left" onclick="back_to_login()"></i>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+      </div>
+      <div class="modal-body p-5 pt-0">
+         <form id="login_form" class="">
+            <div id="login_msg_display" class="text-center mb-3" style="display:none;"></div>
+            <div class="form-floating mb-3"> 
+              <input type="email" 
+                class="form-control rounded-3" 
+                id="email_login" 
+                placeholder="name@example.com"
+                required> 
+              <label for="email_login">Email address</label> 
+            </div>
+            <div id="first_password" class="form-floating"> 
+              <!-- <div style="position: relative;"> -->
+                <input type="password" 
+                  class="form-control rounded-3" 
+                  id="password_login" 
+                  placeholder="Password"
+                  > 
+                <label for="password_login">Password</label>
+                <i class="fa-solid fa-eye-slash"
+                    id="password_login_toggle"
+                    style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                    onclick="toggle_password_vis('password_login_toggle', 'password_login');">
+                </i>
+            </div>
+            <div id="second_password" class="form-floating mt-3 mb-3" style="display: none">
+              <input type="password" 
+                class="form-control rounded-3" 
+                id="password_register_2" 
+                placeholder="Password"
+              > 
+              <label for="password_register_2">Confirm Password</label>
+              <i class="fa-solid fa-eye-slash"
+                  id="password_register_2_toggle"
+                  style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                  onclick="toggle_password_vis('password_register_2_toggle', 'password_register_2');">
+              </i>
+          </div>
+            <div id="forgot_password_div" class="text-center p-2">
+              <small class="text-body-secondary">
+                <a href="#" onclick="event.preventDefault(); switch_to_forgot()">Forgot password?</a>
+              </small> 
+            </div>
+            <button id="login_btn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary">Log in</button> 
+            <button id="google_btn" class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3 disabled" type="submit">
+               <svg class="bi me-1" width="16" height="16" aria-hidden="true">
+                  <use xlink:href="#google"></use>
+               </svg>
+               Log in with Google
+            </button>
+            <div id="register_div" class="text-center">
+              <small class="text-body-secondary">
+                Don't have an account? <a href="#" onclick="event.preventDefault(); switch_to_register()">Register here</a>.
+              </small>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+  
+</div>
 
-        // Use Jinja to generate the base URL
-        const baseUrl = "/search";
-        window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
-      }
-    });
+<script>
+  async function refreshUserMenu() {
+    const response = await fetch("/user-menu"); // endpoint returns just the <ul> content
+    const html = await response.text();
+    document.getElementById("user-menu-ul").innerHTML = html;
+  }
+  refreshUserMenu();
+
+  $(document).ready(function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // prevents form submission
+            const query = $('#searchInput').val().trim();
+            if (!query) return;
+
+            // Use Jinja to generate the base URL
+            const baseUrl = "/search";
+            window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
+        }
+        });
+    }
   });
 
-  function sign_out() {
-    const baseUrl = "/logout";
-    if (window.location.pathname == '/dashboard.html') {
-      window.location.href=baseUrl;
-    } else {
-      window.location.href=`${baseUrl}?next=${encodeURIComponent(window.location.pathname)}`;
-    }
+  function resend_verification(){
+    console.log('resend_verification');
+    const email = document.getElementById('email_login').value;
+    fetch('/api/resend_verification', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({email:email})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        login_prompt_modal_instance.hide();
+        toastEl.classList.add("text-bg-success");
+        toastEl.classList.remove("text-bg-danger");
+        toastEl.querySelector(".toast-body").textContent = data.message;
+        toast.show();
+      } else {
+        login_msg_display.innerHTML = data.error;
+        login_msg_display.style.display = "block";
+      }
+      
+    })
+    .catch(() => {
+      login_msg_display.innerText = "An unexpected server error occurred.";
+      login_msg_display.style.display = "block";
+    });
   }
+
+  function sign_out() {
+    // Perform request
+    fetch('/logout')
+    .then(res => res.json())
+    .then(data => {
+
+      const baseUrl = "/";
+      if (
+        window.location.pathname == '/dashboard.html' || 
+        window.location.pathname == '/bookmarks.html' ||
+        window.location.pathname == '/flashcards.html' ||
+        window.location.pathname == '/user-hub'
+      ) {
+        window.location.href=baseUrl;
+      } else {
+        window.location.reload();
+      }
+      
+      toastEl.classList.add("text-bg-success");
+      toastEl.classList.remove("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "Successfully logged out";
+      toast.show();
+
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/post/')) {
+        refresh_page();
+        return;
+      }
+
+    })
+    .catch(() => {
+      toastEl.classList.remove("text-bg-success");
+      toastEl.classList.add("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "An unexpected server error occurred.";
+      toast.show();
+    });
+  }
+
+  let login_prompt_modal_instance = null;
+  function showLoginModal(){
+    back_to_login();
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  function show_password_reset(){
+    switch_to_register();
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "Please enter and confirm your new password";
+    login_msg_display.style.display = "block";
+    
+    document.getElementById('login_btn').innerText = 'Update Password';
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  const loginForm = document.getElementById("login_form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const login_msg_display = document.getElementById("login_msg_display");
+        login_msg_display.style.display = 'none';
+
+        const email = document.getElementById('email_login').value;
+
+        // INPUT ELEMENTS (safer than reusing the wrapper divs)
+        const first_password_input = document.getElementById('password_login');
+        const second_password_input = document.getElementById('password_register_2');
+
+        const first_password_div = document.getElementById('first_password');
+        const second_password_div = document.getElementById('second_password');
+
+        let function_path = '';
+        let data = { email: email };
+        const login_btn = document.getElementById("login_btn");
+        const old_button_text = login_btn.innerText;
+        let new_button_text = "";
+        let user_already_exists = false;
+
+        // REGISTER OR RESET MODE (both visible)
+        console.log('first_password_div.style.display')
+        console.log(first_password_div.style.display)
+        console.log(' ')
+        console.log('second_password_div.style.display')
+        console.log(second_password_div.style.display)
+
+        if (first_password_div.style.display === 'block' && second_password_div.style.display === 'block') {
+        // REGISTER
+        if (login_btn.innerText === 'Update Password'){
+            function_path = '/api/update_password';
+            new_button_text = 'Update Password';
+        } else {
+            function_path = '/register';
+            new_button_text = 'Register';
+        }
+        
+        const password = first_password_input.value;
+        const confirm_password = second_password_input.value;
+
+        if (password !== confirm_password) {
+            login_msg_display.innerText = "Passwords do not match!";
+            login_msg_display.style.display = "block";
+            return;
+        }
+        data.password = password;
+        } 
+        // FORGOT PASSWORD MODE
+        else if (first_password_div.style.display === 'none' && second_password_div.style.display === 'none') {
+        function_path = '/api/reset_password_request';
+        new_button_text = 'Send Password Reset Link';
+        } 
+        // LOGIN MODE
+        else {
+        function_path = '/api/login';
+        new_button_text = 'Log in';
+        data.password = first_password_input.value;
+        }
+
+        // Disable button and show spinner
+        login_btn.disabled = true;
+        login_btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+        fetch(function_path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+        if (data.status === "success") {
+            if (function_path === '/api/login') {
+                // Always reload the page after login
+                window.location.reload();
+            } else if (function_path === '/register') {
+            // Show verification message
+            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+            login_msg_display.style.display = "block";
+            } else {
+            // Password reset or update
+            login_msg_display.innerText = data.message;
+            login_msg_display.style.display = "block";
+            if (function_path === '/api/update_password') {
+                setTimeout(() => {
+                back_to_login();
+                login_msg_display.innerText = "Password updated successfully. Please log in.";
+                login_msg_display.style.display = "block";
+                }, 2000);
+            }
+            }
+        } else {
+            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.style.display = "block";
+        }
+        })
+        .catch(err => {
+        console.error(err);
+        login_msg_display.innerText = "An unexpected server error occurred.";
+        login_msg_display.style.display = "block";
+        })
+        .finally(() => {
+        // Re-enable button
+        login_btn.disabled = false;
+        login_btn.innerText = new_button_text;
+        });
+    });
+  }
+
+  // Helper to refresh page (if needed)
+  function refresh_page(){
+    window.location.reload();
+  }
+
+  // TODO: email input from reset should be disabled
+  function back_to_login(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "block";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "block";
+
+    document.getElementById('login_btn').innerText = 'Log in';
+    document.getElementById('google_btn').innerText = 'Log in with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "none";
+  }
+
+  function switch_to_forgot() {
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "none";
+
+    const google_btn = document.getElementById('google_btn');
+    google_btn.style.display = "none";
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    const login_btn = document.getElementById('login_btn');
+    login_btn.innerText = 'Send Password Reset Link';
+  }
+
+  function switch_to_register(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const first_password_div = document.getElementById('first_password');
+    first_password_div.style.display = "block";
+    const second_password_div = document.getElementById('second_password');
+    second_password_div.style.display = "block";
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    document.getElementById('login_btn').innerText = 'Register';
+    document.getElementById('google_btn').innerText = 'Register with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+  }
+
+  function toggle_password_vis(toggleId, inputId){
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+    toggle.classList.toggle("fa-eye");
+    toggle.classList.toggle("fa-eye-slash");
+    toggle.style.color = isHidden ? "black" : "grey";
+  }
+
+  // Categories menu: Auto-close other submenus when opening one
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryDropdown = document.querySelector('#categories');
+    if (!categoryDropdown) return;
+
+    const mainDropdownMenu = categoryDropdown.nextElementSibling;
+    if (!mainDropdownMenu) return;
+
+    // Close all submenus when main dropdown is hidden
+    categoryDropdown.addEventListener('hidden.bs.dropdown', function() {
+      const allSubmenus = mainDropdownMenu.querySelectorAll('.dropdown-menu.show');
+      allSubmenus.forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+  });
 </script>
     <main style="padding-top: 80px;" class="container flex-grow-1">
 
@@ -252,9 +660,65 @@
       </div>
     </main>
       
-    <!-- notification for when making bookmarks -->
+    <!-- main model (confirmation dialog) for the user -->
+<div class="modal fade" id="main_modal" tabindex="-1" aria-labelledby="main_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="main_modal_label">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this bookmark?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Just a message and "ok" -->
+<div class="modal fade" id="alert_modal" tabindex="-1" aria-labelledby="alert_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alert_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- custom buttons that must always be set -->
+<div class="modal fade" id="custom_modal" tabindex="-1" aria-labelledby="custom_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="custom_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- notification toast for users -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="main_toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">Bookmark updated!</div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>

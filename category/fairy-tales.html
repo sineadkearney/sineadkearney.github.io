@@ -1,20 +1,280 @@
-<!DOCTYPE html>
+
 <head>
   <meta charset="utf-8">
   <title>Gaeilge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- name="viewport" - Configures the viewport (visible area of the webpage)
+  width=device-width - Set page width to match the device's screen width
+  initial-scale=1 - Set initial zoom level to 100% (no zoom) -->
+
   <!-- Load theme immediately (inline script runs before page renders) -->
   <script src="/assets/js/load_theme.js"></script>
 
-  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="/assets/css/common.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/css/common.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<style>
+    .filter-sidebar {
+        position: sticky;
+        top: 80px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    .view-toggle {
+        display: inline-flex;
+        gap: 0.5rem;
+    }
+
+    .view-toggle-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--bs-border-color);
+        background: var(--bs-body-bg);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .view-toggle-btn.active {
+        background: var(--bs-primary);
+        color: white;
+        border-color: var(--bs-primary);
+    }
+
+    .view-toggle-btn:hover:not(.active) {
+        background: var(--bs-secondary-bg);
+    }
+
+    .post-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .post-card-list {
+        width: 100%;
+    }
+
+    .post-card-list .card {
+        flex-direction: row !important;
+        width: 100%;
+    }
+
+    .post-card-list .card-img-container {
+        flex-shrink: 0;
+        width: 250px;
+        height: 200px;
+    }
+
+    .post-card-list .card-body {
+        flex: 1;
+    }
+
+    .post-card-grid .card-img-container {
+        width: 100%;
+    }
+
+    .post-card-grid .card {
+        flex-direction: column !important;
+    }
+
+    .card-img-container {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .card-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .version-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .version-btn {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        border-radius: 1rem;
+    }
+
+    .filter-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-section h6 {
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .filter-badge {
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .filter-badge:hover {
+        transform: translateX(5px);
+    }
+
+    .filter-badge.active {
+        background: var(--bs-primary) !important;
+        color: white !important;
+    }
+
+    .word-select {
+        width: 100%;
+    }
+
+    @media (max-width: 991px) {
+        .view-toggle {
+            display: none;
+        }
+
+        .post-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .post-item {
+        animation: slideInUp 0.5s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .post-item:nth-child(1) {
+        animation-delay: 0.05s;
+    }
+
+    .post-item:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .post-item:nth-child(3) {
+        animation-delay: 0.15s;
+    }
+
+    .post-item:nth-child(4) {
+        animation-delay: 0.2s;
+    }
+
+    .post-item:nth-child(5) {
+        animation-delay: 0.25s;
+    }
+
+    .post-item:nth-child(6) {
+        animation-delay: 0.3s;
+    }
+
+    .post-item:nth-child(7) {
+        animation-delay: 0.35s;
+    }
+
+    .post-item:nth-child(8) {
+        animation-delay: 0.4s;
+    }
+
+    .post-item:nth-child(9) {
+        animation-delay: 0.45s;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    [data-bs-theme="light"] .card-img-placeholder {
+        background: linear-gradient(135deg, #f7f7f7 0%, #e2e2e2 100%);
+    }
+
+    [data-bs-theme="dark"] .card-img-placeholder {
+        background: linear-gradient(135deg, #626262 0%, #4a4a4a 100%);
+    }
+
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    [data-bs-theme="dark"] .loading-overlay {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .loading-overlay.active {
+        display: flex;
+    }
+</style>
 </head>
+
 <body class="d-flex flex-column min-vh-100">
 
-  <div class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
+    <style>
+  #header {
+    min-height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  #login_back_arrow {
+    display:none; 
+    font-size: 1.5em;
+    color: gray;
+    cursor: pointer;
+  }
+  #login_back_arrow:hover {
+    color:black;
+  }
+
+  /* Category submenu styles */
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  /* Desktop: Enable hover to open submenus */
+  @media (min-width: 992px) {
+    .dropdown-submenu:hover > .dropdown-menu {
+      display: block;
+    }
+    
+    .dropdown-submenu:hover > .dropdown-item {
+      background-color: var(--bs-dropdown-link-hover-bg);
+      color: var(--bs-dropdown-link-hover-color);
+    }
+  }
+</style>
+
+<div id="header" class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
   <div class="container">
     <a href="../" class="navbar-brand">Home</a>
     <button class="navbar-toggler" 
@@ -82,12 +342,20 @@
     
   </li>
         
+            
+            <li class="">
+    <a class="dropdown-item " 
+    href="/category/charles-dickens.html">
+      Charles Dickens
+    </a>
+    
+  </li>
+        
       </ul>
     
   </li>
               
             </ul>
-        
           </li>
         
           <li class="nav-item">
@@ -97,40 +365,35 @@
           <li class="nav-item">
             <a class="nav-link" href="/resources.html">Resources</a>
           </li>
-        </ul>
+      </ul>
 
-      <ul class="navbar-nav ms-md-auto">
-        <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+      <ul class="navbar-nav ms-md-auto align-items-center">
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
           <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
           <hr class="d-lg-none my-2 text-white-50">
         </li>
 
         <li class="nav-item" data-bs-theme="light">
-          <form id="search_form" class="d-flex" method="POST" action="/search"></form>
+          <form id="search_form" class="d-flex" method="POST" action="/search">
             <div class="position-relative">
               <svg class="position-absolute top-50 start-0 translate-middle-y ms-2" width="16" height="16" fill="currentColor" style="pointer-events: none; color: #6c757d;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
               </svg>
               <input 
                 id="searchInput"
-                class="form-control" 
+                class="form-control form-control-sm" 
                 type="search" 
                 placeholder="Cuardaigh" 
                 style="padding-left: 2.5rem;">
             </div>
           </form>
-          <!-- position-relative - Creates positioning context
-          position-absolute - Positions the icon absolutely
-          top-50 start-0 - Positions icon vertically centered at the left
-          translate-middle-y - Centers the icon perfectly
-          ms-2 - Adds left margin to the icon
-          ps-4 or padding-left: 2.5rem - Adds left padding to input so text doesn't overlap icon
-          d-none d-lg-block - Hides on mobile, shows on desktop -->
         </li>
-        <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
           <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
           <hr class="d-lg-none my-2 text-white-50">
         </li>
+
         <li class="nav-item dropdown" data-bs-theme="light">
           <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
             <i class="bi bi-circle-half"></i>
@@ -149,21 +412,18 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+
+        <li class="nav-item py-2 py-lg-0 col-12 col-lg-auto">
           <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
           <hr class="d-lg-none my-2 text-white-50">
         </li>
+
         <li class="nav-item dropdown" data-bs-theme="light">
           <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="font-size-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Font Size">
             <i class="bi bi-type"></i>
             <span class="d-lg-none ms-2">Font Size</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <!-- <li>
-              <button type="button" class="dropdown-item d-flex align-items-center" id="font-decrease">
-                <i class="bi bi-dash-circle"></i><span class="ms-2">Decrease</span>
-              </button>
-            </li> -->
             <li>
               <button type="button" class="dropdown-item d-flex align-items-center" id="font-reset">
                 <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
@@ -181,140 +441,544 @@
             </li>
           </ul>
         </li>
+
         <li class="nav-item dropdown" data-bs-theme="light">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="user-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="User Menu">
                 <i class="bi bi-person-circle"></i>
                 <span class="d-lg-none ms-2">User Menu</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              
-              <li>
-                  <button id="sign-in-btn" type="button" class="dropdown-item d-flex align-items-center"
-                          data-bs-theme-value="light" aria-pressed="false"
-                          onclick="window.location.href='/login.html?next=' + encodeURIComponent(window.location.pathname)">
-                  <i class="bi bi-box-arrow-in-right"></i><span class="ms-2">Sign In</span>
-                  </button>
-              </li>
-              
-            
-            </ul>
-            </li>
+            <ul id="user-menu-ul" class="dropdown-menu dropdown-menu-end">
+              <!-- initial content rendered by Jinja -->
+            </ul>            
+        </li>
       </ul>
     </div>
   </div>
 </div>
 
-<script>
-  $(document).ready(function() {
-    document.getElementById('searchInput').addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault(); // prevents form submission
-        const query = $('#searchInput').val().trim();
-        if (!query) return;
+<!-- login modal --->
+<div class="modal fade" id="login_prompt_modal" tabindex="-1" aria-labelledby="login_prompt_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <i id="login_back_arrow" class="fa-solid fa-arrow-left" onclick="back_to_login()"></i>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+      </div>
+      <div class="modal-body p-5 pt-0">
+         <form id="login_form" class="">
+            <div id="login_msg_display" class="text-center mb-3" style="display:none;"></div>
+            <div class="form-floating mb-3"> 
+              <input type="email" 
+                class="form-control rounded-3" 
+                id="email_login" 
+                placeholder="name@example.com"
+                required> 
+              <label for="email_login">Email address</label> 
+            </div>
+            <div id="first_password" class="form-floating"> 
+              <!-- <div style="position: relative;"> -->
+                <input type="password" 
+                  class="form-control rounded-3" 
+                  id="password_login" 
+                  placeholder="Password"
+                  > 
+                <label for="password_login">Password</label>
+                <i class="fa-solid fa-eye-slash"
+                    id="password_login_toggle"
+                    style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                    onclick="toggle_password_vis('password_login_toggle', 'password_login');">
+                </i>
+            </div>
+            <div id="second_password" class="form-floating mt-3 mb-3" style="display: none">
+              <input type="password" 
+                class="form-control rounded-3" 
+                id="password_register_2" 
+                placeholder="Password"
+              > 
+              <label for="password_register_2">Confirm Password</label>
+              <i class="fa-solid fa-eye-slash"
+                  id="password_register_2_toggle"
+                  style="position: absolute; right: 10px; top: 40%; cursor: pointer; color: grey;"
+                  onclick="toggle_password_vis('password_register_2_toggle', 'password_register_2');">
+              </i>
+          </div>
+            <div id="forgot_password_div" class="text-center p-2">
+              <small class="text-body-secondary">
+                <a href="#" onclick="event.preventDefault(); switch_to_forgot()">Forgot password?</a>
+              </small> 
+            </div>
+            <button id="login_btn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary">Log in</button> 
+            <button id="google_btn" class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3 disabled" type="submit">
+               <svg class="bi me-1" width="16" height="16" aria-hidden="true">
+                  <use xlink:href="#google"></use>
+               </svg>
+               Log in with Google
+            </button>
+            <div id="register_div" class="text-center">
+              <small class="text-body-secondary">
+                Don't have an account? <a href="#" onclick="event.preventDefault(); switch_to_register()">Register here</a>.
+              </small>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+  
+</div>
 
-        // Use Jinja to generate the base URL
-        const baseUrl = "/search";
-        window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
-      }
-    });
+<script>
+  async function refreshUserMenu() {
+    const response = await fetch("/user-menu"); // endpoint returns just the <ul> content
+    const html = await response.text();
+    document.getElementById("user-menu-ul").innerHTML = html;
+  }
+  refreshUserMenu();
+
+  $(document).ready(function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // prevents form submission
+            const query = $('#searchInput').val().trim();
+            if (!query) return;
+
+            // Use Jinja to generate the base URL
+            const baseUrl = "/search";
+            window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
+        }
+        });
+    }
   });
 
-  function sign_out() {
-    const baseUrl = "/logout";
-    if (window.location.pathname == '/dashboard.html') {
-      window.location.href=baseUrl;
-    } else {
-      window.location.href=`${baseUrl}?next=${encodeURIComponent(window.location.pathname)}`;
-    }
+  function resend_verification(){
+    console.log('resend_verification');
+    const email = document.getElementById('email_login').value;
+    fetch('/api/resend_verification', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({email:email})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        login_prompt_modal_instance.hide();
+        toastEl.classList.add("text-bg-success");
+        toastEl.classList.remove("text-bg-danger");
+        toastEl.querySelector(".toast-body").textContent = data.message;
+        toast.show();
+      } else {
+        login_msg_display.innerHTML = data.error;
+        login_msg_display.style.display = "block";
+      }
+      
+    })
+    .catch(() => {
+      login_msg_display.innerText = "An unexpected server error occurred.";
+      login_msg_display.style.display = "block";
+    });
   }
+
+  function sign_out() {
+    // Perform request
+    fetch('/logout')
+    .then(res => res.json())
+    .then(data => {
+
+      const baseUrl = "/";
+      if (
+        window.location.pathname == '/dashboard.html' || 
+        window.location.pathname == '/bookmarks.html' ||
+        window.location.pathname == '/flashcards.html' ||
+        window.location.pathname == '/user-hub'
+      ) {
+        window.location.href=baseUrl;
+      } else {
+        window.location.reload();
+      }
+      
+      toastEl.classList.add("text-bg-success");
+      toastEl.classList.remove("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "Successfully logged out";
+      toast.show();
+
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/post/')) {
+        refresh_page();
+        return;
+      }
+
+    })
+    .catch(() => {
+      toastEl.classList.remove("text-bg-success");
+      toastEl.classList.add("text-bg-danger");
+      toastEl.querySelector(".toast-body").textContent = "An unexpected server error occurred.";
+      toast.show();
+    });
+  }
+
+  let login_prompt_modal_instance = null;
+  function showLoginModal(){
+    back_to_login();
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  function show_password_reset(){
+    switch_to_register();
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "Please enter and confirm your new password";
+    login_msg_display.style.display = "block";
+    
+    document.getElementById('login_btn').innerText = 'Update Password';
+    const login_prompt_modal = document.getElementById('login_prompt_modal')
+    login_prompt_modal_instance = new bootstrap.Modal(login_prompt_modal);
+    login_prompt_modal_instance.show();
+  }
+
+  const loginForm = document.getElementById("login_form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const login_msg_display = document.getElementById("login_msg_display");
+        login_msg_display.style.display = 'none';
+
+        const email = document.getElementById('email_login').value;
+
+        // INPUT ELEMENTS (safer than reusing the wrapper divs)
+        const first_password_input = document.getElementById('password_login');
+        const second_password_input = document.getElementById('password_register_2');
+
+        const first_password_div = document.getElementById('first_password');
+        const second_password_div = document.getElementById('second_password');
+
+        let function_path = '';
+        let data = { email: email };
+        const login_btn = document.getElementById("login_btn");
+        const old_button_text = login_btn.innerText;
+        let new_button_text = "";
+        let user_already_exists = false;
+
+        // REGISTER OR RESET MODE (both visible)
+        console.log('first_password_div.style.display')
+        console.log(first_password_div.style.display)
+        console.log(' ')
+        console.log('second_password_div.style.display')
+        console.log(second_password_div.style.display)
+
+        if (first_password_div.style.display === 'block' && second_password_div.style.display === 'block') {
+        // REGISTER
+        if (login_btn.innerText === 'Update Password'){
+            function_path = '/api/update_password';
+            new_button_text = 'Update Password';
+        } else {
+            function_path = '/register';
+            new_button_text = 'Register';
+        }
+        
+        const password = first_password_input.value;
+        const confirm_password = second_password_input.value;
+
+        if (password !== confirm_password) {
+            login_msg_display.innerText = "Passwords do not match!";
+            login_msg_display.style.display = "block";
+            return;
+        }
+        data.password = password;
+        } 
+        // FORGOT PASSWORD MODE
+        else if (first_password_div.style.display === 'none' && second_password_div.style.display === 'none') {
+        function_path = '/api/reset_password_request';
+        new_button_text = 'Send Password Reset Link';
+        } 
+        // LOGIN MODE
+        else {
+        function_path = '/api/login';
+        new_button_text = 'Log in';
+        data.password = first_password_input.value;
+        }
+
+        // Disable button and show spinner
+        login_btn.disabled = true;
+        login_btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+        fetch(function_path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+        if (data.status === "success") {
+            if (function_path === '/api/login') {
+                // Always reload the page after login
+                window.location.reload();
+            } else if (function_path === '/register') {
+            // Show verification message
+            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+            login_msg_display.style.display = "block";
+            } else {
+            // Password reset or update
+            login_msg_display.innerText = data.message;
+            login_msg_display.style.display = "block";
+            if (function_path === '/api/update_password') {
+                setTimeout(() => {
+                back_to_login();
+                login_msg_display.innerText = "Password updated successfully. Please log in.";
+                login_msg_display.style.display = "block";
+                }, 2000);
+            }
+            }
+        } else {
+            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.style.display = "block";
+        }
+        })
+        .catch(err => {
+        console.error(err);
+        login_msg_display.innerText = "An unexpected server error occurred.";
+        login_msg_display.style.display = "block";
+        })
+        .finally(() => {
+        // Re-enable button
+        login_btn.disabled = false;
+        login_btn.innerText = new_button_text;
+        });
+    });
+  }
+
+  // Helper to refresh page (if needed)
+  function refresh_page(){
+    window.location.reload();
+  }
+
+  // TODO: email input from reset should be disabled
+  function back_to_login(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "block";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "block";
+
+    document.getElementById('login_btn').innerText = 'Log in';
+    document.getElementById('google_btn').innerText = 'Log in with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "none";
+  }
+
+  function switch_to_forgot() {
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const second_password = document.getElementById('second_password');
+    second_password.style.display = "none";
+
+    const first_password = document.getElementById('first_password');
+    first_password.style.display = "none";
+
+    const google_btn = document.getElementById('google_btn');
+    google_btn.style.display = "none";
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    const login_btn = document.getElementById('login_btn');
+    login_btn.innerText = 'Send Password Reset Link';
+  }
+
+  function switch_to_register(){
+    const login_msg_display = document.getElementById("login_msg_display");
+    login_msg_display.innerText = "";
+    login_msg_display.style.display = "none";
+
+    const first_password_div = document.getElementById('first_password');
+    first_password_div.style.display = "block";
+    const second_password_div = document.getElementById('second_password');
+    second_password_div.style.display = "block";
+    const forgot_password_div = document.getElementById('forgot_password_div');
+    forgot_password_div.style.display = "none";
+    
+    const register_div = document.getElementById('register_div');
+    register_div.style.display = "none";
+
+    document.getElementById('login_btn').innerText = 'Register';
+    document.getElementById('google_btn').innerText = 'Register with Google';
+
+    const login_back_arrow = document.getElementById('login_back_arrow');
+    login_back_arrow.style.display = "block";
+  }
+
+  function toggle_password_vis(toggleId, inputId){
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+    toggle.classList.toggle("fa-eye");
+    toggle.classList.toggle("fa-eye-slash");
+    toggle.style.color = isHidden ? "black" : "grey";
+  }
+
+  // Categories menu: Auto-close other submenus when opening one
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryDropdown = document.querySelector('#categories');
+    if (!categoryDropdown) return;
+
+    const mainDropdownMenu = categoryDropdown.nextElementSibling;
+    if (!mainDropdownMenu) return;
+
+    // Close all submenus when main dropdown is hidden
+    categoryDropdown.addEventListener('hidden.bs.dropdown', function() {
+      const allSubmenus = mainDropdownMenu.querySelectorAll('.dropdown-menu.show');
+      allSubmenus.forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+  });
 </script>
-    <main style="padding-top: 5em;" class="container flex-grow-1">
+    <main class="container-fluid flex-grow-1 mt-4">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 mb-4">
+                <div class="filter-sidebar">
+                    <h5 class="mb-4">Filters</h5>
 
-  <h3 class="mb-4">Posts in Category: Fairy Tales</h3>
+                    <div class="filter-section">
+                        <h6>Category</h6>
+                        <div class="d-flex flex-column gap-2" id="categoryFilters">
+                            <span class="badge bg-secondary-subtle text-secondary-emphasis filter-badge active"
+                                data-category="" onclick="filterByCategory('')">
+                                All Categories
+                            </span>
+                            
+                        </div>
+                    </div>
 
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">Rapunzel</h5>
-        <p class="card-text text-muted">2025-11-06</p>
-        <a href="/post/9.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">An Mhaighdean Mhara Bheag</h5>
-        <p class="card-text text-muted">2025-11-05</p>
-        <a href="/post/8.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">An Bosca Tintreach</h5>
-        <p class="card-text text-muted">2025-11-02</p>
-        <a href="/post/5.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">An Mac Tíre agus na Seacht Meannán Beaga</h5>
-        <p class="card-text text-muted">2025-11-02</p>
-        <a href="/post/4.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">Tomás Beag</h5>
-        <p class="card-text text-muted">2025-10-16</p>
-        <a href="/post/3.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">An tÉan Órga</h5>
-        <p class="card-text text-muted">2025-10-13</p>
-        <a href="/post/2.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">An Madra agus an Gealbhan</h5>
-        <p class="card-text text-muted">2025-10-13</p>
-        <a href="/post/1.html" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  
+                    <div class="filter-section">
+                        <h6>Word</h6>
+                        <select class="form-select word-select" id="wordFilter" onchange="filterByWord(this.value)">
+                            <option value="">All Words</option>
+                            
+                        </select>
+                    </div>
 
-  <!-- Pagination -->
-  <nav aria-label="Page navigation">
-    <ul class="pagination">
-      
-        <li class="page-item disabled"><span class="page-link">Previous</span></li>
-      
+                    <div class="filter-section" id="clearFiltersSection" style="display: none;" >
+                        <button class="btn btn-outline-secondary btn-sm w-100" onclick="clearAllFilters()">
+                            <i class="fas fa-times me-1"></i> Clear All Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-      
+            <div class="col-lg-9 col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">Posts in Category: Fairy Tales</h3>
+                    <div class="view-toggle d-none d-md-flex">
+                        <button class="view-toggle-btn active" id="gridViewBtn" onclick="switchView('grid')">
+                            <i class="fas fa-th"></i> Grid
+                        </button>
+                        <button class="view-toggle-btn" id="listViewBtn" onclick="switchView('list')">
+                            <i class="fas fa-list"></i> List
+                        </button>
+                    </div>
+                </div>
+
+                <div style="position: relative;">
+                    <div class="loading-overlay" id="loadingOverlay">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div id="postsContainer" class="post-grid"></div>
+                </div>
+
+                <div id="noPostsMessage" class="text-center text-muted mt-5" style="display: none;">
+                    No results found for &#34;Fairy Tales&#34;
+                </div>
+
+                <nav aria-label="Page navigation" class="mt-5" id="paginationContainer"></nav>
+            </div>
+        </div>
+    </main>
+
+    <!-- main model (confirmation dialog) for the user -->
+<div class="modal fade" id="main_modal" tabindex="-1" aria-labelledby="main_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="main_modal_label">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this bookmark?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Just a message and "ok" -->
+<div class="modal fade" id="alert_modal" tabindex="-1" aria-labelledby="alert_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alert_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
         
-          
-            <li class="page-item active"><span class="page-link">1</span></li>
-          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- custom buttons that must always be set -->
+<div class="modal fade" id="custom_modal" tabindex="-1" aria-labelledby="custom_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="custom_modal_label">Alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
         
-      
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button> -->
+      </div>
+    </div>
+  </div>
+</div>
 
-      
-        <li class="page-item disabled"><span class="page-link">Next</span></li>
-      
-    </ul>
-  </nav>
-  </main>
 
-  <!-- notification for when making bookmarks -->
+<!-- notification toast for users -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="bookmark-toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="main_toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">Bookmark updated!</div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -360,8 +1024,252 @@
     </div>
   </div>
 </div>
-    
-  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/assets/js/common.js"></script>
+
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/common.js"></script>
+
+    <script>
+        let currentPage = 1;
+        let currentCategory = '';
+        let currentWord = '';
+        let currentViewMode = 'grid';
+
+        const initialPosts = [{"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Little Red-Cap (Little Red Riding Hood)", "id": 13, "im_path": "../assets/img/posts/red-riding-hood.jpg", "post_date": "2025-11-20", "post_title": "Caip\u00edn Dearg Beag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Ugly Duckling", "id": 12, "im_path": "../assets/img/posts/ugly_duckling.jpg", "post_date": "2025-11-17", "post_title": "An Lacha Bheag Ghr\u00e1nna", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Hansel and Gretel", "id": 11, "im_path": "../assets/img/posts/hansel-and-gretel.jpg", "post_date": "2025-11-15", "post_title": "Hansel agus Gretel", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Rapunzel", "id": 9, "im_path": "../assets/img/posts/rapunzel.jpg", "post_date": "2025-11-07", "post_title": "Rapunzel", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Little Mermaid", "id": 8, "im_path": "../assets/img/posts/little_mermaid.png", "post_date": "2025-11-06", "post_title": "An Mhaighdean Mhara Bheag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Tinderbox", "id": 5, "im_path": "../assets/img/posts/tinderbox.png", "post_date": "2025-11-02", "post_title": "An Bosca Tintreach", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "The Wolf and the Seven Little Kids", "id": 4, "im_path": "../assets/img/posts/wolf_and_kids.jpg", "post_date": "2025-11-02", "post_title": "An Mac T\u00edre agus na Seacht Meann\u00e1n Beaga", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Little Tomas (Tom Thumb)", "id": 3, "im_path": "../assets/img/posts/tom_thumb.png", "post_date": "2025-10-17", "post_title": "Tom\u00e1s Beag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "The Golden Bird", "id": 2, "im_path": "../assets/img/posts/golden_bird.jpg", "post_date": "2025-10-14", "post_title": "An t\u00c9an \u00d3rga", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "The Dog and the Sparrow", "id": 1, "im_path": "../assets/img/posts/dog-and-sparrow.jpg", "post_date": "2025-10-13", "post_title": "An Madra agus an Gealbhan", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "modern"}, {"enabled": true, "level": 2.0, "level_str": "simple"}]}];
+        const initialPagination = {
+            page: 1,
+            pages: 1,
+            total: 10,
+            has_prev: false,
+            has_next: false,
+            prev_num: null,
+            next_num: null
+        };
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        async function fetchFilteredPosts(page = 1) {
+            showLoading();
+
+            const params = new URLSearchParams();
+            params.append('page', page);
+            if (currentCategory) params.append('category', currentCategory);
+            if (currentWord) params.append('word', currentWord);
+
+            try {
+                const response = await fetch(`/api/posts/filter?${params.toString()}`);
+                const data = await response.json();
+
+                updateCategoryFilters(data.available_categories);
+                updateWordFilters(data.available_words);
+                renderPosts(data.posts);
+                renderPagination(data.pagination);
+
+                currentPage = page;
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function renderPosts(posts) {
+            const container = document.getElementById('postsContainer');
+            const noPostsMsg = document.getElementById('noPostsMessage');
+
+            if (posts.length === 0) {
+                container.innerHTML = '';
+                noPostsMsg.style.display = 'block';
+                return;
+            }
+
+            noPostsMsg.style.display = 'none';
+
+            const cardClass = currentViewMode === 'grid' ? 'post-card-grid' : 'post-card-list';
+
+            container.innerHTML = posts.map(post => `
+        <div class="post-item ${cardClass}">
+          <div class="card h-100 border-0 shadow-sm hover-card d-flex">
+            <div class="card-img-container">
+              ${post.im_path ?
+                    `<img src="${post.im_path}" alt="Post Image">` :
+                    `<div class="card-img-placeholder d-flex align-items-center justify-content-center h-100">
+                  <i class="fa-solid fa-book-open fa-3x text-white opacity-50"></i>
+                </div>`
+                }
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title fw-bold" ${post.english_title ? `data-bs-toggle="tooltip" title="${post.english_title}"` : ''}>
+                <a href="/post/${post.id}.html" class="text-decoration-none text-reset">
+                  ${post.post_title}
+                </a>
+              </h5>
+              <p class="card-text text-muted small mb-3">
+                <i class="far fa-calendar-alt me-1"></i> ${post.post_date}
+              </p>
+              <div class="mb-3">
+                ${post.categories.map(cat =>
+                    `<span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">${cat.name}</span>`
+                ).join('')}
+              </div>
+              <div class="mt-auto">
+                <small class="text-muted d-block mb-2">Difficulty Levels:</small>
+                <div class="version-buttons">
+                  ${post.versions.map(version =>
+                    `<a href="/post/${post.id}.html?level=${version.level}" 
+                       class="btn btn-sm version-btn ${version.enabled ? 'btn-outline-primary' : 'btn-outline-secondary disabled'}">
+                      ${version.level_str}
+                    </a>`
+                ).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+            const tooltipTriggerList = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+            [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+        }
+
+        function renderPagination(pagination) {
+            const container = document.getElementById('paginationContainer');
+
+            if (pagination.pages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<ul class="pagination justify-content-center">';
+
+            if (pagination.has_prev) {
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="event.preventDefault(); fetchFilteredPosts(${pagination.prev_num})">Previous</a></li>`;
+            } else {
+                html += `<li class="page-item disabled"><span class="page-link">Previous</span></li>`;
+            }
+
+            for (let i = 1; i <= pagination.pages; i++) {
+                if (i === pagination.page) {
+                    html += `<li class="page-item active"><span class="page-link">${i}</span></li>`;
+                } else if (i === 1 || i === pagination.pages || (i >= pagination.page - 2 && i <= pagination.page + 2)) {
+                    html += `<li class="page-item"><a class="page-link" href="#" onclick="event.preventDefault(); fetchFilteredPosts(${i})">${i}</a></li>`;
+                } else if (i === pagination.page - 3 || i === pagination.page + 3) {
+                    html += `<li class="page-item disabled"><span class="page-link">…</span></li>`;
+                }
+            }
+
+            if (pagination.has_next) {
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="event.preventDefault(); fetchFilteredPosts(${pagination.next_num})">Next</a></li>`;
+            } else {
+                html += `<li class="page-item disabled"><span class="page-link">Next</span></li>`;
+            }
+
+            html += '</ul>';
+            container.innerHTML = html;
+        }
+
+        function updateCategoryFilters(categories) {
+            const container = document.getElementById('categoryFilters');
+
+            let html = `<span class="badge bg-secondary-subtle text-secondary-emphasis filter-badge ${!currentCategory ? 'active' : ''}"
+                        data-category="" onclick="filterByCategory('')">
+                    All Categories
+                  </span>`;
+
+            html += categories.map(cat =>
+                `<span class="badge bg-secondary-subtle text-secondary-emphasis filter-badge ${currentCategory === cat.slug ? 'active' : ''}"
+               data-category="${cat.slug}" onclick="filterByCategory('${cat.slug}')">
+          ${cat.name} (${cat.count})
+        </span>`
+            ).join('');
+
+            container.innerHTML = html;
+        }
+
+        function updateWordFilters(words) {
+            const select = document.getElementById('wordFilter');
+
+            let html = '<option value="">All Words</option>';
+            html += words.map(word =>
+                `<option value="${word.value}" ${currentWord === word.value ? 'selected' : ''}>
+          ${word.value} (${word.count})
+        </option>`
+            ).join('');
+
+            select.innerHTML = html;
+        }
+
+        function filterByCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+            fetchFilteredPosts(1);
+            updateClearFiltersButton();
+        }
+
+        function filterByWord(word) {
+            currentWord = word;
+            currentPage = 1;
+            fetchFilteredPosts(1);
+            updateClearFiltersButton();
+        }
+
+        function clearAllFilters() {
+            currentCategory = '';
+            currentWord = '';
+            currentPage = 1;
+            fetchFilteredPosts(1);
+            updateClearFiltersButton();
+        }
+
+        function updateClearFiltersButton() {
+            const section = document.getElementById('clearFiltersSection');
+            if (currentCategory || currentWord) {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        function switchView(view) {
+            const container = document.getElementById('postsContainer');
+            const gridBtn = document.getElementById('gridViewBtn');
+            const listBtn = document.getElementById('listViewBtn');
+            const postItems = document.querySelectorAll('.post-item');
+
+            if (view === 'grid') {
+                container.className = 'post-grid';
+                postItems.forEach(item => {
+                    item.className = 'post-item post-card-grid';
+                });
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+                localStorage.setItem('listViewMode', 'grid');
+                currentViewMode = 'grid';
+            } else {
+                container.className = 'post-list';
+                postItems.forEach(item => {
+                    item.className = 'post-item post-card-list';
+                });
+                listBtn.classList.add('active');
+                gridBtn.classList.remove('active');
+                localStorage.setItem('listViewMode', 'list');
+                currentViewMode = 'list';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedView = localStorage.getItem('listViewMode') || 'grid';
+            currentViewMode = savedView;
+            switchView(savedView);
+            renderPosts(initialPosts);
+            renderPagination(initialPagination);
+        });
+    </script>
 </body>
+
 </html>

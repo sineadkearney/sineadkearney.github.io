@@ -1,0 +1,428 @@
+{
+  "available_categories": [
+    {
+      "count": 1,
+      "name": "Arthur Conan Doyle",
+      "slug": "arthur-conan-doyle"
+    },
+    {
+      "count": 1,
+      "name": "Charles Dickens",
+      "slug": "charles-dickens"
+    },
+    {
+      "count": 10,
+      "name": "Fairy Tales",
+      "slug": "fairy-tales"
+    },
+    {
+      "count": 2,
+      "name": "Fiction",
+      "slug": "fiction"
+    },
+    {
+      "count": 7,
+      "name": "Grimms",
+      "slug": "grimms"
+    },
+    {
+      "count": 3,
+      "name": "Hans Christian Andersen",
+      "slug": "hans-christian-andersen"
+    }
+  ],
+  "available_words": [
+    {
+      "count": 10,
+      "value": "eagla"
+    },
+    {
+      "count": 8,
+      "value": "fuinneog"
+    },
+    {
+      "count": 8,
+      "value": "coill"
+    },
+    {
+      "count": 7,
+      "value": "gr\u00e1"
+    },
+    {
+      "count": 6,
+      "value": "codladh"
+    },
+    {
+      "count": 6,
+      "value": "scread"
+    },
+    {
+      "count": 6,
+      "value": "gaird\u00edn"
+    },
+    {
+      "count": 6,
+      "value": "caoineadh"
+    },
+    {
+      "count": 6,
+      "value": "mac t\u00edre"
+    },
+    {
+      "count": 5,
+      "value": "br\u00f3n"
+    },
+    {
+      "count": 5,
+      "value": "cailleach"
+    },
+    {
+      "count": 5,
+      "value": "\u00e9an"
+    },
+    {
+      "count": 4,
+      "value": "teach"
+    },
+    {
+      "count": 4,
+      "value": "sr\u00e1idbhaile"
+    },
+    {
+      "count": 4,
+      "value": "titim"
+    },
+    {
+      "count": 4,
+      "value": "\u00e1thas"
+    },
+    {
+      "count": 4,
+      "value": "sios\u00far"
+    },
+    {
+      "count": 4,
+      "value": "tua"
+    },
+    {
+      "count": 4,
+      "value": "m\u00e1thair"
+    },
+    {
+      "count": 4,
+      "value": "dorcha"
+    },
+    {
+      "count": 4,
+      "value": "napr\u00fan"
+    },
+    {
+      "count": 4,
+      "value": "leanbh"
+    },
+    {
+      "count": 4,
+      "value": "scanraithe"
+    },
+    {
+      "count": 4,
+      "value": "madra"
+    },
+    {
+      "count": 4,
+      "value": "b\u00e1s"
+    },
+    {
+      "count": 4,
+      "value": "guth"
+    },
+    {
+      "count": 4,
+      "value": "bolg"
+    },
+    {
+      "count": 4,
+      "value": "banphrionsa"
+    },
+    {
+      "count": 4,
+      "value": "clocha"
+    },
+    {
+      "count": 3,
+      "value": "caisle\u00e1n"
+    }
+  ],
+  "pagination": {
+    "has_next": true,
+    "has_prev": false,
+    "next_num": 2,
+    "page": 1,
+    "pages": 2,
+    "prev_num": null,
+    "total": 12
+  },
+  "posts": [
+    {
+      "categories": [
+        {
+          "name": "Fiction",
+          "slug": "fiction"
+        },
+        {
+          "name": "Charles Dickens",
+          "slug": "charles-dickens"
+        }
+      ],
+      "english_title": "A Christmas Carol",
+      "id": 14,
+      "im_path": "../assets/img/posts/a-christmas-carol.jpg",
+      "post_date": "2025-11-30",
+      "post_title": "Car\u00fal na Nollag",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 55
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        },
+        {
+          "name": "Grimms",
+          "slug": "grimms"
+        }
+      ],
+      "english_title": "Little Red-Cap (Little Red Riding Hood)",
+      "id": 13,
+      "im_path": "../assets/img/posts/red-riding-hood.jpg",
+      "post_date": "2025-11-20",
+      "post_title": "Caip\u00edn Dearg Beag",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 51
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 53
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Hans Christian Andersen",
+          "slug": "hans-christian-andersen"
+        },
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        }
+      ],
+      "english_title": "The Ugly Duckling",
+      "id": 12,
+      "im_path": "../assets/img/posts/ugly_duckling.jpg",
+      "post_date": "2025-11-17",
+      "post_title": "An Lacha Bheag Ghr\u00e1nna",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 49
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        },
+        {
+          "name": "Grimms",
+          "slug": "grimms"
+        }
+      ],
+      "english_title": "Hansel and Gretel",
+      "id": 11,
+      "im_path": "../assets/img/posts/hansel-and-gretel.jpg",
+      "post_date": "2025-11-15",
+      "post_title": "Hansel agus Gretel",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 45
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 47
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        },
+        {
+          "name": "Grimms",
+          "slug": "grimms"
+        }
+      ],
+      "english_title": "Rapunzel",
+      "id": 9,
+      "im_path": "../assets/img/posts/rapunzel.jpg",
+      "post_date": "2025-11-07",
+      "post_title": "Rapunzel",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 37
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 39
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Hans Christian Andersen",
+          "slug": "hans-christian-andersen"
+        },
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        }
+      ],
+      "english_title": "The Little Mermaid",
+      "id": 8,
+      "im_path": "../assets/img/posts/little_mermaid.png",
+      "post_date": "2025-11-06",
+      "post_title": "An Mhaighdean Mhara Bheag",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 33
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 35
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Arthur Conan Doyle",
+          "slug": "arthur-conan-doyle"
+        },
+        {
+          "name": "Fiction",
+          "slug": "fiction"
+        }
+      ],
+      "english_title": "A Case of Identity",
+      "id": 6,
+      "im_path": "../assets/img/posts/a-case-of-identity.jpg",
+      "post_date": "2025-11-03",
+      "post_title": "C\u00e1s C\u00e9annachta",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 25
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 31
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Hans Christian Andersen",
+          "slug": "hans-christian-andersen"
+        },
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        }
+      ],
+      "english_title": "The Tinderbox",
+      "id": 5,
+      "im_path": "../assets/img/posts/tinderbox.png",
+      "post_date": "2025-11-02",
+      "post_title": "An Bosca Tintreach",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 23
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        },
+        {
+          "name": "Grimms",
+          "slug": "grimms"
+        }
+      ],
+      "english_title": "The Wolf and the Seven Little Kids",
+      "id": 4,
+      "im_path": "../assets/img/posts/wolf_and_kids.jpg",
+      "post_date": "2025-11-02",
+      "post_title": "An Mac T\u00edre agus na Seacht Meann\u00e1n Beaga",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 19
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 21
+        }
+      ]
+    }
+  ]
+}
