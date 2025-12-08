@@ -674,7 +674,7 @@
             function_path = '/api/update_password';
             new_button_text = 'Update Password';
         } else {
-            function_path = '/register';
+            function_path = '/api/register';
             new_button_text = 'Register';
         }
         
@@ -716,35 +716,35 @@
                 // Always reload the page after login
                 window.location.reload();
             } else if (function_path === '/register') {
-            // Show verification message
-            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
-            login_msg_display.style.display = "block";
+              // Show verification message
+              login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+              login_msg_display.style.display = "block";
             } else {
-            // Password reset or update
-            login_msg_display.innerText = data.message;
-            login_msg_display.style.display = "block";
-            if (function_path === '/api/update_password') {
-                setTimeout(() => {
-                back_to_login();
-                login_msg_display.innerText = "Password updated successfully. Please log in.";
-                login_msg_display.style.display = "block";
-                }, 2000);
-            }
+              // Password reset or update
+              login_msg_display.innerText = data.message;
+              login_msg_display.style.display = "block";
+              if (function_path === '/api/update_password') {
+                  setTimeout(() => {
+                  back_to_login();
+                  login_msg_display.innerText = "Password updated successfully. Please log in.";
+                  login_msg_display.style.display = "block";
+                  }, 2000);
+              }
             }
         } else {
-            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.innerHTML = data.message || "An error occurred.";
             login_msg_display.style.display = "block";
         }
         })
         .catch(err => {
-        console.error(err);
-        login_msg_display.innerText = "An unexpected server error occurred.";
-        login_msg_display.style.display = "block";
+          console.error(err);
+          login_msg_display.innerText = "An unexpected server error occurred.";
+          login_msg_display.style.display = "block";
         })
         .finally(() => {
-        // Re-enable button
-        login_btn.disabled = false;
-        login_btn.innerText = new_button_text;
+          // Re-enable button
+          login_btn.disabled = false;
+          login_btn.innerText = new_button_text;
         });
     });
   }
@@ -877,12 +877,6 @@
                             
                             <span
                                 class="badge bg-secondary-subtle text-secondary-emphasis filter-badge "
-                                data-category="charles-dickens" onclick="filterByCategory('charles-dickens')">
-                                Charles Dickens (1)
-                            </span>
-                            
-                            <span
-                                class="badge bg-secondary-subtle text-secondary-emphasis filter-badge "
                                 data-category="fairy-tales" onclick="filterByCategory('fairy-tales')">
                                 Fairy Tales (10)
                             </span>
@@ -890,7 +884,7 @@
                             <span
                                 class="badge bg-secondary-subtle text-secondary-emphasis filter-badge "
                                 data-category="fiction" onclick="filterByCategory('fiction')">
-                                Fiction (2)
+                                Fiction (1)
                             </span>
                             
                             <span
@@ -1190,11 +1184,11 @@
         let currentWord = '';
         let currentViewMode = 'grid';
 
-        const initialPosts = [{"categories": [{"name": "Fiction", "slug": "fiction"}, {"name": "Charles Dickens", "slug": "charles-dickens"}], "english_title": "A Christmas Carol", "id": 14, "im_path": "../assets/img/posts/a-christmas-carol.jpg", "post_date": "Sun, 30 Nov 2025 18:03:46 GMT", "post_title": "Car\u00fal na Nollag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 55}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Little Red-Cap (Little Red Riding Hood)", "id": 13, "im_path": "../assets/img/posts/red-riding-hood.jpg", "post_date": "Thu, 20 Nov 2025 03:43:48 GMT", "post_title": "Caip\u00edn Dearg Beag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 51}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 53}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Ugly Duckling", "id": 12, "im_path": "../assets/img/posts/ugly_duckling.jpg", "post_date": "Mon, 17 Nov 2025 03:01:57 GMT", "post_title": "An Lacha Bheag Ghr\u00e1nna", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 49}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Hansel and Gretel", "id": 11, "im_path": "../assets/img/posts/hansel-and-gretel.jpg", "post_date": "Sat, 15 Nov 2025 03:41:21 GMT", "post_title": "Hansel agus Gretel", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 45}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 47}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Rapunzel", "id": 9, "im_path": "../assets/img/posts/rapunzel.jpg", "post_date": "Fri, 07 Nov 2025 03:49:48 GMT", "post_title": "Rapunzel", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 37}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 39}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Little Mermaid", "id": 8, "im_path": "../assets/img/posts/little_mermaid.png", "post_date": "Thu, 06 Nov 2025 04:37:04 GMT", "post_title": "An Mhaighdean Mhara Bheag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 33}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 35}]}, {"categories": [{"name": "Arthur Conan Doyle", "slug": "arthur-conan-doyle"}, {"name": "Fiction", "slug": "fiction"}], "english_title": "A Case of Identity", "id": 6, "im_path": "../assets/img/posts/a-case-of-identity.jpg", "post_date": "Mon, 03 Nov 2025 01:47:20 GMT", "post_title": "C\u00e1s C\u00e9annachta", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 25}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 31}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Tinderbox", "id": 5, "im_path": "../assets/img/posts/tinderbox.png", "post_date": "Sun, 02 Nov 2025 22:22:29 GMT", "post_title": "An Bosca Tintreach", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 23}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "The Wolf and the Seven Little Kids", "id": 4, "im_path": "../assets/img/posts/wolf_and_kids.jpg", "post_date": "Sun, 02 Nov 2025 18:13:00 GMT", "post_title": "An Mac T\u00edre agus na Seacht Meann\u00e1n Beaga", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 19}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 21}]}];
+        const initialPosts = [{"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Little Red-Cap (Little Red Riding Hood)", "id": 13, "im_path": "../assets/img/posts/red-riding-hood.jpg", "post_date": "Thu, 20 Nov 2025 03:43:48 GMT", "post_title": "Caip\u00edn Dearg Beag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 51}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 53}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Ugly Duckling", "id": 12, "im_path": "../assets/img/posts/ugly_duckling.jpg", "post_date": "Mon, 17 Nov 2025 03:01:57 GMT", "post_title": "An Lacha Bheag Ghr\u00e1nna", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 49}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Hansel and Gretel", "id": 11, "im_path": "../assets/img/posts/hansel-and-gretel.jpg", "post_date": "Sat, 15 Nov 2025 03:41:21 GMT", "post_title": "Hansel agus Gretel", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 45}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 47}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Rapunzel", "id": 9, "im_path": "../assets/img/posts/rapunzel.jpg", "post_date": "Fri, 07 Nov 2025 03:49:48 GMT", "post_title": "Rapunzel", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 37}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 39}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Little Mermaid", "id": 8, "im_path": "../assets/img/posts/little_mermaid.png", "post_date": "Thu, 06 Nov 2025 04:37:04 GMT", "post_title": "An Mhaighdean Mhara Bheag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 33}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 35}]}, {"categories": [{"name": "Arthur Conan Doyle", "slug": "arthur-conan-doyle"}, {"name": "Fiction", "slug": "fiction"}], "english_title": "A Case of Identity", "id": 6, "im_path": "../assets/img/posts/a-case-of-identity.jpg", "post_date": "Mon, 03 Nov 2025 01:47:20 GMT", "post_title": "C\u00e1s C\u00e9annachta", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 25}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 31}]}, {"categories": [{"name": "Hans Christian Andersen", "slug": "hans-christian-andersen"}, {"name": "Fairy Tales", "slug": "fairy-tales"}], "english_title": "The Tinderbox", "id": 5, "im_path": "../assets/img/posts/tinderbox.png", "post_date": "Sun, 02 Nov 2025 22:22:29 GMT", "post_title": "An Bosca Tintreach", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 23}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "The Wolf and the Seven Little Kids", "id": 4, "im_path": "../assets/img/posts/wolf_and_kids.jpg", "post_date": "Sun, 02 Nov 2025 18:13:00 GMT", "post_title": "An Mac T\u00edre agus na Seacht Meann\u00e1n Beaga", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 19}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 21}]}, {"categories": [{"name": "Fairy Tales", "slug": "fairy-tales"}, {"name": "Grimms", "slug": "grimms"}], "english_title": "Little Tomas (Tom Thumb)", "id": 3, "im_path": "../assets/img/posts/tom_thumb.png", "post_date": "Fri, 17 Oct 2025 02:56:52 GMT", "post_title": "Tom\u00e1s Beag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original", "version_id": 11}, {"enabled": true, "level": 1.0, "level_str": "simple", "version_id": 17}]}];
         const initialPagination = {
             page: 1,
             pages: 2,
-            total: 12,
+            total: 11,
             has_prev: false,
             has_next: true,
             prev_num: null,

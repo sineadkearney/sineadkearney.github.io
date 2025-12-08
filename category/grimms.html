@@ -674,7 +674,7 @@
             function_path = '/api/update_password';
             new_button_text = 'Update Password';
         } else {
-            function_path = '/register';
+            function_path = '/api/register';
             new_button_text = 'Register';
         }
         
@@ -716,35 +716,35 @@
                 // Always reload the page after login
                 window.location.reload();
             } else if (function_path === '/register') {
-            // Show verification message
-            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
-            login_msg_display.style.display = "block";
+              // Show verification message
+              login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+              login_msg_display.style.display = "block";
             } else {
-            // Password reset or update
-            login_msg_display.innerText = data.message;
-            login_msg_display.style.display = "block";
-            if (function_path === '/api/update_password') {
-                setTimeout(() => {
-                back_to_login();
-                login_msg_display.innerText = "Password updated successfully. Please log in.";
-                login_msg_display.style.display = "block";
-                }, 2000);
-            }
+              // Password reset or update
+              login_msg_display.innerText = data.message;
+              login_msg_display.style.display = "block";
+              if (function_path === '/api/update_password') {
+                  setTimeout(() => {
+                  back_to_login();
+                  login_msg_display.innerText = "Password updated successfully. Please log in.";
+                  login_msg_display.style.display = "block";
+                  }, 2000);
+              }
             }
         } else {
-            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.innerHTML = data.message || "An error occurred.";
             login_msg_display.style.display = "block";
         }
         })
         .catch(err => {
-        console.error(err);
-        login_msg_display.innerText = "An unexpected server error occurred.";
-        login_msg_display.style.display = "block";
+          console.error(err);
+          login_msg_display.innerText = "An unexpected server error occurred.";
+          login_msg_display.style.display = "block";
         })
         .finally(() => {
-        // Re-enable button
-        login_btn.disabled = false;
-        login_btn.innerText = new_button_text;
+          // Re-enable button
+          login_btn.disabled = false;
+          login_btn.innerText = new_button_text;
         });
     });
   }

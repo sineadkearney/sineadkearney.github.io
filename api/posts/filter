@@ -6,17 +6,12 @@
       "slug": "arthur-conan-doyle"
     },
     {
-      "count": 1,
-      "name": "Charles Dickens",
-      "slug": "charles-dickens"
-    },
-    {
       "count": 10,
       "name": "Fairy Tales",
       "slug": "fairy-tales"
     },
     {
-      "count": 2,
+      "count": 1,
       "name": "Fiction",
       "slug": "fiction"
     },
@@ -160,34 +155,9 @@
     "page": 1,
     "pages": 2,
     "prev_num": null,
-    "total": 12
+    "total": 11
   },
   "posts": [
-    {
-      "categories": [
-        {
-          "name": "Fiction",
-          "slug": "fiction"
-        },
-        {
-          "name": "Charles Dickens",
-          "slug": "charles-dickens"
-        }
-      ],
-      "english_title": "A Christmas Carol",
-      "id": 14,
-      "im_path": "../assets/img/posts/a-christmas-carol.jpg",
-      "post_date": "2025-11-30",
-      "post_title": "Car\u00fal na Nollag",
-      "versions": [
-        {
-          "enabled": true,
-          "level": 0.0,
-          "level_str": "original",
-          "version_id": 55
-        }
-      ]
-    },
     {
       "categories": [
         {
@@ -421,6 +391,37 @@
           "level": 1.0,
           "level_str": "simple",
           "version_id": 21
+        }
+      ]
+    },
+    {
+      "categories": [
+        {
+          "name": "Fairy Tales",
+          "slug": "fairy-tales"
+        },
+        {
+          "name": "Grimms",
+          "slug": "grimms"
+        }
+      ],
+      "english_title": "Little Tomas (Tom Thumb)",
+      "id": 3,
+      "im_path": "../assets/img/posts/tom_thumb.png",
+      "post_date": "2025-10-17",
+      "post_title": "Tom\u00e1s Beag",
+      "versions": [
+        {
+          "enabled": true,
+          "level": 0.0,
+          "level_str": "original",
+          "version_id": 11
+        },
+        {
+          "enabled": true,
+          "level": 1.0,
+          "level_str": "simple",
+          "version_id": 17
         }
       ]
     }

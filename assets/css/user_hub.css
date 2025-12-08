@@ -129,6 +129,14 @@ body.reduced-motion .tab-content-wrapper {
     margin-bottom: 15px;
 }
 
+.stat-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
 .stat-icon {
     font-size: 32px;
     width: 60px;
@@ -152,6 +160,10 @@ body.reduced-motion .tab-content-wrapper {
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+[data-bs-theme="dark"] .stat-label {
+    color: #f7f7f7;
 }
 
 /* Achievement Grid */
@@ -780,7 +792,7 @@ body.reduced-motion .achievement-card:not(.locked):hover {
     align-items: center;
     gap: 15px;
     padding: 12px;
-    background: white;
+    /* background: white; */
     border-radius: 12px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
@@ -806,13 +818,13 @@ body.reduced-motion .achievement-card:not(.locked):hover {
 
 .activity-title {
     font-weight: 600;
-    color: #2d3748;
+    /* color: #2d3748; */
     margin-bottom: 2px;
 }
 
 .activity-date {
     font-size: 12px;
-    color: #718096;
+    /* color: #718096; */
 }
 
 /* Streak Calendar */
@@ -865,6 +877,31 @@ body.reduced-motion .scroll-to-top-btn {
     gap: 5px;
 }
 
+.calendar-card {
+    /* background: white; */
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Light mode */
+[data-bs-theme="light"] .calendar-card {
+    background-color: var(--bs-light);
+}
+
+/* Dark mode */
+[data-bs-theme="dark"] .calendar-card {
+    background-color: var(--bs-dark);
+}
+
+.calendar-header {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 15px;
+    /* color: #2d3748; */
+}
+
+
 .calendar-day {
     aspect-ratio: 1;
     border-radius: 6px;
@@ -886,4 +923,16 @@ body.reduced-motion .scroll-to-top-btn {
 
 .calendar-day.today {
     border: 2px solid #4299e1;
+}
+
+
+input[type="checkbox"] {
+    width: 25px;
+    /* Adjust this value as needed */
+    height: 25px;
+    /* Adjust this value as needed */
+}
+
+input[type="checkbox"] {
+    accent-color: var(--bs-primary);
 }

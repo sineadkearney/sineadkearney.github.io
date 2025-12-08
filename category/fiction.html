@@ -674,7 +674,7 @@
             function_path = '/api/update_password';
             new_button_text = 'Update Password';
         } else {
-            function_path = '/register';
+            function_path = '/api/register';
             new_button_text = 'Register';
         }
         
@@ -716,35 +716,35 @@
                 // Always reload the page after login
                 window.location.reload();
             } else if (function_path === '/register') {
-            // Show verification message
-            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
-            login_msg_display.style.display = "block";
+              // Show verification message
+              login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+              login_msg_display.style.display = "block";
             } else {
-            // Password reset or update
-            login_msg_display.innerText = data.message;
-            login_msg_display.style.display = "block";
-            if (function_path === '/api/update_password') {
-                setTimeout(() => {
-                back_to_login();
-                login_msg_display.innerText = "Password updated successfully. Please log in.";
-                login_msg_display.style.display = "block";
-                }, 2000);
-            }
+              // Password reset or update
+              login_msg_display.innerText = data.message;
+              login_msg_display.style.display = "block";
+              if (function_path === '/api/update_password') {
+                  setTimeout(() => {
+                  back_to_login();
+                  login_msg_display.innerText = "Password updated successfully. Please log in.";
+                  login_msg_display.style.display = "block";
+                  }, 2000);
+              }
             }
         } else {
-            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.innerHTML = data.message || "An error occurred.";
             login_msg_display.style.display = "block";
         }
         })
         .catch(err => {
-        console.error(err);
-        login_msg_display.innerText = "An unexpected server error occurred.";
-        login_msg_display.style.display = "block";
+          console.error(err);
+          login_msg_display.innerText = "An unexpected server error occurred.";
+          login_msg_display.style.display = "block";
         })
         .finally(() => {
-        // Re-enable button
-        login_btn.disabled = false;
-        login_btn.innerText = new_button_text;
+          // Re-enable button
+          login_btn.disabled = false;
+          login_btn.innerText = new_button_text;
         });
     });
   }
@@ -1034,11 +1034,11 @@
         let currentWord = '';
         let currentViewMode = 'grid';
 
-        const initialPosts = [{"categories": [{"name": "Fiction", "slug": "fiction"}, {"name": "Charles Dickens", "slug": "charles-dickens"}], "english_title": "A Christmas Carol", "id": 14, "im_path": "../assets/img/posts/a-christmas-carol.jpg", "post_date": "2025-11-30", "post_title": "Car\u00fal na Nollag", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}]}, {"categories": [{"name": "Arthur Conan Doyle", "slug": "arthur-conan-doyle"}, {"name": "Fiction", "slug": "fiction"}], "english_title": "A Case of Identity", "id": 6, "im_path": "../assets/img/posts/a-case-of-identity.jpg", "post_date": "2025-11-03", "post_title": "C\u00e1s C\u00e9annachta", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}];
+        const initialPosts = [{"categories": [{"name": "Arthur Conan Doyle", "slug": "arthur-conan-doyle"}, {"name": "Fiction", "slug": "fiction"}], "english_title": "A Case of Identity", "id": 6, "im_path": "../assets/img/posts/a-case-of-identity.jpg", "post_date": "2025-11-03", "post_title": "C\u00e1s C\u00e9annachta", "versions": [{"enabled": true, "level": 0.0, "level_str": "original"}, {"enabled": true, "level": 1.0, "level_str": "simple"}]}];
         const initialPagination = {
             page: 1,
             pages: 1,
-            total: 2,
+            total: 1,
             has_prev: false,
             has_next: false,
             prev_num: null,

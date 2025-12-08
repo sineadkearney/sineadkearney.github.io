@@ -70,33 +70,42 @@
         }, 100);
     }
 
-    // Animate all stat values on the page
-    function animateStats() {
-        const statValues = document.querySelectorAll('.stat-value');
+    // Initialize animations when DOM is ready
+    function animateStats(context = document) {
+        const statValues = context.querySelectorAll('.stat-value');
+        statValues.forEach((el, idx) => {
+            // Prevent re-animation
+            if (el.classList.contains('animated')) return;
 
-        statValues.forEach((element, index) => {
-            const finalValue = parseInt(element.textContent) || 0;
+            const target = parseInt(el.getAttribute('data-target')) || 0;
+            // Mark as animated immediately
+            el.classList.add('animated');
 
-            // Stagger the animations slightly
             setTimeout(() => {
-                countUp(element, 0, finalValue, 2000);
-            }, index * 100);
+                countUp(el, 0, target, 2000);
+            }, idx * 100);
         });
     }
 
     // Animate all progress bars on the page
-    function animateProgressBars() {
-        const progressBars = document.querySelectorAll('.progress-bar');
+    function animateProgressBars(context = document) {
+        const progressBars = context.querySelectorAll('.progress-bar');
 
         progressBars.forEach((bar, index) => {
-            // Get the current width from the style attribute
-            const currentWidth = bar.style.width;
-            const targetWidth = parseFloat(currentWidth);
+            // Check if already animated via a data attribute or class
+            if (bar.classList.contains('animated')) return;
+
+            // Get the current width from the style attribute or computed style
+            // Note: For re-entrant animations, we might want to store target in data attribute
+            // But here we rely on inline style width set by server template
+            let targetWidth = parseFloat(bar.style.width);
+
+            // If inline style is 0, check if we have a data-width? 
+            // The template sets style="width: X%".
 
             if (!isNaN(targetWidth)) {
-                setTimeout(() => {
-                    animateProgressBar(bar, targetWidth, 1500);
-                }, index * 150);
+                bar.classList.add('animated');
+                animateProgressBar(bar, targetWidth, 1500);
             }
         });
     }
@@ -110,28 +119,32 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    animateStats();
-                    animateProgressBars();
-                    observer.disconnect(); // Only animate once
+                    const grid = entry.target;
+                    // Animate items within this grid
+                    animateStats(grid);
+                    animateProgressBars(grid);
+
+                    // Stop observing this grid so it doesn't re-trigger
+                    observer.unobserve(grid);
+                    grid.classList.add('animating-complete');
                 }
             });
         }, { threshold: 0.1 });
 
-        // Observe the stats grid
-        const statsGrid = document.querySelector('.stats-grid');
-        if (statsGrid) {
-            observer.observe(statsGrid);
-        }
+        // Observe ALL stats grids (dashboard and flashcards)
+        const statsGrids = document.querySelectorAll('.stats-grid');
+        statsGrids.forEach(grid => {
+            observer.observe(grid);
+            grid.classList.add('animating'); // Prep class
+        });
 
-        // Listen for tab changes to re-animate if needed
+        // Listen for tab changes - mostly as a backup for visibility changes that 
+        // might not trigger intersection immediately in some edge cases, 
+        // but with IntersectionObserver on all grids, this is less critical.
+        // We removed the forced re-animation logic here to fix the glitch.
         window.addEventListener('tabChanged', (event) => {
-            if (event.detail.tab === 'dashboard') {
-                // Small delay to ensure tab content is visible
-                setTimeout(() => {
-                    animateStats();
-                    animateProgressBars();
-                }, 100);
-            }
+            // We rely on the observer. If the tab change makes a grid visible,
+            // the observer will fire.
         });
 
         // Listen for reduced motion changes

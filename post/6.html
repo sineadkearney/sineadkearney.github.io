@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    // Apply collapsed state immediately to prevent flash
+    (function() {
+      var leftCollapsed = localStorage.getItem('leftSidebarCollapsed') === 'true';
+      var rightCollapsed = localStorage.getItem('rightSidebarCollapsed') === 'true';
+      var htmlClasses = [];
+      if (leftCollapsed) htmlClasses.push('left-sidebar-collapsed');
+      if (rightCollapsed) htmlClasses.push('right-sidebar-collapsed');
+      if (htmlClasses.length > 0) {
+        document.documentElement.className += ' ' + htmlClasses.join(' ');
+      }
+    })();
+  </script>
   <meta charset="utf-8">
   <title>Gaeilge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +85,7 @@
       padding: 1rem;
       z-index: 1020;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
 
@@ -112,13 +125,6 @@
     }
     .bookmark-item.active {
       background-color: var(--bs-primary-bg-subtle);
-    }
-
-    /* Chapter break styling */
-    .chapter-break {
-      border: 0;
-      border-top: 2px solid var(--bs-border-color);
-      margin: 2rem 0;
     }
 
     #content {
@@ -177,6 +183,208 @@
     #center-col.loading {
       opacity: 0;
       transition: opacity 0.2s ease-in;
+    }
+
+    
+    @media (min-width: 992px) {
+      /* Prevent main container from reflowing columns */
+      #main-container {
+        position: relative;
+      }
+      
+      .sidebar-col { 
+        transition: all 0.3s ease; 
+        position: relative; 
+      }
+      
+      .sidebar-col.collapsed { 
+        min-width: 0 !important; 
+        max-width: 0 !important; 
+        flex: 0 0 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        overflow: visible !important; /* Allow button to show */
+      }
+      
+      /* Apply collapsed state on page load */
+      html.left-sidebar-collapsed #left-sidebar {
+        min-width: 0 !important;
+        max-width: 0 !important;
+        flex: 0 0 0 !important;
+        padding: 0 !important;
+        width: 0;
+      }
+      
+      html.right-sidebar-collapsed #right-sidebar {
+        min-width: 0 !important;
+        max-width: 0 !important;
+        flex: 0 0 0 !important;
+        padding: 0 !important;
+        width: 0;
+      }
+      
+      html.right-sidebar-collapsed #center-col {
+        margin-right: 0;
+      }
+      
+      .sidebar-col.collapsed > *:not(.sidebar-toggle) { 
+        display: none; 
+      }
+      
+      /* Fix right sidebar position to prevent movement */
+      #right-sidebar {
+        position: absolute;
+        right: 0;
+        top: 50px; /* Below header */
+        bottom: 0;
+        width: 25%; /* col-lg-3 = 25% */
+        transition: none !important; /* Don't animate right sidebar */
+      }
+      
+      #right-sidebar.collapsed {
+        width: 0;
+      }
+      
+      /* Left sidebar normal position */
+      #left-sidebar {
+        width: 25%;
+        flex: none;
+      }
+      
+      #left-sidebar.collapsed {
+        width: 0;
+      }
+      
+      /* Center column adjusts margin to fill space smoothly */
+      #center-col {
+        flex: 1;
+        margin-left: 0;
+        margin-right: 25%; /* Space for right sidebar */
+        transition: margin-right 0.3s ease;
+        position: relative;
+      }
+      
+      /* When right sidebar collapses, remove right margin */
+      #right-sidebar.collapsed ~ #center-col,
+      body:has(#right-sidebar.collapsed) #center-col {
+        margin-right: 0;
+      }
+      
+      /* Toggle buttons */
+      .sidebar-toggle { 
+        position: absolute;
+        top: 0;
+        width: 28px; 
+        height: 28px; 
+        background: var(--bs-primary); 
+        color: white; 
+        border: none; 
+        border-radius: 6px;
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        z-index: 100; 
+        transition: all 0.3s ease; 
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        font-size: 14px;
+      }
+      
+      /* Left sidebar - button on right side, inline with header */
+      #left-sidebar .sidebar-toggle { 
+        right: 8px;
+        top: 16px;
+      }
+      
+      /* Right sidebar - button on left side, inline with header */
+      #right-sidebar .sidebar-toggle { 
+        left: 8px;
+        top: 16px;
+      }
+      
+      /* Right sidebar header - add padding to clear the button */
+      #right-sidebar h5:first-of-type {
+        padding-left: 40px;
+      }
+      
+      /* When collapsed - buttons stick out from screen edge */
+      #left-sidebar.collapsed .sidebar-toggle {
+        right: -14px;
+        left: auto;
+        width: 24px;
+        height: 50px;
+        border-radius: 0 8px 8px 0;
+        top: 80px;
+      }
+      
+      #right-sidebar.collapsed .sidebar-toggle {
+        left: -14px;
+        right: auto;
+        width: 24px;
+        height: 50px;
+        border-radius: 8px 0 0 8px;
+        top: 80px;
+      }
+      
+      .sidebar-toggle:hover { 
+        background: var(--bs-primary-dark);
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      }
+      
+      /* Post image max dimensions */
+      #post_image {
+        max-width: 650px !important;
+        width: auto;
+        height: auto;
+        max-height: 600px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+    
+    @media (max-width: 991px) { 
+      .sidebar-toggle { display: none !important; }
+      .post_image {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+
+    /* Two-column layout for full-width content (Desktop only) */
+    @media (min-width: 992px) {
+        .two-column-mode {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Default: direct children span full width unless specified */
+        .two-column-mode > * {
+            grid-column: 1 / -1;
+        }
+
+        /* Scenario 1: Image visible */
+        .two-column-mode.with-image #post_image {
+            grid-column: 1 / 2;
+            margin-bottom: 0 !important;
+            padding-right: 1rem;
+        }
+        
+        .two-column-mode.with-image #content {
+            grid-column: 2 / 3;
+        }
+
+        /* Scenario 2: No image (Text split) */
+        .two-column-mode.no-image #content {
+            column-count: 2;
+            column-gap: 3rem;
+            orphans: 3;
+            widows: 3;
+            display: block; /* Ensure block for column-count */
+        }
     }
   </style>
 </head>
@@ -623,7 +831,7 @@
             function_path = '/api/update_password';
             new_button_text = 'Update Password';
         } else {
-            function_path = '/register';
+            function_path = '/api/register';
             new_button_text = 'Register';
         }
         
@@ -665,35 +873,35 @@
                 // Always reload the page after login
                 window.location.reload();
             } else if (function_path === '/register') {
-            // Show verification message
-            login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
-            login_msg_display.style.display = "block";
+              // Show verification message
+              login_msg_display.innerHTML = data.message + ' <a href="#" onclick="resend_verification()">Resend verification email</a>';
+              login_msg_display.style.display = "block";
             } else {
-            // Password reset or update
-            login_msg_display.innerText = data.message;
-            login_msg_display.style.display = "block";
-            if (function_path === '/api/update_password') {
-                setTimeout(() => {
-                back_to_login();
-                login_msg_display.innerText = "Password updated successfully. Please log in.";
-                login_msg_display.style.display = "block";
-                }, 2000);
-            }
+              // Password reset or update
+              login_msg_display.innerText = data.message;
+              login_msg_display.style.display = "block";
+              if (function_path === '/api/update_password') {
+                  setTimeout(() => {
+                  back_to_login();
+                  login_msg_display.innerText = "Password updated successfully. Please log in.";
+                  login_msg_display.style.display = "block";
+                  }, 2000);
+              }
             }
         } else {
-            login_msg_display.innerText = data.message || "An error occurred.";
+            login_msg_display.innerHTML = data.message || "An error occurred.";
             login_msg_display.style.display = "block";
         }
         })
         .catch(err => {
-        console.error(err);
-        login_msg_display.innerText = "An unexpected server error occurred.";
-        login_msg_display.style.display = "block";
+          console.error(err);
+          login_msg_display.innerText = "An unexpected server error occurred.";
+          login_msg_display.style.display = "block";
         })
         .finally(() => {
-        // Re-enable button
-        login_btn.disabled = false;
-        login_btn.innerText = new_button_text;
+          // Re-enable button
+          login_btn.disabled = false;
+          login_btn.innerText = new_button_text;
         });
     });
   }
@@ -819,6 +1027,7 @@
     
     <!-- Left Sidebar (Desktop) -->
     <div id="left-sidebar" class="col-lg-3 sidebar-col d-none d-lg-block">
+      <button class="sidebar-toggle" id="left-toggle" onclick="toggleSidebar('left')"><i class="bi bi-chevron-left"></i></button>
       <!-- Versions -->
       <div class="mb-4">
         <h5 class="text-uppercase text-muted fs-6 mb-3">Versions</h5>
@@ -909,6 +1118,7 @@
 
     <!-- Right Sidebar (Desktop) -->
     <div id="right-sidebar" class="col-lg-3 sidebar-col d-none d-lg-block">
+      <button class="sidebar-toggle" id="right-toggle" onclick="toggleSidebar('right')"><i class="bi bi-chevron-right"></i></button>
       <h5 class="text-uppercase text-muted fs-6 mb-3">Foclóir / Words</h5>
       <div id="words-list">
         <!-- Populated by JS -->
@@ -1288,12 +1498,14 @@
       if (instant) {
         contentDiv.innerHTML = pages[pageIndex];
         reinitializeTooltips();
+        updateContentLayout();
       } else {
         contentDiv.style.opacity = 0;
         setTimeout(() => {
           contentDiv.innerHTML = pages[pageIndex];
           contentDiv.style.opacity = 1;
           reinitializeTooltips();
+          updateContentLayout();
         }, 150);
       }
 
@@ -1738,6 +1950,86 @@
         else if (e.key === "ArrowRight") nextPage();
     });
 
+    function toggleSidebar(s){
+      var sb=document.getElementById(s+'-sidebar');
+      var t=document.getElementById(s+'-toggle');
+      var i=t.querySelector('i');
+      sb.classList.toggle('collapsed');
+      
+      // Also toggle the HTML class for initial load state
+      var htmlClass = s + '-sidebar-collapsed';
+      if (sb.classList.contains('collapsed')) {
+        document.documentElement.classList.add(htmlClass);
+      } else {
+        document.documentElement.classList.remove(htmlClass);
+      }
+      
+      i.className=sb.classList.contains('collapsed')?(s==='left'?'bi bi-chevron-right':'bi bi-chevron-left'):(s==='left'?'bi bi-chevron-left':'bi bi-chevron-right');
+      var l=document.getElementById('left-sidebar'),r=document.getElementById('right-sidebar'),c=document.getElementById('center-col');
+      if(l&&r&&c){
+        c.classList.remove('col-lg-6','col-lg-9','col-lg-12');
+        if(l.classList.contains('collapsed')&&r.classList.contains('collapsed'))c.classList.add('col-lg-12');
+        else if(l.classList.contains('collapsed')||r.classList.contains('collapsed'))c.classList.add('col-lg-9');
+        else c.classList.add('col-lg-6');
+      }
+      
+      // Update content layout for two-column mode
+      updateContentLayout();
+      
+      localStorage.setItem(s+'SidebarCollapsed',sb.classList.contains('collapsed'));
+    }
+
+    function updateContentLayout() {
+        const leftCollapsed = document.getElementById('left-sidebar').classList.contains('collapsed');
+        const rightCollapsed = document.getElementById('right-sidebar').classList.contains('collapsed');
+        const contentArea = document.getElementById('content-area');
+        const imgDiv = document.getElementById('post_image');
+        
+        if (leftCollapsed && rightCollapsed) {
+            contentArea.classList.add('two-column-mode');
+            
+            // Check if image is effectively visible
+            const img = imgDiv ? imgDiv.querySelector('img') : null;
+            let hasImage = false;
+            
+            // Logic based check for stability (avoids race conditions with layout)
+            // We consider the image visible if we are on page 0 (or undefined=initial) 
+            // AND the image source is valid.
+            if (typeof current_page_index === 'undefined' || current_page_index === 0) {
+                 if (img && img.getAttribute('src') && img.getAttribute('src').length > 1) {
+                     hasImage = true;
+                 }
+            }
+
+            if (hasImage) {
+                contentArea.classList.add('with-image');
+                contentArea.classList.remove('no-image');
+            } else {
+                contentArea.classList.add('no-image');
+                contentArea.classList.remove('with-image');
+            }
+        } else {
+            contentArea.classList.remove('two-column-mode', 'with-image', 'no-image');
+        }
+    }
+
+    (function(){
+      // Apply collapsed class without animation on page load
+      var leftCollapsed = localStorage.getItem('leftSidebarCollapsed') === 'true';
+      var rightCollapsed = localStorage.getItem('rightSidebarCollapsed') === 'true';
+      
+      if (leftCollapsed) {
+        document.getElementById('left-sidebar').classList.add('collapsed');
+        document.getElementById('left-toggle').querySelector('i').className = 'bi bi-chevron-right';
+      }
+      if (rightCollapsed) {
+        document.getElementById('right-sidebar').classList.add('collapsed');
+        document.getElementById('right-toggle').querySelector('i').className = 'bi bi-chevron-left';
+      }
+      
+      // Initial layout update - Synchronous to prevent FOUC/Jump
+      updateContentLayout();
+    })();
   </script>
 </body>
 </html>
